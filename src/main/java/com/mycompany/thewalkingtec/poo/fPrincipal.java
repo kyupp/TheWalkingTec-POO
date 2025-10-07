@@ -21,7 +21,8 @@ import javax.swing.border.Border;
  */
 public class fPrincipal extends javax.swing.JFrame {
     
-    private ArrayList<Casilla> terreno = new ArrayList<Casilla>();
+    private int TAMANO_TERRENO = 25;
+    private Casilla[][] terreno = new Casilla[25][25];
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(fPrincipal.class.getName());
 
@@ -30,6 +31,7 @@ public class fPrincipal extends javax.swing.JFrame {
      */
     public fPrincipal() {
         initComponents();
+        inicializarTerreno();
         generarTerreno();
     }
 
@@ -144,42 +146,30 @@ public class fPrincipal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new fPrincipal().setVisible(true));
     }
     
-     private void generarTerreno(){
+    private void inicializarTerreno(){
+        for (int i = 0; i < TAMANO_TERRENO; i++){
+            for (int j = 0; j < TAMANO_TERRENO; j++) {
+                this.terreno[i][j] = new Casilla();
+            }
+        }
+    }
+    
+    private void generarTerreno(){
         //Tomar el tamaño del ejercito a agregar
-        int tamano = 25;
         int x = 0;
         int y = 0;
-        for (int i = 0; i < tamano; i++){
-            for (int j = 0; j < tamano; j++) {
+        for (int i = 0; i < TAMANO_TERRENO; i++){
+            for (int j = 0; j < TAMANO_TERRENO; j++) {
                 //Para cada soldado se crea un Label
                 JLabel nuevoLabel = new JLabel("");
                 nuevoLabel.setOpaque(true);
                 nuevoLabel.setBackground(new java.awt.Color(66, 245, 66));
                 Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 2); 
                 nuevoLabel.setBorder(lineBorder); // Apply the border to the label
-                nuevoLabel.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e){
-                        JOptionPane.showMessageDialog(pnlTerreno, ("Label Clicked" + nuevoLabel.getLocation().getX() + ", " + nuevoLabel.getLocation().getY()));
-                        txaLog.append("Se clickeó sobre: X: " + nuevoLabel.getLocation().getX() + ",Y: " + nuevoLabel.getLocation().getY()+"\n");
-                    }
-                    
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
-                        nuevoLabel.setBackground(new java.awt.Color(245, 66, 66));
-                    }
-                    
-                    @Override
-                    public void mouseExited(MouseEvent e) {
-                        nuevoLabel.setBackground(new java.awt.Color(66, 245, 66));
-                    }
-                
-                });
-
                 nuevoLabel.setBounds(x, y, 30, 30);
 
                 pnlTerreno.add(nuevoLabel);
-                this.terreno.add(new Casilla(nuevoLabel.getLocation(), nuevoLabel));
+                this.terreno[i][j] = new Casilla(pnlTerreno, txaLog, nuevoLabel.getLocation(), nuevoLabel);
                 
                 y += 30;
             }
@@ -189,6 +179,7 @@ public class fPrincipal extends javax.swing.JFrame {
         
         this.repaint();
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
