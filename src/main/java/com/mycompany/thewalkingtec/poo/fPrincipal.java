@@ -6,10 +6,13 @@ package com.mycompany.thewalkingtec.poo;
 
 import com.mycompany.thewalkingtec.poo.Terreno.Casilla;
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 
 /**
@@ -41,12 +44,15 @@ public class fPrincipal extends javax.swing.JFrame {
 
         pnlTerreno = new javax.swing.JPanel();
         pnlUtilidades = new javax.swing.JPanel();
+        tbPnlComponentes = new javax.swing.JTabbedPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txaLog = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1150, 790));
-        setPreferredSize(new java.awt.Dimension(1150, 790));
+        setMinimumSize(new java.awt.Dimension(1170, 790));
+        setPreferredSize(new java.awt.Dimension(1170, 790));
         setResizable(false);
-        setSize(new java.awt.Dimension(1150, 790));
+        setSize(new java.awt.Dimension(1170, 790));
 
         pnlTerreno.setBackground(new java.awt.Color(153, 255, 153));
         pnlTerreno.setMinimumSize(new java.awt.Dimension(790, 750));
@@ -64,18 +70,35 @@ public class fPrincipal extends javax.swing.JFrame {
         );
 
         pnlUtilidades.setBackground(new java.awt.Color(255, 255, 204));
-        pnlUtilidades.setMinimumSize(new java.awt.Dimension(400, 750));
+        pnlUtilidades.setMinimumSize(new java.awt.Dimension(400, 760));
         pnlUtilidades.setPreferredSize(new java.awt.Dimension(400, 750));
+
+        tbPnlComponentes.setBackground(new java.awt.Color(255, 255, 102));
+        tbPnlComponentes.setOpaque(true);
+
+        txaLog.setColumns(20);
+        txaLog.setRows(5);
+        jScrollPane1.setViewportView(txaLog);
 
         javax.swing.GroupLayout pnlUtilidadesLayout = new javax.swing.GroupLayout(pnlUtilidades);
         pnlUtilidades.setLayout(pnlUtilidadesLayout);
         pnlUtilidadesLayout.setHorizontalGroup(
             pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUtilidadesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
+                    .addComponent(tbPnlComponentes))
+                .addContainerGap())
         );
         pnlUtilidadesLayout.setVerticalGroup(
             pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 750, Short.MAX_VALUE)
+            .addGroup(pnlUtilidadesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tbPnlComponentes, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -85,16 +108,12 @@ public class fPrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlUtilidades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(pnlUtilidades, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(pnlTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlUtilidades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 31, Short.MAX_VALUE))
+            .addComponent(pnlTerreno, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(pnlUtilidades, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -138,6 +157,24 @@ public class fPrincipal extends javax.swing.JFrame {
                 nuevoLabel.setBackground(new java.awt.Color(66, 245, 66));
                 Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 2); 
                 nuevoLabel.setBorder(lineBorder); // Apply the border to the label
+                nuevoLabel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e){
+                        JOptionPane.showMessageDialog(pnlTerreno, ("Label Clicked" + nuevoLabel.getLocation().getX() + ", " + nuevoLabel.getLocation().getY()));
+                        txaLog.append("Se clickeó sobre: X: " + nuevoLabel.getLocation().getX() + ",Y: " + nuevoLabel.getLocation().getY()+"\n");
+                    }
+                    
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        nuevoLabel.setBackground(new java.awt.Color(245, 66, 66));
+                    }
+                    
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        nuevoLabel.setBackground(new java.awt.Color(66, 245, 66));
+                    }
+                
+                });
 
                 nuevoLabel.setBounds(x, y, 30, 30);
 
@@ -154,7 +191,10 @@ public class fPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel pnlTerreno;
     private javax.swing.JPanel pnlUtilidades;
+    private javax.swing.JTabbedPane tbPnlComponentes;
+    private javax.swing.JTextArea txaLog;
     // End of variables declaration//GEN-END:variables
 }
