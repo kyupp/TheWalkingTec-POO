@@ -8,7 +8,7 @@ package com.mycompany.thewalkingtec.poo;
  *
  * @author mathiasviquez
  */
-public class Tropa extends Componente {
+public class Tropa extends Componente{
     
     int ataque;
     //boolean isAttacking = true;
@@ -16,5 +16,4 @@ public class Tropa extends Componente {
     public int atacar(){
         return ataque;
     }
-    
 }
