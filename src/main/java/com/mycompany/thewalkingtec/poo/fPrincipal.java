@@ -15,6 +15,8 @@ import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 /**
@@ -180,37 +182,82 @@ public class fPrincipal extends javax.swing.JFrame {
         lblArbol.setBackground(new java.awt.Color(168, 117, 50));
         //int x = (new Random()).nextInt(500) + 250;
         //int y = (new Random()).nextInt(300) + 200;
-        lblArbol.setBounds(50, 300, 40, 40);
+        lblArbol.setBounds(30, 30, 30, 30);
         pnlComponentes.add(lblArbol);
         this.arbolDeLaVida =  new arbolDeLaVida(lblArbol, this);
         
         //ImageIcon icono = new ImageIcon(getClass().getResource(""));
 
         //this.arbolDeLaVida.setApariencia(icono);
-        initArrastreLabel(lblArbol);
+        initArrastreLabel(lblArbol, terreno);
     }
     
-    private void initArrastreLabel(JLabel lbl2) {
+    private void initArrastreLabel(JLabel lbl2, Casilla[][] terreno) {
         final Point[] puntoInicial = {null};
+        final JLabel[] moviendo = {null}; 
 
         lbl2.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 puntoInicial[0] = e.getPoint(); // Guarda la posición inicial cuando se da click
+                
+                moviendo[0] = new JLabel(lbl2.getText());
+                moviendo[0].setOpaque(true);
+                moviendo[0].setBackground(lbl2.getBackground());
+                moviendo[0].setSize(lbl2.getSize());
+                moviendo[0].setBorder(lbl2.getBorder());
+                
+                JPanel temporal = (JPanel) getGlassPane();
+                temporal.setLayout(null);
+                temporal.add(moviendo[0]);
+                temporal.setVisible(true);
+
+                Point puntoFrame = SwingUtilities.convertPoint(lbl2, e.getPoint(), getGlassPane());
+                moviendo[0].setLocation(puntoFrame);
             }
+            
+            public void mouseReleased(MouseEvent e){
+                if (moviendo[0] == null) return;
+                        
+                Point nuevoPuntoEnPantalla = e.getLocationOnScreen();
+                Point nuevoPuntoEnTerreno = pnlTerreno.getLocationOnScreen();
+                
+                int xEnTerreno = nuevoPuntoEnPantalla.x - nuevoPuntoEnTerreno.x - puntoInicial[0].x;
+                int yEnTerreno = nuevoPuntoEnPantalla.y - nuevoPuntoEnTerreno.y - puntoInicial[0].y;
+                
+                if (xEnTerreno >= 0 && yEnTerreno >= 0 &&
+                    xEnTerreno < pnlTerreno.getWidth() && yEnTerreno < pnlTerreno.getHeight()) {
+
+                    // Remover del panel actual
+                    lbl2.getParent().remove(lbl2);
+                    // Agregar al panel terreno
+                    pnlTerreno.add(lbl2);
+                    lbl2.setLocation(xEnTerreno, yEnTerreno);
+                    pnlTerreno.repaint();
+                    txaLog.append("Label movido al terreno en x: " + xEnTerreno + " y: " + yEnTerreno + "\n");
+                    terreno[xEnTerreno/30][yEnTerreno/30].seleccionar();
+                } else {
+                    txaLog.append("Soltado fuera del terreno.\n");
+                }
+                
+                // Limpiar el fantasma
+                JPanel temporal = (JPanel) getGlassPane();
+                temporal.remove(moviendo[0]);
+                temporal.repaint();
+                temporal.setVisible(false);
+                moviendo[0] = null;
+            }
+        
         });
 
         lbl2.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
             public void mouseDragged(MouseEvent e) {
-                if (puntoInicial[0] != null) {
-                    
-                    int thisX = lbl2.getLocation().x; //Posicion x actual 
-                    int thisY = lbl2.getLocation().y; //Posicion y actual
-
-                    int xMoved = e.getX() - puntoInicial[0].x; //Offset en x
-                    int yMoved = e.getY() - puntoInicial[0].y; //Offset en y
-
-                    lbl2.setLocation(thisX + xMoved, thisY + yMoved); //Actualizar posición del label
+                if (moviendo[0] != null) {
+                    JPanel temporal = (JPanel) getGlassPane();
+                    Point p = SwingUtilities.convertPoint(lbl2, e.getPoint(), temporal);
+                    moviendo[0].setLocation(p.x - puntoInicial[0].x, p.y - puntoInicial[0].y);
+                    temporal.repaint();
                 }
             }
         });
@@ -226,8 +273,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 JLabel nuevoLabel = new JLabel("");
                 nuevoLabel.setOpaque(true);
                 nuevoLabel.setBackground(new java.awt.Color(66, 245, 66));
-                Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 2); 
-                nuevoLabel.setBorder(lineBorder); // Apply the border to the label
+                nuevoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); // Apply the border to the label
                 nuevoLabel.setBounds(x, y, 30, 30);
 
                 pnlTerreno.add(nuevoLabel);
