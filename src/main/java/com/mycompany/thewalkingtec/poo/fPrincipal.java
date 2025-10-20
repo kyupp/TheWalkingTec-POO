@@ -6,8 +6,10 @@ package com.mycompany.thewalkingtec.poo;
 
 import com.mycompany.thewalkingtec.poo.Terreno.Casilla;
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.BorderFactory;
@@ -23,6 +25,9 @@ public class fPrincipal extends javax.swing.JFrame {
     
     private int TAMANO_TERRENO = 25;
     private Casilla[][] terreno = new Casilla[25][25];
+    private ArrayList<Componente> defensas = new ArrayList<Componente>();
+    private ArrayList<Componente> atacantes = new ArrayList<Componente>();
+    private arbolDeLaVida arbolDeLaVida;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(fPrincipal.class.getName());
 
@@ -33,6 +38,7 @@ public class fPrincipal extends javax.swing.JFrame {
         initComponents();
         inicializarTerreno();
         generarTerreno();
+        initArbol();
     }
 
     /**
@@ -47,6 +53,7 @@ public class fPrincipal extends javax.swing.JFrame {
         pnlTerreno = new javax.swing.JPanel();
         pnlUtilidades = new javax.swing.JPanel();
         tbPnlComponentes = new javax.swing.JTabbedPane();
+        pnlComponentes = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txaLog = new javax.swing.JTextArea();
 
@@ -77,6 +84,19 @@ public class fPrincipal extends javax.swing.JFrame {
 
         tbPnlComponentes.setBackground(new java.awt.Color(255, 255, 102));
         tbPnlComponentes.setOpaque(true);
+
+        javax.swing.GroupLayout pnlComponentesLayout = new javax.swing.GroupLayout(pnlComponentes);
+        pnlComponentes.setLayout(pnlComponentesLayout);
+        pnlComponentesLayout.setHorizontalGroup(
+            pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 397, Short.MAX_VALUE)
+        );
+        pnlComponentesLayout.setVerticalGroup(
+            pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 350, Short.MAX_VALUE)
+        );
+
+        tbPnlComponentes.addTab("tab1", pnlComponentes);
 
         txaLog.setColumns(20);
         txaLog.setRows(5);
@@ -154,6 +174,48 @@ public class fPrincipal extends javax.swing.JFrame {
         }
     }
     
+    private void initArbol(){
+        JLabel lblArbol = new JLabel("");
+        lblArbol.setOpaque(true);
+        lblArbol.setBackground(new java.awt.Color(168, 117, 50));
+        //int x = (new Random()).nextInt(500) + 250;
+        //int y = (new Random()).nextInt(300) + 200;
+        lblArbol.setBounds(50, 300, 40, 40);
+        pnlComponentes.add(lblArbol);
+        this.arbolDeLaVida =  new arbolDeLaVida(lblArbol, this);
+        
+        //ImageIcon icono = new ImageIcon(getClass().getResource(""));
+
+        //this.arbolDeLaVida.setApariencia(icono);
+        initArrastreLabel(lblArbol);
+    }
+    
+    private void initArrastreLabel(JLabel lbl2) {
+        final Point[] puntoInicial = {null};
+
+        lbl2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                puntoInicial[0] = e.getPoint(); // Guarda la posición inicial cuando se da click
+            }
+        });
+
+        lbl2.addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseDragged(MouseEvent e) {
+                if (puntoInicial[0] != null) {
+                    
+                    int thisX = lbl2.getLocation().x; //Posicion x actual 
+                    int thisY = lbl2.getLocation().y; //Posicion y actual
+
+                    int xMoved = e.getX() - puntoInicial[0].x; //Offset en x
+                    int yMoved = e.getY() - puntoInicial[0].y; //Offset en y
+
+                    lbl2.setLocation(thisX + xMoved, thisY + yMoved); //Actualizar posición del label
+                }
+            }
+        });
+    }
+    
     private void generarTerreno(){
         //Tomar el tamaño del ejercito a agregar
         int x = 0;
@@ -180,9 +242,12 @@ public class fPrincipal extends javax.swing.JFrame {
         this.repaint();
     }
     
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel pnlComponentes;
     private javax.swing.JPanel pnlTerreno;
     private javax.swing.JPanel pnlUtilidades;
     private javax.swing.JTabbedPane tbPnlComponentes;
