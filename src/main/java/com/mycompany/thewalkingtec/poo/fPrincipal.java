@@ -4,6 +4,8 @@
  */
 package com.mycompany.thewalkingtec.poo;
 
+import Componentes.Arma;
+import Componentes.Zombie;
 import com.mycompany.thewalkingtec.poo.Terreno.Casilla;
 import java.awt.Color;
 import java.awt.Point;
@@ -27,8 +29,8 @@ public class fPrincipal extends javax.swing.JFrame {
     
     private int TAMANO_TERRENO = 25;
     private Casilla[][] terreno = new Casilla[25][25];
-    private ArrayList<Componente> defensas = new ArrayList<Componente>();
-    private ArrayList<Componente> atacantes = new ArrayList<Componente>();
+    private ArrayList<Arma> defensas = new ArrayList<Arma>();
+    private ArrayList<Zombie> atacantes = new ArrayList<Zombie>();
     private arbolDeLaVida arbolDeLaVida;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(fPrincipal.class.getName());
