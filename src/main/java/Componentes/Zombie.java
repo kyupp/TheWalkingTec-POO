@@ -11,22 +11,15 @@ import javax.swing.ImageIcon;
  *
  * @author mathiasviquez
  */
-public class Tropa extends Componente {
+public class Zombie extends Componente{
     
-    int ataquePorUnidad;
-    //boolean isAttacking = false;
+    
+    Tropa tipo;
 
-    public Tropa(int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, ImageIcon apariencia) {
+    public Zombie(Tropa tipo, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, ImageIcon apariencia) {
         super(vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
-        this.ataquePorUnidad = ataquePorUnidad;
+        this.tipo = tipo;
     }
-    
-    public int atacar(){
-        return ataquePorUnidad;
-    }
-
-    
-    
     
     
 }
