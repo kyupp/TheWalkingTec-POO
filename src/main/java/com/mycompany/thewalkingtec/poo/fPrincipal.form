@@ -91,7 +91,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="jScrollPane1" max="32767" attributes="0"/>
-                      <Component id="tbPnlComponentes" max="32767" attributes="0"/>
+                      <Component id="tbPnlComponentes" pref="397" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>

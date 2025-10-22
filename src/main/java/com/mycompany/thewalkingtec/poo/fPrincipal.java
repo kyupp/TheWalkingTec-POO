@@ -42,7 +42,7 @@ public class fPrincipal extends javax.swing.JFrame {
         initComponents();
         inicializarTerreno();
         generarTerreno();
-        initArbol();
+        initDefensa();
     }
 
     /**
@@ -178,25 +178,30 @@ public class fPrincipal extends javax.swing.JFrame {
         }
     }
     
-    private void initArbol(){
-        JLabel lblArbol = new JLabel("");
-        lblArbol.setOpaque(true);
-        lblArbol.setBackground(new java.awt.Color(168, 117, 50));
+    private void initDefensa(){
+        JLabel lblDefensa = new JLabel("");
+        lblDefensa.setOpaque(true);
+        lblDefensa.setBackground(new java.awt.Color(168, 117, 50));
         //int x = (new Random()).nextInt(500) + 250;
         //int y = (new Random()).nextInt(300) + 200;
-        lblArbol.setBounds(30, 30, 30, 30);
-        pnlComponentes.add(lblArbol);
-        this.arbolDeLaVida =  new arbolDeLaVida(lblArbol, this);
+        lblDefensa.setBounds(30, 30, 30, 30);
+        pnlComponentes.add(lblDefensa);
         
         //ImageIcon icono = new ImageIcon(getClass().getResource(""));
 
         //this.arbolDeLaVida.setApariencia(icono);
-        initArrastreLabel(lblArbol, terreno);
+        initArrastreLabel(lblDefensa, terreno);
     }
     
     private void initArrastreLabel(JLabel lbl2, Casilla[][] terreno) {
-        final Point[] puntoInicial = {null};
-        final JLabel[] moviendo = {null}; 
+         final Point[] puntoInicial = {null};
+         final JLabel[] moviendo = {null}; 
+         // Crear copia del panel actual
+         JLabel nuevaDefensa = new JLabel();
+         nuevaDefensa.setBackground(lbl2.getBackground());
+         nuevaDefensa.setOpaque(true);
+         nuevaDefensa.setBounds(lbl2.getBounds());
+         this.arbolDeLaVida =  new arbolDeLaVida(nuevaDefensa, this);
 
         lbl2.addMouseListener(new MouseAdapter() {
             @Override
@@ -229,14 +234,19 @@ public class fPrincipal extends javax.swing.JFrame {
                 
                 if (xEnTerreno >= 0 && yEnTerreno >= 0 &&
                     xEnTerreno < pnlTerreno.getWidth() && yEnTerreno < pnlTerreno.getHeight()) {
-
-                    // Remover del panel actual
-                    lbl2.getParent().remove(lbl2);
+                    
+                    nuevaDefensa.setSize(30, 30); 
+                    nuevaDefensa.setOpaque(true);
+                    nuevaDefensa.setBackground(Color.ORANGE); // Algo visible
+                    nuevaDefensa.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                    
                     // Agregar al panel terreno
-                    pnlTerreno.add(lbl2);
-                    lbl2.setLocation(xEnTerreno, yEnTerreno);
+                    nuevaDefensa.setLocation(xEnTerreno, yEnTerreno);
+                    pnlTerreno.add(nuevaDefensa);
                     pnlTerreno.repaint();
+                    pnlTerreno.revalidate();
                     txaLog.append("Label movido al terreno en x: " + xEnTerreno + " y: " + yEnTerreno + "\n");
+                    terreno[xEnTerreno/30][yEnTerreno/30].insertarTropa(nuevaDefensa);
                     terreno[xEnTerreno/30][yEnTerreno/30].seleccionar();
                 } else {
                     txaLog.append("Soltado fuera del terreno.\n");
@@ -274,10 +284,14 @@ public class fPrincipal extends javax.swing.JFrame {
                 //Para cada soldado se crea un Label
                 JLabel nuevoLabel = new JLabel("");
                 nuevoLabel.setOpaque(true);
-                nuevoLabel.setBackground(new java.awt.Color(66, 245, 66));
                 nuevoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); // Apply the border to the label
                 nuevoLabel.setBounds(x, y, 30, 30);
 
+                nuevoLabel.setBackground(new java.awt.Color(66, 245, 66));
+                if(i >= 23 || j >= 23 || i < 2 || j < 2){
+                    nuevoLabel.setBackground(new java.awt.Color(47,79,79));
+                }
+                
                 pnlTerreno.add(nuevoLabel);
                 this.terreno[i][j] = new Casilla(pnlTerreno, txaLog, nuevoLabel.getLocation(), nuevoLabel);
                 
