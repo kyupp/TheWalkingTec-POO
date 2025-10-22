@@ -4,7 +4,9 @@
  */
 package Componentes;
 
+import com.mycompany.thewalkingtec.poo.fPrincipal;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 /**
  *
@@ -12,10 +14,10 @@ import javax.swing.ImageIcon;
  */
 public class impacto extends Contacto{
     
-    int areaDeAfecto;
+    private int areaDeAfecto;
     
-    public impacto(int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, ImageIcon apariencia,int areaDeAfecto) {
-        super(ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
+    public impacto(JLabel refLabel, fPrincipal refPantalla, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, ImageIcon apariencia,int areaDeAfecto) {
+        super(refLabel, refPantalla, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
         this.areaDeAfecto = areaDeAfecto;
     }
     

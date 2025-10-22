@@ -5,6 +5,7 @@
 package com.mycompany.thewalkingtec.poo;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 /**
  *
@@ -12,20 +13,23 @@ import javax.swing.ImageIcon;
  */
 public class Componente extends Thread{
     
-    int vidaMaxima;
-    
-    int vida;
-    int golpesPorSegundo;
-    int nivel;
-    int campos;
-    int nivelDeApaicion;
-    int alcance;
-    ImageIcon apariencia;
+    private int vidaMaxima;
+    private int vida;
+    private int golpesPorSegundo;
+    private int nivel;
+    private int campos;
+    private int nivelDeApaicion;
+    private int alcance;
+    private ImageIcon apariencia;
+    private JLabel refLabel;
+    private fPrincipal refPantalla;
 
     public Componente() {
     }
 
-    public Componente(int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, ImageIcon apariencia) {
+    public Componente(JLabel refLabel, fPrincipal refPantalla, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, ImageIcon apariencia) {
+        this.refLabel = refLabel;
+        this.refPantalla = refPantalla;
         this.vida = vida;
         this.golpesPorSegundo = golpesPorSegundo;
         this.nivel = nivel;
