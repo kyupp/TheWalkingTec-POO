@@ -240,7 +240,7 @@ public class fPrincipal extends javax.swing.JFrame {
                     txaLog.append("Soltado fuera del terreno.\n");
                 }
                 
-                // Limpiar el fantasma
+                // Limpiar el temporal
                 JPanel temporal = (JPanel) getGlassPane();
                 temporal.remove(moviendo[0]);
                 temporal.repaint();
@@ -284,7 +284,6 @@ public class fPrincipal extends javax.swing.JFrame {
             y = 0;
             x += 30;
         }
-        
         this.repaint();
     }
     
