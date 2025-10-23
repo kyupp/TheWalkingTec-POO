@@ -4,8 +4,8 @@
  */
 package com.mycompany.thewalkingtec.poo;
 
-import Componentes.Arma;
-import Componentes.Zombie;
+import com.mycompany.thewalkingtec.poo.Componentes.Arma;
+import com.mycompany.thewalkingtec.poo.Componentes.Zombie;
 import com.mycompany.thewalkingtec.poo.Terreno.Casilla;
 import java.awt.Color;
 import java.awt.Point;

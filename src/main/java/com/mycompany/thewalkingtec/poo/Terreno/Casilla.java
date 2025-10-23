@@ -4,7 +4,7 @@
  */
 package com.mycompany.thewalkingtec.poo.Terreno;
 
-import Componentes.Tropa;
+import com.mycompany.thewalkingtec.poo.Componentes.Tropa;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
