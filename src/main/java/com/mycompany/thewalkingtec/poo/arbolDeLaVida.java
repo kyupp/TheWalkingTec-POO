@@ -13,7 +13,7 @@ import javax.swing.JLabel;
  *
  * @author mathiasviquez
  */
-public class arbolDeLaVida {
+public class arbolDeLaVida extends Componente{
     
     private JLabel refLabel;
     private fPrincipal refPantalla;
@@ -24,14 +24,19 @@ public class arbolDeLaVida {
         this.apariencia = apariencia;
     }
 
-    public arbolDeLaVida(JLabel refLabel, fPrincipal refPantalla) {
-        this.refLabel = refLabel;
-        this.refPantalla = refPantalla;
+    public arbolDeLaVida(fPrincipal refPantalla, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance) {
+        super(refPantalla, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance);
     }
     
     public JLabel getRefLabel() {
         return refLabel;
     }
+
+    public void setRefLabel(JLabel refLabel) {
+        this.refLabel = refLabel;
+    }
+    
+    
     
     public int getVida() {
         return vida;
@@ -46,5 +51,6 @@ public class arbolDeLaVida {
         this.refLabel.setForeground(Color.white);
         this.refLabel.setText("R.I.P");
     }
+    
     
 }

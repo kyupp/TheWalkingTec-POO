@@ -18,8 +18,8 @@ public class Zombie extends Componente{
     
     Tropa tipo;
 
-    public Zombie(JLabel refLabel, fPrincipal refPantalla, Tropa tipo, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, ImageIcon apariencia) {
-        super( refLabel, refPantalla, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
+    public Zombie(JLabel refLabel, fPrincipal refPantalla, Tropa tipo, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance) {
+        super(refPantalla, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance);
         this.tipo = tipo;
     }
     

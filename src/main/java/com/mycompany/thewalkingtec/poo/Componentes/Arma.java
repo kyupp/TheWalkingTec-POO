@@ -4,7 +4,6 @@
  */
 package com.mycompany.thewalkingtec.poo.Componentes;
 
-import com.mycompany.thewalkingtec.poo.Componente;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -13,12 +12,12 @@ import javax.swing.JLabel;
  *
  * @author mathiasviquez
  */
-public class Arma extends Componente{
+public class Arma extends Tropa{
     
     Tropa tipo;
 
-    public Arma(JLabel refLabel, fPrincipal refPantalla, Tropa tipo, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, ImageIcon apariencia) {
-        super(refLabel, refPantalla, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
+    public Arma(fPrincipal refPantalla, Tropa tipo, int golpesPorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance) {
+        super(refPantalla, golpesPorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance);
         this.tipo = tipo;
     }
     

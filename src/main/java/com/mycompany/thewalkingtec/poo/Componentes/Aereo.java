@@ -5,8 +5,6 @@
 package com.mycompany.thewalkingtec.poo.Componentes;
 
 import com.mycompany.thewalkingtec.poo.fPrincipal;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 
 /**
  *
@@ -14,8 +12,8 @@ import javax.swing.JLabel;
  */
 public class Aereo extends Tropa{
     
-    public Aereo(JLabel refLabel, fPrincipal refPantalla, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, ImageIcon apariencia) {
-        super(refLabel, refPantalla, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
+    public Aereo(fPrincipal refPantalla, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance) {
+        super(refPantalla, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance);
     }
     
     

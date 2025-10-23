@@ -5,6 +5,7 @@
 package com.mycompany.thewalkingtec.poo;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Arma;
+import com.mycompany.thewalkingtec.poo.Componentes.Contacto;
 import com.mycompany.thewalkingtec.poo.Componentes.Zombie;
 import com.mycompany.thewalkingtec.poo.Terreno.Casilla;
 import java.awt.Color;
@@ -26,13 +27,12 @@ import javax.swing.border.Border;
  * @author kyup
  */
 public class fPrincipal extends javax.swing.JFrame {
-    
+
     private int TAMANO_TERRENO = 25;
     private Casilla[][] terreno = new Casilla[25][25];
-    private ArrayList<Arma> defensas = new ArrayList<Arma>();
-    private ArrayList<Zombie> atacantes = new ArrayList<Zombie>();
-    private arbolDeLaVida arbolDeLaVida;
-    
+    private ArrayList<Componente> defensas = new ArrayList<Componente>();
+    private ArrayList<Componente> atacantes = new ArrayList<Componente>();
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(fPrincipal.class.getName());
 
     /**
@@ -42,7 +42,9 @@ public class fPrincipal extends javax.swing.JFrame {
         initComponents();
         inicializarTerreno();
         generarTerreno();
-        initDefensa();
+
+        initDefensa(new arbolDeLaVida(this, 100, 0, 0, 0, 0, 0), 0);
+        initDefensa(new Contacto(this, 100, 0, 0, 0,0, 0, 0), 40);
     }
 
     /**
@@ -169,89 +171,102 @@ public class fPrincipal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new fPrincipal().setVisible(true));
     }
-    
-    private void inicializarTerreno(){
-        for (int i = 0; i < TAMANO_TERRENO; i++){
+
+    private void inicializarTerreno() {
+        for (int i = 0; i < TAMANO_TERRENO; i++) {
             for (int j = 0; j < TAMANO_TERRENO; j++) {
                 this.terreno[i][j] = new Casilla();
             }
         }
     }
-    
-    private void initDefensa(){
+
+    private void initDefensa(Componente estructuraDefensa, int pos) {
         JLabel lblDefensa = new JLabel("");
         lblDefensa.setOpaque(true);
         lblDefensa.setBackground(new java.awt.Color(168, 117, 50));
         //int x = (new Random()).nextInt(500) + 250;
         //int y = (new Random()).nextInt(300) + 200;
-        lblDefensa.setBounds(30, 30, 30, 30);
+        lblDefensa.setBounds(30 + pos, 30, 30, 30);
         pnlComponentes.add(lblDefensa);
-        
-        //ImageIcon icono = new ImageIcon(getClass().getResource(""));
 
+        //ImageIcon icono = new ImageIcon(getClass().getResource(""));
         //this.arbolDeLaVida.setApariencia(icono);
-        initArrastreLabel(lblDefensa, terreno);
+        initArrastreLabel(lblDefensa, estructuraDefensa);
     }
-    
-    private void initArrastreLabel(JLabel lbl2, Casilla[][] terreno) {
-         final Point[] puntoInicial = {null};
-         final JLabel[] moviendo = {null}; 
-         // Crear copia del panel actual
-         JLabel nuevaDefensa = new JLabel();
-         nuevaDefensa.setBackground(lbl2.getBackground());
-         nuevaDefensa.setOpaque(true);
-         nuevaDefensa.setBounds(lbl2.getBounds());
-         this.arbolDeLaVida =  new arbolDeLaVida(nuevaDefensa, this);
+
+    private void initArrastreLabel(JLabel lbl2, Componente estructuraDefensa) {
+        final Point[] puntoInicial = {null};
+        final JLabel[] moviendo = {null};
+        // Crear copia del panel actual
+        JLabel nuevaDefensa = new JLabel();
+        nuevaDefensa.setBackground(lbl2.getBackground());
+        nuevaDefensa.setOpaque(true);
+        nuevaDefensa.setBounds(lbl2.getBounds());
+
+        estructuraDefensa.setRefLabel(nuevaDefensa);
+        this.defensas.add(estructuraDefensa);
 
         lbl2.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 puntoInicial[0] = e.getPoint(); // Guarda la posición inicial cuando se da click
-                
+
                 moviendo[0] = new JLabel(lbl2.getText());
                 moviendo[0].setOpaque(true);
                 moviendo[0].setBackground(lbl2.getBackground());
                 moviendo[0].setSize(lbl2.getSize());
                 moviendo[0].setBorder(lbl2.getBorder());
-                
+
                 JPanel temporal = (JPanel) getGlassPane();
                 temporal.setLayout(null);
                 temporal.add(moviendo[0]);
                 temporal.setVisible(true);
 
-                Point puntoFrame = SwingUtilities.convertPoint(lbl2, e.getPoint(), getGlassPane());
+                Point puntoFrame = SwingUtilities.convertPoint(temporal, e.getPoint(), getGlassPane());
                 moviendo[0].setLocation(puntoFrame);
             }
-            
-            public void mouseReleased(MouseEvent e){
-                if (moviendo[0] == null) return;
-                        
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (moviendo[0] == null) {
+                    return;
+                }
+
                 Point nuevoPuntoEnPantalla = e.getLocationOnScreen();
                 Point nuevoPuntoEnTerreno = pnlTerreno.getLocationOnScreen();
-                
+
                 int xEnTerreno = nuevoPuntoEnPantalla.x - nuevoPuntoEnTerreno.x - puntoInicial[0].x;
                 int yEnTerreno = nuevoPuntoEnPantalla.y - nuevoPuntoEnTerreno.y - puntoInicial[0].y;
-                
-                if (xEnTerreno >= 0 && yEnTerreno >= 0 &&
-                    xEnTerreno < pnlTerreno.getWidth() && yEnTerreno < pnlTerreno.getHeight()) {
-                    
-                    nuevaDefensa.setSize(30, 30); 
+
+                //Obtener coordenas en el terreno
+                // Convertir posición de pantalla → coordenadas relativas al pnlTerreno
+                SwingUtilities.convertPointFromScreen(nuevoPuntoEnPantalla, pnlTerreno);
+
+                // Calcular la casilla donde se soltó
+                int col = nuevoPuntoEnPantalla.x / 30;
+                int fila = nuevoPuntoEnPantalla.y / 30;
+
+                if (xEnTerreno >= 0 && yEnTerreno >= 0
+                        && xEnTerreno < pnlTerreno.getWidth() && yEnTerreno < pnlTerreno.getHeight() && !terreno[col][fila].estaOcupada()) {
+
+                    nuevaDefensa.setSize(30, 30);
                     nuevaDefensa.setOpaque(true);
                     nuevaDefensa.setBackground(Color.ORANGE); // Algo visible
                     nuevaDefensa.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                    
+
                     // Agregar al panel terreno
                     nuevaDefensa.setLocation(xEnTerreno, yEnTerreno);
                     pnlTerreno.add(nuevaDefensa);
                     pnlTerreno.repaint();
                     pnlTerreno.revalidate();
                     txaLog.append("Label movido al terreno en x: " + xEnTerreno + " y: " + yEnTerreno + "\n");
-                    terreno[xEnTerreno/30][yEnTerreno/30].insertarTropa(nuevaDefensa);
-                    terreno[xEnTerreno/30][yEnTerreno/30].seleccionar();
+
+                    terreno[col][fila].insertarTropa(estructuraDefensa);
+                    txaLog.append("Casilla x: " + (xEnTerreno / 30) + " y: " + (yEnTerreno / 30) + "\n");
                 } else {
-                    txaLog.append("Soltado fuera del terreno.\n");
+                    txaLog.append("Soltado fuera del terreno o la casilla está ocupada.\n");
                 }
-                
+
                 // Limpiar el temporal
                 JPanel temporal = (JPanel) getGlassPane();
                 temporal.remove(moviendo[0]);
@@ -259,7 +274,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 temporal.setVisible(false);
                 moviendo[0] = null;
             }
-        
+
         });
 
         lbl2.addMouseMotionListener(new MouseMotionAdapter() {
@@ -274,27 +289,27 @@ public class fPrincipal extends javax.swing.JFrame {
             }
         });
     }
-    
-    private void generarTerreno(){
+
+    private void generarTerreno() {
         //Tomar el tamaño del ejercito a agregar
         int x = 0;
         int y = 0;
-        for (int i = 0; i < TAMANO_TERRENO; i++){
+        for (int i = 0; i < TAMANO_TERRENO; i++) {
             for (int j = 0; j < TAMANO_TERRENO; j++) {
                 //Para cada soldado se crea un Label
                 JLabel nuevoLabel = new JLabel("");
                 nuevoLabel.setOpaque(true);
-                nuevoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); // Apply the border to the label
+                nuevoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); // Aplica el borde
                 nuevoLabel.setBounds(x, y, 30, 30);
 
                 nuevoLabel.setBackground(new java.awt.Color(66, 245, 66));
-                if(i >= 23 || j >= 23 || i < 2 || j < 2){
-                    nuevoLabel.setBackground(new java.awt.Color(47,79,79));
+                if (i >= 23 || j >= 23 || i < 2 || j < 2) {
+                    nuevoLabel.setBackground(new java.awt.Color(47, 79, 79));
                 }
-                
+
                 pnlTerreno.add(nuevoLabel);
                 this.terreno[i][j] = new Casilla(pnlTerreno, txaLog, nuevoLabel.getLocation(), nuevoLabel);
-                
+
                 y += 30;
             }
             y = 0;
@@ -302,9 +317,7 @@ public class fPrincipal extends javax.swing.JFrame {
         }
         this.repaint();
     }
-    
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

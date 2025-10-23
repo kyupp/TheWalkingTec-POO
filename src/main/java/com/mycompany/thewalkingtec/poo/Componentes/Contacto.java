@@ -14,8 +14,8 @@ import javax.swing.JLabel;
  */
 public class Contacto extends Tropa{
 
-    public Contacto(JLabel refLabel, fPrincipal refPantalla, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, ImageIcon apariencia) {
-        super(refLabel, refPantalla, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
+    public Contacto(fPrincipal refPantalla, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance) {
+        super(refPantalla, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance);
     }
 
 }

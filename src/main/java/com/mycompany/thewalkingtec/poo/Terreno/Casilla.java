@@ -4,6 +4,7 @@
  */
 package com.mycompany.thewalkingtec.poo.Terreno;
 
+import com.mycompany.thewalkingtec.poo.Componente;
 import com.mycompany.thewalkingtec.poo.Componentes.Tropa;
 import java.awt.Color;
 import java.awt.Point;
@@ -26,7 +27,7 @@ public class Casilla {
     boolean seleccionada = false;
     Color colorActual;
     Color colorOriginal;
-    Tropa tropa;
+    Componente tropa;
 
     public Casilla() {
     }
@@ -58,13 +59,15 @@ public class Casilla {
                     @Override
                     public void mouseExited(MouseEvent e) {
                         if (!ocupada) {
+                            
                             lblCasilla.setBackground(colorActual);
                         }
                     }
                 });
     }
     
-    public void insertarTropa(JLabel label){
+    public void insertarTropa(Componente tropa){
+            JLabel label = tropa.getRefLabel();
             label.setSize(lblCasilla.getSize()); // mismo tamaño que la casilla
             label.setLocation(lblCasilla.getLocation()); // se alinea exactamente a la casilla
             label.setOpaque(true);
@@ -74,8 +77,12 @@ public class Casilla {
             pnlTerreno.repaint();
 
             this.ocupada = true;
-            this.tropa = null; // <- Aquí luego será un objeto Tropa real
+            this.tropa = tropa; // <- Aquí luego será un objeto Tropa real
             System.out.println("Tropa insertada y visible en la casilla.");
+    }
+    
+    public boolean estaOcupada(){
+            return ocupada;
     }
     
     public void eliminarTropa(){

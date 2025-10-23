@@ -16,8 +16,8 @@ public class impacto extends Contacto{
     
     private int areaDeAfecto;
     
-    public impacto(JLabel refLabel, fPrincipal refPantalla, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, ImageIcon apariencia,int areaDeAfecto) {
-        super(refLabel, refPantalla, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
+    public impacto(fPrincipal refPantalla, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance,int areaDeAfecto) {
+        super(refPantalla, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance);
         this.areaDeAfecto = areaDeAfecto;
     }
     

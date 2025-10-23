@@ -27,8 +27,8 @@ public class Componente extends Thread{
     public Componente() {
     }
 
-    public Componente(JLabel refLabel, fPrincipal refPantalla, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, ImageIcon apariencia) {
-        this.refLabel = refLabel;
+    public Componente(fPrincipal refPantalla, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance) {
+        this.refLabel = null;
         this.refPantalla = refPantalla;
         this.vida = vida;
         this.golpesPorSegundo = golpesPorSegundo;
@@ -36,11 +36,20 @@ public class Componente extends Thread{
         this.campos = campos;
         this.nivelDeApaicion = nivelDeApaicion;
         this.alcance = alcance;
-        this.apariencia = apariencia;
         
         this.vidaMaxima = vida;
         
     }
+
+    public JLabel getRefLabel() {
+        return refLabel;
+    }
+
+    public void setRefLabel(JLabel refLabel) {
+        this.refLabel = refLabel;
+    }
+    
+    
 
     public int getVida() {
         return vida;
