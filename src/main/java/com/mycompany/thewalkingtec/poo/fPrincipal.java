@@ -4,6 +4,7 @@
  */
 package com.mycompany.thewalkingtec.poo;
 
+import com.mycompany.thewalkingtec.poo.Componentes.ReliquiaDeLaVida;
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaContacto;
 import com.mycompany.thewalkingtec.poo.Terreno.Casilla;
@@ -41,7 +42,7 @@ public class fPrincipal extends javax.swing.JFrame {
         initComponents();
         inicializarTerreno();
         generarTerreno();
-        initDefensa(new arbolDeLaVida(this, 100, 0, 0, 0, 0, 0, "/Imagenes/fotoArbol.png"), 0);
+        initDefensa(new ReliquiaDeLaVida(this, 100, "/Imagenes/fotoArbol.png"), 0);
         initDefensa(new DefensaContacto(this, 100, 0, 0, 0, 0, 0, 0,"/Imagenes/hulk.png"), 40);
     }
 
