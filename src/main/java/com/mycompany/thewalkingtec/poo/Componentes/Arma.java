@@ -16,8 +16,8 @@ public class Arma extends Tropa{
     
     Tropa tipo;
 
-    public Arma(fPrincipal refPantalla, Tropa tipo, int golpesPorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance) {
-        super(refPantalla, golpesPorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance);
+    public Arma(fPrincipal refPantalla, Tropa tipo, int golpesPorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
+        super(refPantalla, golpesPorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
         this.tipo = tipo;
     }
     

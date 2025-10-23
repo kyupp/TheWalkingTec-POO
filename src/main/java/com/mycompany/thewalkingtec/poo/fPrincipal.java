@@ -4,18 +4,22 @@
  */
 package com.mycompany.thewalkingtec.poo;
 
+import com.mycompany.thewalkingtec.poo.Componentes.Componente;
 import com.mycompany.thewalkingtec.poo.Componentes.Arma;
 import com.mycompany.thewalkingtec.poo.Componentes.Contacto;
 import com.mycompany.thewalkingtec.poo.Componentes.Zombie;
 import com.mycompany.thewalkingtec.poo.Terreno.Casilla;
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -39,12 +43,12 @@ public class fPrincipal extends javax.swing.JFrame {
      * Creates new form fPrincipal
      */
     public fPrincipal() {
+
         initComponents();
         inicializarTerreno();
         generarTerreno();
-
-        initDefensa(new arbolDeLaVida(this, 100, 0, 0, 0, 0, 0), 0);
-        initDefensa(new Contacto(this, 100, 0, 0, 0,0, 0, 0), 40);
+        initDefensa(new arbolDeLaVida(this, 100, 0, 0, 0, 0, 0, "/Imagenes/fotoArbol.png"), 0);
+        initDefensa(new Contacto(this, 100, 0, 0, 0, 0, 0, 0,"/Imagenes/hulk.png"), 40);
     }
 
     /**
@@ -184,17 +188,26 @@ public class fPrincipal extends javax.swing.JFrame {
         JLabel lblDefensa = new JLabel("");
         lblDefensa.setOpaque(true);
         lblDefensa.setBackground(new java.awt.Color(168, 117, 50));
-        //int x = (new Random()).nextInt(500) + 250;
-        //int y = (new Random()).nextInt(300) + 200;
         lblDefensa.setBounds(30 + pos, 30, 30, 30);
-        pnlComponentes.add(lblDefensa);
+        
+         //Cargar imagen del árbol y asignarla al label
+         ImageIcon iconoOriginal = new ImageIcon(new ImageIcon(getClass().getResource(estructuraDefensa.getApariencia())).getImage().getScaledInstance(lblDefensa.getWidth(), lblDefensa.getHeight(), 0));
+         lblDefensa.setIcon(iconoOriginal);
+         
+         pnlComponentes.add(lblDefensa);
+         
+         lblDefensa.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                //JOptionPane.showMessageDialog(null, "Este es un mensaje de ejemplo.");
+            }
+         });
 
-        //ImageIcon icono = new ImageIcon(getClass().getResource(""));
-        //this.arbolDeLaVida.setApariencia(icono);
         initArrastreLabel(lblDefensa, estructuraDefensa);
     }
 
     private void initArrastreLabel(JLabel lbl2, Componente estructuraDefensa) {
+        
         final Point[] puntoInicial = {null};
         final JLabel[] moviendo = {null};
         // Crear copia del panel actual
@@ -251,7 +264,7 @@ public class fPrincipal extends javax.swing.JFrame {
 
                     nuevaDefensa.setSize(30, 30);
                     nuevaDefensa.setOpaque(true);
-                    nuevaDefensa.setBackground(Color.ORANGE); // Algo visible
+                    nuevaDefensa.setBackground(new java.awt.Color(66, 245, 66));
                     nuevaDefensa.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
                     // Agregar al panel terreno
@@ -263,6 +276,7 @@ public class fPrincipal extends javax.swing.JFrame {
 
                     terreno[col][fila].insertarTropa(estructuraDefensa);
                     txaLog.append("Casilla x: " + (xEnTerreno / 30) + " y: " + (yEnTerreno / 30) + "\n");
+                    pnlTerreno.repaint();
                 } else {
                     txaLog.append("Soltado fuera del terreno o la casilla está ocupada.\n");
                 }
@@ -285,7 +299,10 @@ public class fPrincipal extends javax.swing.JFrame {
                     Point p = SwingUtilities.convertPoint(lbl2, e.getPoint(), temporal);
                     moviendo[0].setLocation(p.x - puntoInicial[0].x, p.y - puntoInicial[0].y);
                     temporal.repaint();
+                    
                 }
+                
+                
             }
         });
     }

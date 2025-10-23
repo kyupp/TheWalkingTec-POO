@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.thewalkingtec.poo;
+package com.mycompany.thewalkingtec.poo.Componentes;
 
+import com.mycompany.thewalkingtec.poo.fPrincipal;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -20,14 +21,14 @@ public class Componente extends Thread{
     private int campos;
     private int nivelDeApaicion;
     private int alcance;
-    private ImageIcon apariencia;
+    private String apariencia;
     private JLabel refLabel;
     private fPrincipal refPantalla;
 
     public Componente() {
     }
 
-    public Componente(fPrincipal refPantalla, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance) {
+    public Componente(fPrincipal refPantalla, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
         this.refLabel = null;
         this.refPantalla = refPantalla;
         this.vida = vida;
@@ -36,21 +37,28 @@ public class Componente extends Thread{
         this.campos = campos;
         this.nivelDeApaicion = nivelDeApaicion;
         this.alcance = alcance;
-        
+        this.apariencia = apariencia;
         this.vidaMaxima = vida;
         
     }
 
-    public JLabel getRefLabel() {
+       public JLabel getRefLabel() {
         return refLabel;
     }
 
     public void setRefLabel(JLabel refLabel) {
         this.refLabel = refLabel;
+        // Cargar imagen del árbol y asignarla al label
+         ImageIcon iconoOriginal = new ImageIcon(new ImageIcon(getClass().getResource(apariencia)).getImage().getScaledInstance(refLabel.getWidth(), refLabel.getHeight(), 0));
+         refLabel.setOpaque(false);
+         refLabel.setIcon(iconoOriginal);
+         refLabel.repaint();
+    }   
+
+    public String getApariencia() {
+        return apariencia;
     }
     
-    
-
     public int getVida() {
         return vida;
     }

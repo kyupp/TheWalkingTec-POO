@@ -4,7 +4,7 @@
  */
 package com.mycompany.thewalkingtec.poo.Terreno;
 
-import com.mycompany.thewalkingtec.poo.Componente;
+import com.mycompany.thewalkingtec.poo.Componentes.Componente;
 import com.mycompany.thewalkingtec.poo.Componentes.Tropa;
 import java.awt.Color;
 import java.awt.Point;

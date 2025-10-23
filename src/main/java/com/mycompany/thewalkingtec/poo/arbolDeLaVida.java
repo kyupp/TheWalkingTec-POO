@@ -4,7 +4,7 @@
  */
 package com.mycompany.thewalkingtec.poo;
 
-import com.mycompany.thewalkingtec.poo.Componente;
+import com.mycompany.thewalkingtec.poo.Componentes.Componente;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -18,25 +18,11 @@ public class arbolDeLaVida extends Componente{
     private JLabel refLabel;
     private fPrincipal refPantalla;
     int vida = 1;
-    private ImageIcon apariencia;
-
-    public void setApariencia(ImageIcon apariencia) {
-        this.apariencia = apariencia;
-    }
-
-    public arbolDeLaVida(fPrincipal refPantalla, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance) {
-        super(refPantalla, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance);
-    }
     
-    public JLabel getRefLabel() {
-        return refLabel;
+    public arbolDeLaVida(fPrincipal refPantalla, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
+        super(refPantalla, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
+        
     }
-
-    public void setRefLabel(JLabel refLabel) {
-        this.refLabel = refLabel;
-    }
-    
-    
     
     public int getVida() {
         return vida;

@@ -16,8 +16,8 @@ public class impacto extends Contacto{
     
     private int areaDeAfecto;
     
-    public impacto(fPrincipal refPantalla, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance,int areaDeAfecto) {
-        super(refPantalla, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance);
+    public impacto(fPrincipal refPantalla, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance,int areaDeAfecto, String apariencia) {
+        super(refPantalla, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
         this.areaDeAfecto = areaDeAfecto;
     }
     

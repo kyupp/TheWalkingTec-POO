@@ -4,7 +4,6 @@
  */
 package com.mycompany.thewalkingtec.poo.Componentes;
 
-import com.mycompany.thewalkingtec.poo.Componente;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -18,8 +17,8 @@ public class Zombie extends Componente{
     
     Tropa tipo;
 
-    public Zombie(JLabel refLabel, fPrincipal refPantalla, Tropa tipo, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance) {
-        super(refPantalla, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance);
+    public Zombie(JLabel refLabel, fPrincipal refPantalla, Tropa tipo, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
+        super(refPantalla, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
         this.tipo = tipo;
     }
     
