@@ -5,26 +5,19 @@
 package com.mycompany.thewalkingtec.poo;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
-import com.mycompany.thewalkingtec.poo.Componentes.Arma;
-import com.mycompany.thewalkingtec.poo.Componentes.Contacto;
-import com.mycompany.thewalkingtec.poo.Componentes.Zombie;
+import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaContacto;
 import com.mycompany.thewalkingtec.poo.Terreno.Casilla;
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 
 /**
  *
@@ -34,8 +27,9 @@ public class fPrincipal extends javax.swing.JFrame {
 
     private int TAMANO_TERRENO = 25;
     private Casilla[][] terreno = new Casilla[25][25];
-    private ArrayList<Componente> defensas = new ArrayList<Componente>();
+    private ArrayList<Componente> ejercito = new ArrayList<Componente>();
     private ArrayList<Componente> atacantes = new ArrayList<Componente>();
+    private ArrayList<Componente> defensa = new ArrayList<Componente>();
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(fPrincipal.class.getName());
 
@@ -48,7 +42,7 @@ public class fPrincipal extends javax.swing.JFrame {
         inicializarTerreno();
         generarTerreno();
         initDefensa(new arbolDeLaVida(this, 100, 0, 0, 0, 0, 0, "/Imagenes/fotoArbol.png"), 0);
-        initDefensa(new Contacto(this, 100, 0, 0, 0, 0, 0, 0,"/Imagenes/hulk.png"), 40);
+        initDefensa(new DefensaContacto(this, 100, 0, 0, 0, 0, 0, 0,"/Imagenes/hulk.png"), 40);
     }
 
     /**
@@ -178,7 +172,7 @@ public class fPrincipal extends javax.swing.JFrame {
 
     private void inicializarTerreno() {
         for (int i = 0; i < TAMANO_TERRENO; i++) {
-            for (int j = 0; j < TAMANO_TERRENO; j++) {
+            for (int j = 0; j < TAMANO_TERRENO; j++) {  
                 this.terreno[i][j] = new Casilla();
             }
         }
@@ -217,7 +211,7 @@ public class fPrincipal extends javax.swing.JFrame {
         nuevaDefensa.setBounds(lbl2.getBounds());
 
         estructuraDefensa.setRefLabel(nuevaDefensa);
-        this.defensas.add(estructuraDefensa);
+        this.ejercito.add(estructuraDefensa);
 
         lbl2.addMouseListener(new MouseAdapter() {
             @Override

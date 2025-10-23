@@ -5,7 +5,7 @@
 package com.mycompany.thewalkingtec.poo.Terreno;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
-import com.mycompany.thewalkingtec.poo.Componentes.Tropa;
+import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -77,7 +77,7 @@ public class Casilla {
             pnlTerreno.repaint();
 
             this.ocupada = true;
-            this.tropa = tropa; // <- Aquí luego será un objeto Tropa real
+            this.tropa = tropa; // <- Aquí luego será un objeto Defensa real
             System.out.println("Tropa insertada y visible en la casilla.");
     }
     

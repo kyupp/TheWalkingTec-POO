@@ -7,102 +7,88 @@ package com.mycompany.thewalkingtec.poo.Componentes;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import java.awt.Image;
 
-/**
- *
- * @author mathiasviquez
- */
-public class Componente extends Thread{
-    
+public abstract class Componente extends Thread {
+
+    // 🔹 Atributos principales
     private int vidaMaxima;
     private int vida;
     private int golpesPorSegundo;
     private int nivel;
     private int campos;
-    private int nivelDeApaicion;
+    private int nivelDeAparicion;
     private int alcance;
     private String apariencia;
+
+    // 🔹 Referencias a la interfaz
     private JLabel refLabel;
     private fPrincipal refPantalla;
 
+    // 🔹 Constructores
     public Componente() {
     }
 
-    public Componente(fPrincipal refPantalla, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
+    public Componente(fPrincipal refPantalla, int vida, int golpesPorSegundo, int nivel, 
+                      int campos, int nivelDeAparicion, int alcance, String apariencia) {
         this.refLabel = null;
         this.refPantalla = refPantalla;
         this.vida = vida;
+        this.vidaMaxima = vida;
         this.golpesPorSegundo = golpesPorSegundo;
         this.nivel = nivel;
         this.campos = campos;
-        this.nivelDeApaicion = nivelDeApaicion;
+        this.nivelDeAparicion = nivelDeAparicion;
         this.alcance = alcance;
         this.apariencia = apariencia;
-        this.vidaMaxima = vida;
-        
     }
 
-       public JLabel getRefLabel() {
+    // 🔹 Métodos de imagen y UI
+    public void setRefLabel(JLabel refLabel) {
+        this.refLabel = refLabel;
+        try {
+            ImageIcon iconoOriginal = new ImageIcon(getClass().getResource(apariencia));
+            Image imagenEscalada = iconoOriginal.getImage()
+                    .getScaledInstance(refLabel.getWidth(), refLabel.getHeight(), Image.SCALE_SMOOTH);
+            refLabel.setOpaque(false);
+            refLabel.setIcon(new ImageIcon(imagenEscalada));
+            refLabel.repaint();
+        } catch (Exception e) {
+            System.err.println("⚠️ Error cargando imagen: " + apariencia);
+        }
+    }
+
+    public JLabel getRefLabel() {
         return refLabel;
     }
 
-    public void setRefLabel(JLabel refLabel) {
-        this.refLabel = refLabel;
-        // Cargar imagen del árbol y asignarla al label
-         ImageIcon iconoOriginal = new ImageIcon(new ImageIcon(getClass().getResource(apariencia)).getImage().getScaledInstance(refLabel.getWidth(), refLabel.getHeight(), 0));
-         refLabel.setOpaque(false);
-         refLabel.setIcon(iconoOriginal);
-         refLabel.repaint();
-    }   
+    // 🔹 Getters y setters
+    public String getApariencia() { return apariencia; }
+    public int getVida() { return vida; }
+    public int getGolpesPorSegundo() { return golpesPorSegundo; }
+    public int getNivel() { return nivel; }
+    public int getCampos() { return campos; }
+    public int getNivelDeAparicion() { return nivelDeAparicion; }
+    public int getAlcance() { return alcance; }
+    public fPrincipal getRefPantalla() { return refPantalla; }
 
-    public String getApariencia() {
-        return apariencia;
-    }
-    
-    public int getVida() {
-        return vida;
-    }
+    public void setVida(int vida) { this.vida = vida; }
+    public void setNivel(int nivel) { this.nivel = nivel; }
 
-    public int getGolpesPorSegundo() {
-        return golpesPorSegundo;
-    }
-
-    public int getNivel() {
-        return nivel;
-    }
-
-    public int getCampos() {
-        return campos;
-    }
-
-    public int getNivelDeApaicion() {
-        return nivelDeApaicion;
-    }
-
-    public int getAlcance() {
-        return alcance;
-    }
-    
-    public void subirNivel(){
+    public void subirNivel() {
         this.nivel++;
+        // Mejoras
     }
-    
-    public void recibirGolpe(int golpe){
-        
-        if (this.vida >= golpe){
-            
-            this.vida = this.vida - golpe;
-            
-        }else if (this.vida < golpe && this.vida > 0){
-            
-            this.vida = 0;
-        }
+
+    public void recibirGolpe(int golpe) {
+        this.vida = Math.max(this.vida - golpe, 0);
     }
-    
-    public void resetearVida(){
+
+    public void resetearVida() {
         this.vida = this.vidaMaxima;
     }
-    
-    
-    
+
+    public boolean estaDestruido() {
+        return this.vida <= 0;
+    }
 }
