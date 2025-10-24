@@ -32,7 +32,7 @@ public class fPrincipal extends javax.swing.JFrame {
     private ArrayList<Componente> ejercito = new ArrayList<Componente>();
     private ArrayList<Componente> atacantes = new ArrayList<Componente>();
     private ArrayList<Componente> defensa = new ArrayList<Componente>();
-    private ReliquiaDeLaVida reliquia = new ReliquiaDeLaVida(this,"Reliquia", 100, "/Imagenes/fotoArbol.png");
+    private ReliquiaDeLaVida reliquia = new ReliquiaDeLaVida(this, "Reliquia", 100, "/Imagenes/fotoArbol.png");
     boolean reliquiaPlaced = false;
 
     //Atributos de juego
@@ -68,10 +68,10 @@ public class fPrincipal extends javax.swing.JFrame {
         pnlComponentes = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txaLog = new javax.swing.JTextArea();
+        btnIniciar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1170, 790));
-        setPreferredSize(new java.awt.Dimension(1170, 790));
         setResizable(false);
         setSize(new java.awt.Dimension(1170, 790));
 
@@ -105,7 +105,7 @@ public class fPrincipal extends javax.swing.JFrame {
         );
         pnlComponentesLayout.setVerticalGroup(
             pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
+            .addGap(0, 329, Short.MAX_VALUE)
         );
 
         tbPnlComponentes.addTab("tab1", pnlComponentes);
@@ -114,22 +114,34 @@ public class fPrincipal extends javax.swing.JFrame {
         txaLog.setRows(5);
         jScrollPane1.setViewportView(txaLog);
 
+        btnIniciar.setText("Iniciar");
+        btnIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlUtilidadesLayout = new javax.swing.GroupLayout(pnlUtilidades);
         pnlUtilidades.setLayout(pnlUtilidadesLayout);
         pnlUtilidadesLayout.setHorizontalGroup(
             pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUtilidadesLayout.createSequentialGroup()
+            .addGroup(pnlUtilidadesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
-                    .addComponent(tbPnlComponentes))
+                .addGroup(pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(tbPnlComponentes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
+                    .addGroup(pnlUtilidadesLayout.createSequentialGroup()
+                        .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlUtilidadesLayout.setVerticalGroup(
             pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlUtilidadesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tbPnlComponentes, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tbPnlComponentes, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1)
                 .addContainerGap())
@@ -152,6 +164,11 @@ public class fPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
+        // TODO add your handling code here:
+        iniciarJuego();
+    }//GEN-LAST:event_btnIniciarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -187,7 +204,7 @@ public class fPrincipal extends javax.swing.JFrame {
     }
 
     private void initDefensa(Componente estructuraDefensa, int pos) {
-        JLabel lblDefensa = new JLabel("");
+        JLabel lblDefensa = new JLabel("s");
         lblDefensa.setOpaque(true);
         lblDefensa.setBackground(new java.awt.Color(168, 117, 50));
         lblDefensa.setBounds(30 + pos, 30, 30, 30);
@@ -198,15 +215,6 @@ public class fPrincipal extends javax.swing.JFrame {
         lblDefensa.setIcon(iconoOriginal);
 
         pnlComponentes.add(lblDefensa);
-
-        lblDefensa.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-                //JOptionPane.showMessageDialog(null, "Este es un mensaje de ejemplo.");
-            }
-        });
-
         initArrastreLabel(lblDefensa, estructuraDefensa);
     }
 
@@ -218,29 +226,38 @@ public class fPrincipal extends javax.swing.JFrame {
         JLabel nuevaDefensa = new JLabel();
         nuevaDefensa.setBackground(lbl2.getBackground());
         nuevaDefensa.setOpaque(true);
-        nuevaDefensa.setBounds(lbl2.getBounds());
+        nuevaDefensa.setSize(30, 30);
 
         estructuraDefensa.setRefLabel(nuevaDefensa);
-        this.ejercito.add(estructuraDefensa);
 
         lbl2.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                puntoInicial[0] = e.getPoint(); // Guarda la posición inicial cuando se da click
+                if (estructuraDefensa instanceof ReliquiaDeLaVida && reliquiaPlaced) {
+                    txaLog.append("La Reliquia de la Vida solo puede colocarse una vez.\n");
+                    limpiarArrastreTemporal();
+                    return;
+                } else if (estructuraDefensa instanceof ReliquiaDeLaVida) {
+                    reliquiaPlaced = true;
+                }
 
-                moviendo[0] = new JLabel(lbl2.getText());
-                moviendo[0].setOpaque(true);
-                moviendo[0].setBackground(lbl2.getBackground());
-                moviendo[0].setSize(lbl2.getSize());
-                moviendo[0].setBorder(lbl2.getBorder());
+                if (fPrincipal.this.ejercito.size() <= fPrincipal.this.capacidadEjercito + 1) {
+                    puntoInicial[0] = e.getPoint(); // Guarda la posición inicial cuando se da click
 
-                JPanel temporal = (JPanel) getGlassPane();
-                temporal.setLayout(null);
-                temporal.add(moviendo[0]);
-                temporal.setVisible(true);
+                    moviendo[0] = new JLabel(lbl2.getText());
+                    moviendo[0].setOpaque(true);
+                    moviendo[0].setBackground(lbl2.getBackground());
+                    moviendo[0].setSize(lbl2.getSize());
+                    moviendo[0].setBorder(lbl2.getBorder());
 
-                Point puntoFrame = SwingUtilities.convertPoint(temporal, e.getPoint(), getGlassPane());
-                moviendo[0].setLocation(puntoFrame);
+                    JPanel temporal = (JPanel) getGlassPane();
+                    temporal.setLayout(null);
+                    temporal.add(moviendo[0]);
+                    temporal.setVisible(true);
+
+                    Point puntoFrame = SwingUtilities.convertPoint(temporal, e.getPoint(), getGlassPane());
+                    moviendo[0].setLocation(puntoFrame);
+                }
             }
 
             @Override
@@ -258,15 +275,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 SwingUtilities.convertPointFromScreen(puntoPantalla, pnlTerreno);
                 int col = puntoPantalla.x / 30;
                 int fila = puntoPantalla.y / 30;
-                    
-                if (estructuraDefensa instanceof ReliquiaDeLaVida && reliquiaPlaced) {
-                        txaLog.append("La Reliquia de la Vida solo puede colocarse una vez.\n");
-                        limpiarArrastreTemporal();
-                        return;
-                 }else{
-                    reliquiaPlaced = true;
-                }
-                
+
                 if (xEnTerreno >= 0 && yEnTerreno >= 0
                         && xEnTerreno < pnlTerreno.getWidth() && yEnTerreno < pnlTerreno.getHeight()
                         && !terreno[col][fila].estaOcupada()) {
@@ -275,7 +284,7 @@ public class fPrincipal extends javax.swing.JFrame {
                     Componente nuevaEstructura = estructuraDefensa.clonar(fPrincipal.this);
 
                     // Crear el JLabel definitivo en el terreno
-                    JLabel nuevaDefensa = new JLabel();
+                    JLabel nuevaDefensa = new JLabel("L");
                     nuevaDefensa.setSize(30, 30);
                     nuevaDefensa.setOpaque(true);
                     nuevaDefensa.setBackground(new java.awt.Color(66, 245, 66));
@@ -287,7 +296,16 @@ public class fPrincipal extends javax.swing.JFrame {
                     pnlTerreno.repaint();
 
                     // Añadir la estructura al ejército
-                    fPrincipal.this.ejercito.add(nuevaEstructura);
+                    if (!(estructuraDefensa instanceof ReliquiaDeLaVida)) {
+                        fPrincipal.this.ejercito.add(nuevaEstructura);
+                    }
+
+                    nuevaEstructura.setRefLabel(nuevaDefensa);
+
+                    // Si es la reliquia, actualiza la referencia global también
+                    if (nuevaEstructura instanceof ReliquiaDeLaVida) {
+                        fPrincipal.this.reliquia = (ReliquiaDeLaVida) nuevaEstructura;
+                    }
 
                     // Insertar en la casilla
                     terreno[col][fila].insertarTropa(nuevaEstructura);
@@ -302,8 +320,9 @@ public class fPrincipal extends javax.swing.JFrame {
                 JPanel temporal = (JPanel) getGlassPane();
                 temporal.remove(moviendo[0]);
                 temporal.repaint();
-                temporal.setVisible(false);
+                temporal.setVisible(true);
                 moviendo[0] = null;
+
             }
 
         });
@@ -322,13 +341,13 @@ public class fPrincipal extends javax.swing.JFrame {
             }
         });
     }
-    
+
     private void limpiarArrastreTemporal() {
-    JPanel temporal = (JPanel) getGlassPane();
-    temporal.removeAll();
-    temporal.repaint();
-    temporal.setVisible(false);
-}
+        JPanel temporal = (JPanel) getGlassPane();
+        temporal.removeAll();
+        temporal.repaint();
+        temporal.setVisible(false);
+    }
 
     private void generarTerreno() {
         //Tomar el tamaño del ejercito a agregar
@@ -364,9 +383,25 @@ public class fPrincipal extends javax.swing.JFrame {
 
     public void iniciarJuego() {
         //Instrucciones para iniciar el juego
+        for (Componente estructura : ejercito) {
+            estructura.start();
+        }
+    }
+
+    public Point getObjetivoLocation() {
+        return this.reliquia.getRefLabel().getLocation();
+    }
+
+    public ReliquiaDeLaVida getObjetivo() {
+        return this.reliquia;
+    }
+
+    public void moverSoldado(JLabel refLabel, int x, int y) {
+        refLabel.setLocation(x, y);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnIniciar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel pnlComponentes;
     private javax.swing.JPanel pnlTerreno;
