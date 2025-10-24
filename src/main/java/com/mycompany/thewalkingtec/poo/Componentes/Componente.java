@@ -54,7 +54,7 @@ public abstract class Componente extends Thread {
             refLabel.setIcon(new ImageIcon(imagenEscalada));
             refLabel.repaint();
         } catch (Exception e) {
-            System.err.println("⚠️ Error cargando imagen: " + apariencia);
+            System.err.println(" Error cargando imagen: " + apariencia);
         }
     }
 
