@@ -15,11 +15,11 @@ import javax.swing.JLabel;
  */
 public class ZombieContacto extends Zombie {
 
-    public ZombieContacto(fPrincipal refPantalla, int ataquePorUnidad, int vida, int golpesPorSegundo,
+    public ZombieContacto(fPrincipal refPantalla, String nombre ,int ataquePorUnidad, int vida, int golpesPorSegundo,
                           int nivel, int campos, int nivelDeAparicion, int alcance, 
                           String apariencia, int velocidad) {
 
-        super(refPantalla, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, 
+        super(refPantalla, nombre, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, 
               nivelDeAparicion, alcance, apariencia, velocidad, false);
     }
 

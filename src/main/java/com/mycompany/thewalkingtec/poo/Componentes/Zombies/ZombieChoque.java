@@ -15,11 +15,11 @@ public class ZombieChoque extends Zombie {
 
     private int radioExplosion;
 
-    public ZombieChoque(fPrincipal refPantalla, int ataquePorUnidad, int vida, int golpesPorSegundo,
+    public ZombieChoque(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo,
                         int nivel, int campos, int nivelDeAparicion, int alcance, 
                         String apariencia, int velocidad, int radioExplosion) {
 
-        super(refPantalla, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, 
+        super(refPantalla, nombre, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, 
               nivelDeAparicion, alcance, apariencia, velocidad, false);
         this.radioExplosion = radioExplosion;
     }

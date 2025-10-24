@@ -14,8 +14,8 @@ import com.mycompany.thewalkingtec.poo.fPrincipal;
  */
 public class ZombieAereo extends Zombie implements IVolador{
 
-    public ZombieAereo(fPrincipal refPantalla, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeAparicion, int alcance, String apariencia, int velocidad, boolean volador) {
-        super(refPantalla, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeAparicion, alcance, apariencia, velocidad, volador);
+    public ZombieAereo(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeAparicion, int alcance, String apariencia, int velocidad, boolean volador) {
+        super(refPantalla, nombre ,ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeAparicion, alcance, apariencia, velocidad, volador);
     }
 
     @Override

@@ -26,11 +26,18 @@ import javax.swing.SwingUtilities;
  */
 public class fPrincipal extends javax.swing.JFrame {
 
+    //Componentes del juego
     private int TAMANO_TERRENO = 25;
     private Casilla[][] terreno = new Casilla[25][25];
     private ArrayList<Componente> ejercito = new ArrayList<Componente>();
     private ArrayList<Componente> atacantes = new ArrayList<Componente>();
     private ArrayList<Componente> defensa = new ArrayList<Componente>();
+    private ReliquiaDeLaVida reliquia = new ReliquiaDeLaVida(this,"Reliquia", 100, "/Imagenes/fotoArbol.png");
+    boolean reliquiaPlaced = false;
+
+    //Atributos de juego
+    private int nivelActual = 0;
+    private int capacidadEjercito = 20;
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(fPrincipal.class.getName());
 
@@ -42,8 +49,8 @@ public class fPrincipal extends javax.swing.JFrame {
         initComponents();
         inicializarTerreno();
         generarTerreno();
-        initDefensa(new ReliquiaDeLaVida(this, 100, "/Imagenes/fotoArbol.png"), 0);
-        initDefensa(new DefensaContacto(this, 100, 0, 0, 0, 0, 0, 0, "/Imagenes/hulk.png"), 40);
+        initDefensa(reliquia, 0);
+        initDefensa(new DefensaContacto(this, "De Contacto", 100, 0, 0, 0, 0, 0, 0, "/Imagenes/hulk.png"), 40);
     }
 
     /**
@@ -185,6 +192,7 @@ public class fPrincipal extends javax.swing.JFrame {
         lblDefensa.setBackground(new java.awt.Color(168, 117, 50));
         lblDefensa.setBounds(30 + pos, 30, 30, 30);
 
+        System.out.println(estructuraDefensa.getClass());
         //Cargar imagen del árbol y asignarla al label
         ImageIcon iconoOriginal = new ImageIcon(new ImageIcon(getClass().getResource(estructuraDefensa.getApariencia())).getImage().getScaledInstance(lblDefensa.getWidth(), lblDefensa.getHeight(), 0));
         lblDefensa.setIcon(iconoOriginal);
@@ -194,12 +202,12 @@ public class fPrincipal extends javax.swing.JFrame {
         lblDefensa.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                
+
                 //JOptionPane.showMessageDialog(null, "Este es un mensaje de ejemplo.");
             }
         });
-        initArrastreLabel(lblDefensa, estructuraDefensa);
 
+        initArrastreLabel(lblDefensa, estructuraDefensa);
     }
 
     private void initArrastreLabel(JLabel lbl2, Componente estructuraDefensa) {
@@ -250,7 +258,15 @@ public class fPrincipal extends javax.swing.JFrame {
                 SwingUtilities.convertPointFromScreen(puntoPantalla, pnlTerreno);
                 int col = puntoPantalla.x / 30;
                 int fila = puntoPantalla.y / 30;
-
+                    
+                if (estructuraDefensa instanceof ReliquiaDeLaVida && reliquiaPlaced) {
+                        txaLog.append("La Reliquia de la Vida solo puede colocarse una vez.\n");
+                        limpiarArrastreTemporal();
+                        return;
+                 }else{
+                    reliquiaPlaced = true;
+                }
+                
                 if (xEnTerreno >= 0 && yEnTerreno >= 0
                         && xEnTerreno < pnlTerreno.getWidth() && yEnTerreno < pnlTerreno.getHeight()
                         && !terreno[col][fila].estaOcupada()) {
@@ -277,7 +293,7 @@ public class fPrincipal extends javax.swing.JFrame {
                     terreno[col][fila].insertarTropa(nuevaEstructura);
 
                     txaLog.append("Label movido al terreno en x: " + xEnTerreno + " y: " + yEnTerreno + "\n");
-                     txaLog.append(nuevaEstructura.toString());
+                    txaLog.append(nuevaEstructura.toString() + "\n");
                 } else {
                     txaLog.append("Soltado fuera del terreno o la casilla está ocupada.\n");
                 }
@@ -306,6 +322,13 @@ public class fPrincipal extends javax.swing.JFrame {
             }
         });
     }
+    
+    private void limpiarArrastreTemporal() {
+    JPanel temporal = (JPanel) getGlassPane();
+    temporal.removeAll();
+    temporal.repaint();
+    temporal.setVisible(false);
+}
 
     private void generarTerreno() {
         //Tomar el tamaño del ejercito a agregar
@@ -335,6 +358,13 @@ public class fPrincipal extends javax.swing.JFrame {
         this.repaint();
     }
 
+    public void subirDeNivel() {
+        //Instrucciones de cambios cuando suben de nivel
+    }
+
+    public void iniciarJuego() {
+        //Instrucciones para iniciar el juego
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

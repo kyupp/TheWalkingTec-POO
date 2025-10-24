@@ -12,8 +12,8 @@ import com.mycompany.thewalkingtec.poo.fPrincipal;
  */
 public class DefensaAtaqueMultiple extends DefensaMedioAlcance{
     
-    public DefensaAtaqueMultiple(fPrincipal refPantalla, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
-        super(refPantalla, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
+    public DefensaAtaqueMultiple(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
+        super(refPantalla, nombre ,ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
     }
     
     public void lanzarAtaqueMultiple(){

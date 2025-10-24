@@ -17,8 +17,8 @@ import javax.swing.JLabel;
  */
 public class ReliquiaDeLaVida extends Componente {
     
-    public ReliquiaDeLaVida(fPrincipal refPantalla, int vida, String apariencia) {
-        super(refPantalla, vida, 0, 1, 1, 1, 0, apariencia);
+    public ReliquiaDeLaVida(fPrincipal refPantalla, String nombre, int vida, String apariencia) {
+        super(refPantalla, nombre, vida, 0, 1, 1, 1, 0, apariencia);
     }
     
     public void destruirReliquia() {
@@ -44,6 +44,7 @@ public class ReliquiaDeLaVida extends Componente {
     // Crea una nueva ReliquiaDeLaVida con la misma vida y apariencia
     return new ReliquiaDeLaVida(
         refPantalla,      // referencia a la pantalla
+        super.getNombre(),
         this.getVida(),   // vida actual o vida máxima según quieras
         this.getApariencia()
     );

@@ -12,6 +12,7 @@ import java.awt.Image;
 public abstract class Componente extends Thread {
 
     // 🔹 Atributos principales
+    private String nombre;
     private int vidaMaxima;
     private int vida;
     private int golpesPorSegundo;
@@ -29,10 +30,11 @@ public abstract class Componente extends Thread {
     public Componente() {
     }
 
-    public Componente(fPrincipal refPantalla, int vida, int golpesPorSegundo, int nivel,
+    public Componente(fPrincipal refPantalla, String nombre, int vida, int golpesPorSegundo, int nivel,
             int campos, int nivelDeAparicion, int alcance, String apariencia) {
         this.refLabel = null;
         this.refPantalla = refPantalla;
+        this.nombre = nombre;
         this.vida = vida;
         this.vidaMaxima = vida;
         this.golpesPorSegundo = golpesPorSegundo;
@@ -71,6 +73,10 @@ public abstract class Componente extends Thread {
         return vida;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+    
     public int getGolpesPorSegundo() {
         return golpesPorSegundo;
     }
@@ -93,6 +99,10 @@ public abstract class Componente extends Thread {
 
     public fPrincipal getRefPantalla() {
         return refPantalla;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public void setVida(int vida) {
