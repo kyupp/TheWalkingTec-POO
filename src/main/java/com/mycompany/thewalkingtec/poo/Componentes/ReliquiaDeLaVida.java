@@ -5,6 +5,7 @@
 package com.mycompany.thewalkingtec.poo.Componentes;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
+import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaContacto;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -37,4 +38,14 @@ public class ReliquiaDeLaVida extends Componente {
         }
         destruirReliquia();
     }
+
+    @Override
+    public Componente clonar(fPrincipal refPantalla) {
+    // Crea una nueva ReliquiaDeLaVida con la misma vida y apariencia
+    return new ReliquiaDeLaVida(
+        refPantalla,      // referencia a la pantalla
+        this.getVida(),   // vida actual o vida máxima según quieras
+        this.getApariencia()
+    );
+}
 }
