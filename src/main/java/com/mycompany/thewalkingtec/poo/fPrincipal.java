@@ -43,7 +43,7 @@ public class fPrincipal extends javax.swing.JFrame {
         inicializarTerreno();
         generarTerreno();
         initDefensa(new ReliquiaDeLaVida(this, 100, "/Imagenes/fotoArbol.png"), 0);
-        initDefensa(new DefensaContacto(this, 100, 0, 0, 0, 0, 0, 0,"/Imagenes/hulk.png"), 40);
+        initDefensa(new DefensaContacto(this, 100, 0, 0, 0, 0, 0, 0, "/Imagenes/hulk.png"), 40);
     }
 
     /**
@@ -173,7 +173,7 @@ public class fPrincipal extends javax.swing.JFrame {
 
     private void inicializarTerreno() {
         for (int i = 0; i < TAMANO_TERRENO; i++) {
-            for (int j = 0; j < TAMANO_TERRENO; j++) {  
+            for (int j = 0; j < TAMANO_TERRENO; j++) {
                 this.terreno[i][j] = new Casilla();
             }
         }
@@ -184,25 +184,26 @@ public class fPrincipal extends javax.swing.JFrame {
         lblDefensa.setOpaque(true);
         lblDefensa.setBackground(new java.awt.Color(168, 117, 50));
         lblDefensa.setBounds(30 + pos, 30, 30, 30);
-        
-         //Cargar imagen del árbol y asignarla al label
-         ImageIcon iconoOriginal = new ImageIcon(new ImageIcon(getClass().getResource(estructuraDefensa.getApariencia())).getImage().getScaledInstance(lblDefensa.getWidth(), lblDefensa.getHeight(), 0));
-         lblDefensa.setIcon(iconoOriginal);
-         
-         pnlComponentes.add(lblDefensa);
-         
-         lblDefensa.addMouseListener(new MouseAdapter() {
+
+        //Cargar imagen del árbol y asignarla al label
+        ImageIcon iconoOriginal = new ImageIcon(new ImageIcon(getClass().getResource(estructuraDefensa.getApariencia())).getImage().getScaledInstance(lblDefensa.getWidth(), lblDefensa.getHeight(), 0));
+        lblDefensa.setIcon(iconoOriginal);
+
+        pnlComponentes.add(lblDefensa);
+
+        lblDefensa.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                
                 //JOptionPane.showMessageDialog(null, "Este es un mensaje de ejemplo.");
             }
-         });
-
+        });
         initArrastreLabel(lblDefensa, estructuraDefensa);
+
     }
 
     private void initArrastreLabel(JLabel lbl2, Componente estructuraDefensa) {
-        
+
         final Point[] puntoInicial = {null};
         final JLabel[] moviendo = {null};
         // Crear copia del panel actual
@@ -240,43 +241,48 @@ public class fPrincipal extends javax.swing.JFrame {
                     return;
                 }
 
-                Point nuevoPuntoEnPantalla = e.getLocationOnScreen();
-                Point nuevoPuntoEnTerreno = pnlTerreno.getLocationOnScreen();
+                Point puntoPantalla = e.getLocationOnScreen();
+                Point puntoTerreno = pnlTerreno.getLocationOnScreen();
 
-                int xEnTerreno = nuevoPuntoEnPantalla.x - nuevoPuntoEnTerreno.x - puntoInicial[0].x;
-                int yEnTerreno = nuevoPuntoEnPantalla.y - nuevoPuntoEnTerreno.y - puntoInicial[0].y;
+                int xEnTerreno = puntoPantalla.x - puntoTerreno.x - puntoInicial[0].x;
+                int yEnTerreno = puntoPantalla.y - puntoTerreno.y - puntoInicial[0].y;
 
-                //Obtener coordenas en el terreno
-                // Convertir posición de pantalla → coordenadas relativas al pnlTerreno
-                SwingUtilities.convertPointFromScreen(nuevoPuntoEnPantalla, pnlTerreno);
-
-                // Calcular la casilla donde se soltó
-                int col = nuevoPuntoEnPantalla.x / 30;
-                int fila = nuevoPuntoEnPantalla.y / 30;
+                SwingUtilities.convertPointFromScreen(puntoPantalla, pnlTerreno);
+                int col = puntoPantalla.x / 30;
+                int fila = puntoPantalla.y / 30;
 
                 if (xEnTerreno >= 0 && yEnTerreno >= 0
-                        && xEnTerreno < pnlTerreno.getWidth() && yEnTerreno < pnlTerreno.getHeight() && !terreno[col][fila].estaOcupada()) {
+                        && xEnTerreno < pnlTerreno.getWidth() && yEnTerreno < pnlTerreno.getHeight()
+                        && !terreno[col][fila].estaOcupada()) {
 
+                    // Crear una copia independiente del Componente
+                    Componente nuevaEstructura = estructuraDefensa.clonar(fPrincipal.this);
+
+                    // Crear el JLabel definitivo en el terreno
+                    JLabel nuevaDefensa = new JLabel();
                     nuevaDefensa.setSize(30, 30);
                     nuevaDefensa.setOpaque(true);
                     nuevaDefensa.setBackground(new java.awt.Color(66, 245, 66));
                     nuevaDefensa.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-                    // Agregar al panel terreno
                     nuevaDefensa.setLocation(xEnTerreno, yEnTerreno);
+
+                    nuevaEstructura.setRefLabel(nuevaDefensa);
                     pnlTerreno.add(nuevaDefensa);
                     pnlTerreno.repaint();
-                    pnlTerreno.revalidate();
-                    txaLog.append("Label movido al terreno en x: " + xEnTerreno + " y: " + yEnTerreno + "\n");
 
-                    terreno[col][fila].insertarTropa(estructuraDefensa);
-                    txaLog.append("Casilla x: " + (xEnTerreno / 30) + " y: " + (yEnTerreno / 30) + "\n");
-                    pnlTerreno.repaint();
+                    // Añadir la estructura al ejército
+                    fPrincipal.this.ejercito.add(nuevaEstructura);
+
+                    // Insertar en la casilla
+                    terreno[col][fila].insertarTropa(nuevaEstructura);
+
+                    txaLog.append("Label movido al terreno en x: " + xEnTerreno + " y: " + yEnTerreno + "\n");
+                     txaLog.append(nuevaEstructura.toString());
                 } else {
                     txaLog.append("Soltado fuera del terreno o la casilla está ocupada.\n");
                 }
 
-                // Limpiar el temporal
+                // Limpiar temporal
                 JPanel temporal = (JPanel) getGlassPane();
                 temporal.remove(moviendo[0]);
                 temporal.repaint();
@@ -294,10 +300,9 @@ public class fPrincipal extends javax.swing.JFrame {
                     Point p = SwingUtilities.convertPoint(lbl2, e.getPoint(), temporal);
                     moviendo[0].setLocation(p.x - puntoInicial[0].x, p.y - puntoInicial[0].y);
                     temporal.repaint();
-                    
+
                 }
-                
-                
+
             }
         });
     }
