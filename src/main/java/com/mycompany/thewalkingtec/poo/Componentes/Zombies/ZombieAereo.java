@@ -4,6 +4,7 @@
  */
 package com.mycompany.thewalkingtec.poo.Componentes.Zombies;
 
+import com.mycompany.thewalkingtec.poo.Componentes.Componente;
 import com.mycompany.thewalkingtec.poo.Componentes.IVolador;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 
@@ -24,6 +25,11 @@ public class ZombieAereo extends Zombie implements IVolador{
 
     @Override
     public void buscarObjetivo() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Componente clonar(fPrincipal refPantalla) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

@@ -29,8 +29,8 @@ public abstract class Componente extends Thread {
     public Componente() {
     }
 
-    public Componente(fPrincipal refPantalla, int vida, int golpesPorSegundo, int nivel, 
-                      int campos, int nivelDeAparicion, int alcance, String apariencia) {
+    public Componente(fPrincipal refPantalla, int vida, int golpesPorSegundo, int nivel,
+            int campos, int nivelDeAparicion, int alcance, String apariencia) {
         this.refLabel = null;
         this.refPantalla = refPantalla;
         this.vida = vida;
@@ -63,17 +63,45 @@ public abstract class Componente extends Thread {
     }
 
     // 🔹 Getters y setters
-    public String getApariencia() { return apariencia; }
-    public int getVida() { return vida; }
-    public int getGolpesPorSegundo() { return golpesPorSegundo; }
-    public int getNivel() { return nivel; }
-    public int getCampos() { return campos; }
-    public int getNivelDeAparicion() { return nivelDeAparicion; }
-    public int getAlcance() { return alcance; }
-    public fPrincipal getRefPantalla() { return refPantalla; }
+    public String getApariencia() {
+        return apariencia;
+    }
 
-    public void setVida(int vida) { this.vida = vida; }
-    public void setNivel(int nivel) { this.nivel = nivel; }
+    public int getVida() {
+        return vida;
+    }
+
+    public int getGolpesPorSegundo() {
+        return golpesPorSegundo;
+    }
+
+    public int getNivel() {
+        return nivel;
+    }
+
+    public int getCampos() {
+        return campos;
+    }
+
+    public int getNivelDeAparicion() {
+        return nivelDeAparicion;
+    }
+
+    public int getAlcance() {
+        return alcance;
+    }
+
+    public fPrincipal getRefPantalla() {
+        return refPantalla;
+    }
+
+    public void setVida(int vida) {
+        this.vida = vida;
+    }
+
+    public void setNivel(int nivel) {
+        this.nivel = nivel;
+    }
 
     public void subirNivel() {
         this.nivel++;
@@ -91,4 +119,6 @@ public abstract class Componente extends Thread {
     public boolean estaDestruido() {
         return this.vida <= 0;
     }
+
+    public abstract Componente clonar(fPrincipal refPantalla);
 }

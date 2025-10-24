@@ -12,7 +12,7 @@ import com.mycompany.thewalkingtec.poo.fPrincipal;
  * @author mathiasviquez
  */
 public class Defensa extends Componente {
-    
+
     private int ataquePorUnidad;
     //boolean isAttacking = false;
 
@@ -20,8 +20,23 @@ public class Defensa extends Componente {
         super(refPantalla, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
         this.ataquePorUnidad = ataquePorUnidad;
     }
-    
-    public int atacar(){
+
+    public int atacar() {
         return ataquePorUnidad;
+    }
+
+    @Override
+    public Componente clonar(fPrincipal refPantalla) {
+        return new DefensaContacto(
+                refPantalla,
+                this.getGolpesPorSegundo(), // o el atributo correspondiente de ataquePorUnidad
+                this.getVida(),
+                this.getGolpesPorSegundo(),
+                this.getNivel(),
+                this.getCampos(),
+                this.getNivelDeAparicion(),
+                this.getAlcance(),
+                this.getApariencia()
+        );
     }
 }

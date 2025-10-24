@@ -4,6 +4,7 @@
  */
 package com.mycompany.thewalkingtec.poo.Componentes.Zombies;
 
+import com.mycompany.thewalkingtec.poo.Componentes.Componente;
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 import javax.swing.JLabel;
@@ -25,5 +26,10 @@ public class ZombieContacto extends Zombie {
     @Override
     public void mover() {
         // lógica para moverse hacia una defensa
+    }
+
+    @Override
+    public Componente clonar(fPrincipal refPantalla) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
