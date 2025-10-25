@@ -16,6 +16,9 @@ public class Defensa extends Componente {
     private int ataquePorUnidad;
     //boolean isAttacking = false;
 
+    public Defensa() {
+    }
+
     public Defensa(fPrincipal refPantalla, String nombre ,int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
         super(refPantalla, nombre, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
         this.ataquePorUnidad = ataquePorUnidad;

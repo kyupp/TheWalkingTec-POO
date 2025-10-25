@@ -15,6 +15,9 @@ public class ZombieChoque extends Zombie {
 
     private int radioExplosion;
 
+    public ZombieChoque() {
+    }
+
     public ZombieChoque(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo,
                         int nivel, int campos, int nivelDeAparicion, int alcance, 
                         String apariencia, int velocidad, int radioExplosion) {

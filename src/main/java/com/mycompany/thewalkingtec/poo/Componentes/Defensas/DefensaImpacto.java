@@ -4,20 +4,19 @@
  */
 package com.mycompany.thewalkingtec.poo.Componentes.Defensas;
 
-import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 
 /**
  *
  * @author mathiasviquez
  */
-public class DefensaContacto extends Defensa{
+public class DefensaImpacto extends Defensa{
 
-    public DefensaContacto() {
+    public DefensaImpacto() {
     }
-
-    public DefensaContacto(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
+    
+    public DefensaImpacto(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
         super(refPantalla, nombre, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
     }
-
+    
 }

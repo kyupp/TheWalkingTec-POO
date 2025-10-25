@@ -11,6 +11,9 @@ import com.mycompany.thewalkingtec.poo.fPrincipal;
  * @author kyup
  */
 public class DefensaBloque extends Defensa {
+
+    public DefensaBloque() {
+    }
     
     public DefensaBloque(fPrincipal refPantalla,String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
         super(refPantalla,  nombre, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);

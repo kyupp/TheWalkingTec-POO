@@ -16,6 +16,9 @@ import javax.swing.JLabel;
  */
 public class ZombieMedianoAlcance extends Zombie {
 
+    public ZombieMedianoAlcance() {
+    }
+    
     public ZombieMedianoAlcance(fPrincipal refPantalla,String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo,
                                 int nivel, int campos, int nivelDeAparicion, int alcance, 
                                 String apariencia, int velocidad) {

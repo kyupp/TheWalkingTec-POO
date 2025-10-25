@@ -13,6 +13,9 @@ import com.mycompany.thewalkingtec.poo.fPrincipal;
  * @author mathiasviquez
  */
 public class DefensaAerea extends Defensa implements IVolador{
+
+    public DefensaAerea() {
+    }
     
     public DefensaAerea(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
         super(refPantalla, nombre,ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);

@@ -15,6 +15,9 @@ import javax.swing.JLabel;
  */
 public class ZombieContacto extends Zombie {
 
+    public ZombieContacto() {
+    }
+
     public ZombieContacto(fPrincipal refPantalla, String nombre ,int ataquePorUnidad, int vida, int golpesPorSegundo,
                           int nivel, int campos, int nivelDeAparicion, int alcance, 
                           String apariencia, int velocidad) {

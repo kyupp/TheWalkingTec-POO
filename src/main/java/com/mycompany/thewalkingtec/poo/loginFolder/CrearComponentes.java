@@ -4,6 +4,20 @@
  */
 package com.mycompany.thewalkingtec.poo.loginFolder;
 
+import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
+import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaAerea;
+import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaAtaqueMultiple;
+import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaBloque;
+import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaContacto;
+import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaImpacto;
+import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaMedioAlcance;
+import com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie;
+import com.mycompany.thewalkingtec.poo.Componentes.Zombies.ZombieAereo;
+import com.mycompany.thewalkingtec.poo.Componentes.Zombies.ZombieChoque;
+import com.mycompany.thewalkingtec.poo.Componentes.Zombies.ZombieContacto;
+import com.mycompany.thewalkingtec.poo.Componentes.Zombies.ZombieMedianoAlcance;
+import java.util.ArrayList;
+
 /**
  *
  * @author mathiasviquez
@@ -11,12 +25,180 @@ package com.mycompany.thewalkingtec.poo.loginFolder;
 public class CrearComponentes extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CrearComponentes.class.getName());
+    
+    private ArrayList<Zombie> listaDeZombies = new ArrayList<Zombie>();
+    private ArrayList<Defensa> listaDeArmas = new ArrayList<Defensa>();
+    private ArrayList<DefensaBloque> listaDeBloques = new ArrayList<DefensaBloque>();
 
     /**
      * Creates new form CrearComponentes
      */
     public CrearComponentes() {
         initComponents();
+    }
+    
+    private void crearZombie(String name, int life, int type, int damage, int fields, int appearance, int range){
+        
+        Zombie newZombie;
+        
+        switch (type){
+            case 1 -> {
+                newZombie = new ZombieAereo();
+            }
+            case 2 -> {
+                newZombie = new ZombieChoque();
+            }
+            case 3 -> {
+                newZombie = new ZombieContacto();
+            }
+            default ->{
+                newZombie = new ZombieMedianoAlcance();
+            }
+        }
+        
+        listaDeZombies.add(newZombie);
+        System.out.println("Se agrego el zombieeeee: " + name + " :>>>>");
+        
+    }
+    
+    private void crearArma(String name, int life, int type, int damage, int fields, int appearance, int range){
+        
+        Defensa newArma;
+        
+        switch (type){
+            case 1 -> {
+                newArma = new DefensaAerea();
+            }
+            case 2 -> {
+                newArma = new DefensaImpacto();
+            }
+            case 3 -> {
+                newArma = new DefensaContacto();
+            }
+            case 4 -> {
+                newArma = new DefensaMedioAlcance();
+            }
+            default -> {
+                
+                newArma = new DefensaAtaqueMultiple();
+                
+            }
+        }
+        
+        listaDeArmas.add(newArma);
+        System.out.println("Se agrego el armaaaaa: " + name + " :>>>>");
+        
+    }
+    
+    private void crearBloque(String name, int life, int fields ,int appearance){
+        
+        DefensaBloque newBloque = new DefensaBloque();
+        
+        listaDeBloques.add(newBloque);
+        
+        System.out.println("Se agrego el bloqueeee: " + name + " :>>>>");
+        
+    }
+    
+    private int comprobarTypeZombie(String type){
+        
+        return switch (type) {
+            
+            case "Aereos" -> 1;
+                
+            case "Choque" -> 2;
+                
+            case "De Contacto" -> 3;
+                
+            default -> 4;
+        };
+    }
+    
+    private int comprobarTypeArmas(String type){
+        
+        return switch (type) {
+            
+            case "Aereos" -> 1;
+                
+            case "Impacto" -> 2;
+                
+            case "De Contacto" -> 3;
+                
+            case "Mediano Alcance" -> 4;
+                
+            default -> 5;    
+        };
+    }
+    
+    private void obtenerDatosZombie(){
+        
+        String name = this.txtFldNameZombie.getText();
+        
+        int life = Integer.parseInt(this.txtFldLifeZombie.getText());
+        
+        int type = comprobarTypeZombie((String) this.cmbBxTypeZombie.getSelectedItem());
+        
+        int damage = Integer.parseInt(this.txtFldDamageZombie.getText());
+        
+        int fields = Integer.parseInt(this.txtFldFieldsZombie.getText());
+        
+        int appearance = Integer.parseInt(this.txtFldAppearanceZombie.getText());
+        
+        String rangeStr = this.txtFldRangeZombie.getText();
+        
+        if (rangeStr.equals("")){
+            
+            crearZombie(name, life, type, damage, fields, appearance, 0);
+            
+        } else{
+            
+            int range = Integer.parseInt(rangeStr);
+            crearZombie(name, life, type, damage, fields, appearance, range);
+            
+        }
+        
+    }
+    
+    private void obtenerDatosArma(){
+        
+        String name = this.txtFldNameArmas.getText();
+        
+        int life = Integer.parseInt(this.txtFldLifeArmas.getText());
+        
+        int type = comprobarTypeArmas((String) this.cmbBxTypeArmas.getSelectedItem());
+        
+        int damage = Integer.parseInt(this.txtFldDamageArmas.getText());
+        
+        int fields = Integer.parseInt(this.txtFldFieldsArmas.getText());
+        
+        int appearance = Integer.parseInt(this.txtFldAppearanceArmas.getText());
+        
+        String rangeStr = this.txtFldRangeArmas.getText();
+        
+        if (rangeStr.equals("")){
+            
+            crearArma(name, life, type, damage, fields, appearance, 0);
+            
+        } else{
+            
+            int range = Integer.parseInt(rangeStr);
+            crearArma(name, life, type, damage, fields, appearance, range);
+            
+        }
+    }
+    
+    private void obtenerDatosBloque(){
+        
+        String name = this.txtFldNameBloques.getText();
+        
+        int life = Integer.parseInt(this.txtFldLifeBloques.getText());
+        
+        int fields = Integer.parseInt(this.txtFldFieldsBloques.getText());
+        
+        int appearance = Integer.parseInt(this.txtFldAppearanceBloques.getText());
+        
+        crearBloque(name, life, fields, appearance);
+     
     }
     
     public boolean esUnaPalabra(String text){
@@ -71,9 +253,9 @@ public class CrearComponentes extends javax.swing.JFrame {
         switch (tipo){
             case 1 -> {
                 range = this.txtFldRangeZombie.getText();
-                if (esUnNumero(range)) {
+                if (esUnNumero(range) || range.equals("")) {
                     String opcion = (String) this.cmbBxTypeZombie.getSelectedItem();
-                    if (opcion.equals("Impacto")) return 0;
+                    if (opcion.equals("Choque") || range.equals("")) return 0;
                     this.txtFldAlertaRangeZombie.setText("Esta opción solo se permite para tipo impacto");
                     break;
                 }
@@ -81,9 +263,9 @@ public class CrearComponentes extends javax.swing.JFrame {
             }
             case 2 -> {
                 range = this.txtFldRangeArmas.getText();
-                if (esUnNumero(range)) {
+                if (esUnNumero(range) || range.equals("")) {
                     String opcion = (String) this.cmbBxTypeArmas.getSelectedItem();
-                    if (opcion.equals("Impacto")) return 0;
+                    if (opcion.equals("Impacto") || range.equals("")) return 0;
                     this.txtFldAlertaRangeArma.setText("Esta opción solo se permite para tipo impacto");
                     break;
                 }
@@ -146,49 +328,49 @@ public class CrearComponentes extends javax.swing.JFrame {
             case 1 -> {
                 switch (verificaciones){
                     case 1:
-                        verificarVida(tipo);
+                        contador += verificarVida(tipo);
                         verificaciones++;
                     case 2:
-                        verificarDanno(tipo);
+                        contador += verificarDanno(tipo);
                         verificaciones++;
                     case 3:
-                        verificarRango(tipo);
+                        contador += verificarRango(tipo);
                         verificaciones++;
                     case 4:
-                        verificarAparicion(tipo);
+                        contador += verificarAparicion(tipo);
                         verificaciones++;
                     case 5:
-                        verificarCampos(tipo);
+                        contador += verificarCampos(tipo);
                 }
             }
             case 2 -> {
                 switch (verificaciones){
                     case 1:
-                        verificarVida(tipo);
+                        contador += verificarVida(tipo);
                         verificaciones++;
                     case 2:
-                        verificarDanno(tipo);
+                        contador += verificarDanno(tipo);
                         verificaciones++;
                     case 3:
-                        verificarRango(tipo);
+                        contador += verificarRango(tipo);
                         verificaciones++;
                     case 4:
-                        verificarAparicion(tipo);
+                        contador += verificarAparicion(tipo);
                         verificaciones++;
                     case 5:
-                        verificarCampos(tipo);
+                        contador += verificarCampos(tipo);
                 }                
             }
             case 3 -> {
                 switch (verificaciones){
                     case 1:
-                        verificarVida(tipo);
+                        contador += verificarVida(tipo);
                         verificaciones++;
                     case 2:
-                        verificarAparicion(tipo);
+                        contador += verificarAparicion(tipo);
                         verificaciones++;
                     case 3:
-                        verificarCampos(tipo);
+                        contador += verificarCampos(tipo);
                 }                
             }
         }
@@ -321,7 +503,7 @@ public class CrearComponentes extends javax.swing.JFrame {
         txtFldAlertaNameZombie.setEditable(false);
         txtFldAlertaNameZombie.setBackground(new java.awt.Color(204, 204, 204));
         txtFldAlertaNameZombie.setForeground(new java.awt.Color(204, 0, 0));
-        txtFldAlertaNameZombie.setText("Esta arma ya se encuentra almacenada");
+        txtFldAlertaNameZombie.setText("Este zombie ya se encuentra almacenado");
         txtFldAlertaNameZombie.setBorder(null);
 
         lblZombieImageOutput1.setBackground(new java.awt.Color(204, 204, 255));
@@ -394,7 +576,7 @@ public class CrearComponentes extends javax.swing.JFrame {
         cmbBxTypeZombie.setBackground(new java.awt.Color(153, 153, 153));
         cmbBxTypeZombie.setFont(new java.awt.Font("Helvetica Neue", 3, 13)); // NOI18N
         cmbBxTypeZombie.setForeground(new java.awt.Color(255, 255, 255));
-        cmbBxTypeZombie.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "De Contacto", "Mediano Alcance", "Aereos", "Impacto", "Ataque Multiple" }));
+        cmbBxTypeZombie.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "De Contacto", "Mediano Alcance", "Aereos", "Choque" }));
         cmbBxTypeZombie.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbBxTypeZombieActionPerformed(evt);
@@ -646,8 +828,13 @@ public class CrearComponentes extends javax.swing.JFrame {
         txtFldAlertaNameBloques.setEditable(false);
         txtFldAlertaNameBloques.setBackground(new java.awt.Color(204, 204, 204));
         txtFldAlertaNameBloques.setForeground(new java.awt.Color(204, 0, 0));
-        txtFldAlertaNameBloques.setText("Esta arma ya se encuentra almacenada");
+        txtFldAlertaNameBloques.setText("Este bloque ya se encuentra almacenado");
         txtFldAlertaNameBloques.setBorder(null);
+        txtFldAlertaNameBloques.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFldAlertaNameBloquesActionPerformed(evt);
+            }
+        });
 
         lblBloquesImageOutput1.setBackground(new java.awt.Color(204, 204, 255));
         lblBloquesImageOutput1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -1255,7 +1442,11 @@ public class CrearComponentes extends javax.swing.JFrame {
         this.txtFldAlertaNameArma.setText("");
         this.txtFldAlertaRangeArma.setText("");
         
-        verificarDatos(2);
+        if (verificarDatos(2) == 0){
+            obtenerDatosArma();
+        } else{
+            System.out.println("NO SE PUDOOO INGRESAR EL ARMAAA :<<<");
+        }
     }//GEN-LAST:event_btnCrearArmasActionPerformed
 
     private void btnCrearZombieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearZombieActionPerformed
@@ -1269,7 +1460,11 @@ public class CrearComponentes extends javax.swing.JFrame {
         this.txtFldAlertaNameZombie.setText("");
         this.txtFldAlertaRangeZombie.setText("");        
         
-        verificarDatos(1);
+        if (verificarDatos(1) == 0){
+            obtenerDatosZombie();
+        } else{
+            System.out.println("NO SE PUDOOOO INGRESAR EL ZOMBIEEE :<");
+        }
     }//GEN-LAST:event_btnCrearZombieActionPerformed
 
     private void btnCrearBloquesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearBloquesActionPerformed
@@ -1281,8 +1476,16 @@ public class CrearComponentes extends javax.swing.JFrame {
         this.txtFldAlertaImageBloques2.setText("");
         this.txtFldAlertaNameBloques.setText("");      
         
-        verificarDatos(3);
+        if (verificarDatos(3) == 0){
+            obtenerDatosBloque();
+        } else{
+            System.out.println("NO SE PUDOOOO INGRESAR EL BLOQUEEEE :<");
+        }
     }//GEN-LAST:event_btnCrearBloquesActionPerformed
+
+    private void txtFldAlertaNameBloquesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldAlertaNameBloquesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFldAlertaNameBloquesActionPerformed
 
     /**
      * @param args the command line arguments

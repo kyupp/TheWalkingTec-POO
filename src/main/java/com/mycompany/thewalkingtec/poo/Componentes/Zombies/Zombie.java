@@ -21,6 +21,10 @@ public abstract class Zombie extends Componente{
     private int velocidad;
     private boolean volador;
 
+    public Zombie() {
+    }
+    
+
     public Zombie(fPrincipal refPantalla,String nombre,  int ataquePorUnidad, int vida, int golpesPorSegundo, 
                   int nivel, int campos, int nivelDeAparicion, int alcance, 
                   String apariencia, int velocidad, boolean volador) {
