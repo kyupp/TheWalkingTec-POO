@@ -6,6 +6,7 @@ package com.mycompany.thewalkingtec.poo;
 
 import com.mycompany.thewalkingtec.poo.Componentes.ReliquiaDeLaVida;
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
+import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaContacto;
 import com.mycompany.thewalkingtec.poo.Terreno.Casilla;
 import java.awt.Color;
@@ -31,7 +32,7 @@ public class fPrincipal extends javax.swing.JFrame {
     private Casilla[][] terreno = new Casilla[25][25];
     private ArrayList<Componente> ejercito = new ArrayList<Componente>();
     private ArrayList<Componente> atacantes = new ArrayList<Componente>();
-    private ArrayList<Componente> defensa = new ArrayList<Componente>();
+    private ArrayList<Componente> defensasDisponibles = new ArrayList<Componente>();
     private ReliquiaDeLaVida reliquia = new ReliquiaDeLaVida(this, "Reliquia", 100, "/Imagenes/fotoArbol.png");
     boolean reliquiaPlaced = false;
 
@@ -49,8 +50,8 @@ public class fPrincipal extends javax.swing.JFrame {
         initComponents();
         inicializarTerreno();
         generarTerreno();
-        initDefensa(reliquia, 0);
-        initDefensa(new DefensaContacto(this, "De Contacto", 100, 0, 0, 0, 0, 0, 0, "/Imagenes/hulk.png"), 40);
+        inicializarDefensas();
+       
     }
 
     /**
@@ -207,7 +208,10 @@ public class fPrincipal extends javax.swing.JFrame {
         JLabel lblDefensa = new JLabel("s");
         lblDefensa.setOpaque(true);
         lblDefensa.setBackground(new java.awt.Color(168, 117, 50));
-        lblDefensa.setBounds(30 + pos, 30, 30, 30);
+        int x = 30;
+        int y = 30;
+       
+        lblDefensa.setBounds(x + pos, y, 30, 30);
 
         System.out.println(estructuraDefensa.getClass());
         //Cargar imagen del árbol y asignarla al label
@@ -335,9 +339,7 @@ public class fPrincipal extends javax.swing.JFrame {
                     Point p = SwingUtilities.convertPoint(lbl2, e.getPoint(), temporal);
                     moviendo[0].setLocation(p.x - puntoInicial[0].x, p.y - puntoInicial[0].y);
                     temporal.repaint();
-
                 }
-
             }
         });
     }
@@ -376,6 +378,14 @@ public class fPrincipal extends javax.swing.JFrame {
         }
         this.repaint();
     }
+    
+    public void comprobarGanar(){
+        
+    }
+    
+    public void comprobarPerder(){
+        
+    }
 
     public void subirDeNivel() {
         //Instrucciones de cambios cuando suben de nivel
@@ -387,6 +397,24 @@ public class fPrincipal extends javax.swing.JFrame {
             estructura.start();
         }
     }
+    
+    public void inicializarDefensas(){
+        //leer defensas del archivo
+        //Cargar al panel componentes las defensas al arrayList defensas disponibles
+        defensasDisponibles.add(reliquia);
+        defensasDisponibles.add(new DefensaContacto(this, "Hulk - De Contacto", 100, 0, 0, 0, 0, 1, 0, "/Imagenes/hulk.png"));
+        //Habilitar las que esten al nivel y desabilitar las que no
+        int i = 0;
+        for(Componente defensa : defensasDisponibles){
+            if(defensa.getNivelDeAparicion() <= nivelActual){
+                initDefensa(defensa, i);
+                i+=40;
+                if(i >= 350){
+                    i = 0;
+                }
+            }
+        }
+    }
 
     public Point getObjetivoLocation() {
         return this.reliquia.getRefLabel().getLocation();
@@ -396,7 +424,7 @@ public class fPrincipal extends javax.swing.JFrame {
         return this.reliquia;
     }
 
-    public void moverSoldado(JLabel refLabel, int x, int y) {
+    public void moverZombie(JLabel refLabel, int x, int y) {
         refLabel.setLocation(x, y);
     }
 

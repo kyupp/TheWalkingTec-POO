@@ -162,8 +162,6 @@ public abstract class Componente extends Thread {
                 } else if (y > puntoObjetivo.y) {
                     y -= 20;
                 }
-                //3. Pintar el movimiento del label con el metodo de la pantalla, setLocation
-                refPantalla.moverSoldado(refLabel, x, y);
 
                 //4. Atacar TODO: Ataquen por proximidad, también que reciban ataque por proximidad
                 //atacar(refPantalla.getObjetivo());

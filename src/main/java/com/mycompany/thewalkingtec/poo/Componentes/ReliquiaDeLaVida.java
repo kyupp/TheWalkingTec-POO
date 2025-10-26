@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 public class ReliquiaDeLaVida extends Componente {
     
     public ReliquiaDeLaVida(fPrincipal refPantalla, String nombre, int vida, String apariencia) {
-        super(refPantalla, nombre, vida, 0, 1, 1, 1, 0, apariencia);
+        super(refPantalla, nombre, vida, 0, 1, 1, 0, 0, apariencia);
     }
     
     public void destruirReliquia() {
