@@ -6,15 +6,18 @@ package com.mycompany.thewalkingtec.poo;
 
 import com.mycompany.thewalkingtec.poo.Componentes.ReliquiaDeLaVida;
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
-import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaContacto;
+import com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie;
+import com.mycompany.thewalkingtec.poo.Componentes.Zombies.ZombieContacto;
 import com.mycompany.thewalkingtec.poo.Terreno.Casilla;
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -31,7 +34,7 @@ public class fPrincipal extends javax.swing.JFrame {
     private int TAMANO_TERRENO = 25;
     private Casilla[][] terreno = new Casilla[25][25];
     private ArrayList<Componente> ejercito = new ArrayList<Componente>();
-    private ArrayList<Componente> atacantes = new ArrayList<Componente>();
+    private ArrayList<Zombie> atacantes = new ArrayList<Zombie>();
     private ArrayList<Componente> defensasDisponibles = new ArrayList<Componente>();
     private ReliquiaDeLaVida reliquia = new ReliquiaDeLaVida(this, "Reliquia", 100, "/Imagenes/fotoArbol.png");
     boolean reliquiaPlaced = false;
@@ -51,7 +54,7 @@ public class fPrincipal extends javax.swing.JFrame {
         inicializarTerreno();
         generarTerreno();
         inicializarDefensas();
-       
+
     }
 
     /**
@@ -102,7 +105,7 @@ public class fPrincipal extends javax.swing.JFrame {
         pnlComponentes.setLayout(pnlComponentesLayout);
         pnlComponentesLayout.setHorizontalGroup(
             pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 397, Short.MAX_VALUE)
+            .addGap(0, 247, Short.MAX_VALUE)
         );
         pnlComponentesLayout.setVerticalGroup(
             pnlComponentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,19 +132,22 @@ public class fPrincipal extends javax.swing.JFrame {
             .addGroup(pnlUtilidadesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(tbPnlComponentes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
-                    .addGroup(pnlUtilidadesLayout.createSequentialGroup()
-                        .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUtilidadesLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUtilidadesLayout.createSequentialGroup()
+                                .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(9, 9, 9))
+                            .addComponent(tbPnlComponentes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         pnlUtilidadesLayout.setVerticalGroup(
             pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlUtilidadesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tbPnlComponentes, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(8, 8, 8)
+                .addComponent(tbPnlComponentes, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1)
@@ -168,7 +174,12 @@ public class fPrincipal extends javax.swing.JFrame {
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
         // TODO add your handling code here:
-        iniciarJuego();
+        if (reliquiaPlaced) {
+            generarZombies("s");
+            inicializarZombies();
+        } else {
+            System.out.println("No se puede iniciar");
+        }
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     /**
@@ -205,20 +216,51 @@ public class fPrincipal extends javax.swing.JFrame {
     }
 
     private void initDefensa(Componente estructuraDefensa, int pos) {
-        JLabel lblDefensa = new JLabel("s");
+        // Label principal 
+        JLabel lblDefensa = new JLabel();
+        lblDefensa.setLayout(null);
         lblDefensa.setOpaque(true);
-        lblDefensa.setBackground(new java.awt.Color(168, 117, 50));
-        int x = 30;
-        int y = 30;
-       
-        lblDefensa.setBounds(x + pos, y, 30, 30);
+        lblDefensa.setBackground(new Color(230, 230, 230));
+        lblDefensa.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+        lblDefensa.setBounds(0, pos * 70, 245, 65); // tamaño de tarjeta
 
-        System.out.println(estructuraDefensa.getClass());
-        //Cargar imagen del árbol y asignarla al label
-        ImageIcon iconoOriginal = new ImageIcon(new ImageIcon(getClass().getResource(estructuraDefensa.getApariencia())).getImage().getScaledInstance(lblDefensa.getWidth(), lblDefensa.getHeight(), 0));
-        lblDefensa.setIcon(iconoOriginal);
+        // Imagen
+        JLabel lblFoto = new JLabel();
+        lblFoto.setBounds(10, 7, 50, 50);
+
+        try {
+            ImageIcon icono = new ImageIcon(
+                    new ImageIcon(getClass().getResource(estructuraDefensa.getApariencia()))
+                            .getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_DEFAULT)
+            );
+            lblFoto.setIcon(icono);
+        } catch (Exception e) {
+            System.out.println("No se encontró la imagen: " + estructuraDefensa.getApariencia());
+        }
+
+        lblFoto.setOpaque(false);
+        lblDefensa.add(lblFoto);
+
+        String nombre = estructuraDefensa.getNombre();
+
+        // Nombre
+        JLabel lblNombre = new JLabel(nombre);
+        lblNombre.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 12));
+        lblNombre.setBounds(70, 5, 240, 18);
+        lblDefensa.add(lblNombre);
+
+        // Info (vida, nivel)
+        JLabel lblInfo = new JLabel(
+                "<html><body style='font-size:10px;'>"
+                + "Vida: " + estructuraDefensa.getVida() + "<br>"
+                + "Nivel: " + estructuraDefensa.getNivelDeAparicion() + "<br>"
+                + "</body></html>"
+        );
+        lblInfo.setBounds(70, 22, 120, 40);
+        lblDefensa.add(lblInfo);
 
         pnlComponentes.add(lblDefensa);
+
         initArrastreLabel(lblDefensa, estructuraDefensa);
     }
 
@@ -228,7 +270,6 @@ public class fPrincipal extends javax.swing.JFrame {
         final JLabel[] moviendo = {null};
         // Crear copia del panel actual
         JLabel nuevaDefensa = new JLabel();
-        nuevaDefensa.setBackground(lbl2.getBackground());
         nuevaDefensa.setOpaque(true);
         nuevaDefensa.setSize(30, 30);
 
@@ -241,23 +282,25 @@ public class fPrincipal extends javax.swing.JFrame {
                     txaLog.append("La Reliquia de la Vida solo puede colocarse una vez.\n");
                     limpiarArrastreTemporal();
                     return;
-                } else if (estructuraDefensa instanceof ReliquiaDeLaVida) {
-                    reliquiaPlaced = true;
                 }
-
                 if (fPrincipal.this.ejercito.size() <= fPrincipal.this.capacidadEjercito + 1) {
                     puntoInicial[0] = e.getPoint(); // Guarda la posición inicial cuando se da click
 
                     moviendo[0] = new JLabel(lbl2.getText());
-                    moviendo[0].setOpaque(true);
-                    moviendo[0].setBackground(lbl2.getBackground());
-                    moviendo[0].setSize(lbl2.getSize());
+                    moviendo[0].setOpaque(false);
+                    moviendo[0].setSize(30, 30);
                     moviendo[0].setBorder(lbl2.getBorder());
 
                     JPanel temporal = (JPanel) getGlassPane();
                     temporal.setLayout(null);
                     temporal.add(moviendo[0]);
                     temporal.setVisible(true);
+
+                    ImageIcon icono = new ImageIcon(
+                            new ImageIcon(getClass().getResource(estructuraDefensa.getApariencia()))
+                                    .getImage().getScaledInstance(moviendo[0].getWidth(), moviendo[0].getHeight(), Image.SCALE_DEFAULT)
+                    );
+                    moviendo[0].setIcon(icono);
 
                     Point puntoFrame = SwingUtilities.convertPoint(temporal, e.getPoint(), getGlassPane());
                     moviendo[0].setLocation(puntoFrame);
@@ -270,63 +313,52 @@ public class fPrincipal extends javax.swing.JFrame {
                     return;
                 }
 
-                Point puntoPantalla = e.getLocationOnScreen();
-                Point puntoTerreno = pnlTerreno.getLocationOnScreen();
+                Point dropEnTerreno = e.getLocationOnScreen();
+                SwingUtilities.convertPointFromScreen(dropEnTerreno, pnlTerreno);
 
-                int xEnTerreno = puntoPantalla.x - puntoTerreno.x - puntoInicial[0].x;
-                int yEnTerreno = puntoPantalla.y - puntoTerreno.y - puntoInicial[0].y;
+                int col = dropEnTerreno.x / 30;
+                int fila = dropEnTerreno.y / 30;
 
-                SwingUtilities.convertPointFromScreen(puntoPantalla, pnlTerreno);
-                int col = puntoPantalla.x / 30;
-                int fila = puntoPantalla.y / 30;
+                boolean dentroPanel
+                        = dropEnTerreno.x >= 60 && dropEnTerreno.y >= 60
+                        && dropEnTerreno.x < pnlTerreno.getWidth() - 60
+                        && dropEnTerreno.y < pnlTerreno.getHeight() - 60;
 
-                if (xEnTerreno >= 0 && yEnTerreno >= 0
-                        && xEnTerreno < pnlTerreno.getWidth() && yEnTerreno < pnlTerreno.getHeight()
-                        && !terreno[col][fila].estaOcupada()) {
-
-                    // Crear una copia independiente del Componente
+                if (dentroPanel && !terreno[fila][col].estaOcupada()) {
                     Componente nuevaEstructura = estructuraDefensa.clonar(fPrincipal.this);
 
-                    // Crear el JLabel definitivo en el terreno
-                    JLabel nuevaDefensa = new JLabel("L");
+                    JLabel nuevaDefensa = new JLabel("");
                     nuevaDefensa.setSize(30, 30);
                     nuevaDefensa.setOpaque(true);
                     nuevaDefensa.setBackground(new java.awt.Color(66, 245, 66));
                     nuevaDefensa.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                    nuevaDefensa.setLocation(xEnTerreno, yEnTerreno);
 
                     nuevaEstructura.setRefLabel(nuevaDefensa);
-                    pnlTerreno.add(nuevaDefensa);
-                    pnlTerreno.repaint();
 
-                    // Añadir la estructura al ejército
-                    if (!(estructuraDefensa instanceof ReliquiaDeLaVida)) {
+                    if (estructuraDefensa instanceof ReliquiaDeLaVida && reliquiaPlaced) {
+                        txaLog.append("La Reliquia de la Vida solo puede colocarse una vez.\n");
+                        limpiarArrastreTemporal();
+                        return;
+                    }
+                    if (nuevaEstructura instanceof ReliquiaDeLaVida) {
+                        fPrincipal.this.reliquia = (ReliquiaDeLaVida) nuevaEstructura;
+                        reliquiaPlaced = true;
+                    } else {
                         fPrincipal.this.ejercito.add(nuevaEstructura);
                     }
 
-                    nuevaEstructura.setRefLabel(nuevaDefensa);
-
-                    // Si es la reliquia, actualiza la referencia global también
-                    if (nuevaEstructura instanceof ReliquiaDeLaVida) {
-                        fPrincipal.this.reliquia = (ReliquiaDeLaVida) nuevaEstructura;
-                    }
-
-                    // Insertar en la casilla
-                    terreno[col][fila].insertarTropa(nuevaEstructura);
-
-                    txaLog.append("Label movido al terreno en x: " + xEnTerreno + " y: " + yEnTerreno + "\n");
-                    txaLog.append(nuevaEstructura.toString() + "\n");
+                    terreno[fila][col].insertarTropa(nuevaEstructura);
+                    pnlTerreno.repaint();
                 } else {
                     txaLog.append("Soltado fuera del terreno o la casilla está ocupada.\n");
                 }
 
-                // Limpiar temporal
+                // Limpiar el ghost
                 JPanel temporal = (JPanel) getGlassPane();
                 temporal.remove(moviendo[0]);
                 temporal.repaint();
                 temporal.setVisible(true);
                 moviendo[0] = null;
-
             }
 
         });
@@ -352,39 +384,45 @@ public class fPrincipal extends javax.swing.JFrame {
     }
 
     private void generarTerreno() {
-        //Tomar el tamaño del ejercito a agregar
-        int x = 0;
-        int y = 0;
-        for (int i = 0; i < TAMANO_TERRENO; i++) {
-            for (int j = 0; j < TAMANO_TERRENO; j++) {
-                //Para cada soldado se crea un Label
-                JLabel nuevoLabel = new JLabel("");
-                nuevoLabel.setOpaque(true);
-                nuevoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); // Aplica el borde
-                nuevoLabel.setBounds(x, y, 30, 30);
+        int size = 30; // Tamaño de cada casilla (en píxeles)
+        int x, y;
 
-                nuevoLabel.setBackground(new java.awt.Color(66, 245, 66));
-                if (i >= 23 || j >= 23 || i < 2 || j < 2) {
-                    nuevoLabel.setBackground(new java.awt.Color(47, 79, 79));
+        for (int fila = 0; fila < TAMANO_TERRENO; fila++) {
+            for (int col = 0; col < TAMANO_TERRENO; col++) {
+
+                // Calcular coordenadas en píxeles
+                x = col * size;
+                y = fila * size;
+
+                // Crear el JLabel visual
+                JLabel lblCasilla = new JLabel();
+                lblCasilla.setOpaque(true);
+                lblCasilla.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                lblCasilla.setBounds(x, y, size, size);
+
+                lblCasilla.setBackground(new java.awt.Color(66, 245, 66));
+
+                // Bordes del terreno (oscuros)
+                if (fila >= TAMANO_TERRENO - 2 || col >= TAMANO_TERRENO - 2 || fila < 2 || col < 2) {
+                    lblCasilla.setBackground(new java.awt.Color(47, 79, 79));
                 }
 
-                pnlTerreno.add(nuevoLabel);
-                this.terreno[i][j] = new Casilla(pnlTerreno, txaLog, nuevoLabel.getLocation(), nuevoLabel);
+                // Agregar el label al panel
+                pnlTerreno.add(lblCasilla);
 
-                y += 30;
+                terreno[fila][col] = new Casilla(pnlTerreno, txaLog, new Point(x, y), lblCasilla);
             }
-            y = 0;
-            x += 30;
         }
-        this.repaint();
+
+        pnlTerreno.repaint();
     }
-    
-    public void comprobarGanar(){
-        
+
+    public void comprobarGanar() {
+
     }
-    
-    public void comprobarPerder(){
-        
+
+    public void comprobarPerder() {
+
     }
 
     public void subirDeNivel() {
@@ -393,26 +431,33 @@ public class fPrincipal extends javax.swing.JFrame {
 
     public void iniciarJuego() {
         //Instrucciones para iniciar el juego
-        for (Componente estructura : ejercito) {
-            estructura.start();
-        }
+//        for (Componente estructura : ejercito) {
+//            estructura.start();
+//        }
+        inicializarZombies();
     }
-    
-    public void inicializarDefensas(){
+
+    public void inicializarDefensas() {
         //leer defensas del archivo
         //Cargar al panel componentes las defensas al arrayList defensas disponibles
         defensasDisponibles.add(reliquia);
-        defensasDisponibles.add(new DefensaContacto(this, "Hulk - De Contacto", 100, 0, 0, 0, 0, 1, 0, "/Imagenes/hulk.png"));
+        defensasDisponibles.add(new DefensaContacto(this, "Hulk - De Contacto", 100, 0, 0, 0, 0, 0, 0, "/Imagenes/zombie4.gif"));
         //Habilitar las que esten al nivel y desabilitar las que no
         int i = 0;
-        for(Componente defensa : defensasDisponibles){
-            if(defensa.getNivelDeAparicion() <= nivelActual){
+        for (Componente defensa : defensasDisponibles) {
+            if (defensa.getNivelDeAparicion() <= nivelActual) {
                 initDefensa(defensa, i);
-                i+=40;
-                if(i >= 350){
-                    i = 0;
-                }
+                i++;
             }
+        }
+    }
+
+    public void inicializarZombies() {
+        //leer defensas del archivo
+        //Cargar a los zombies al arrayList defensas disponibles
+        //Habilitar las que esten al nivel
+        for (Zombie zombies : atacantes) {
+            zombies.start();
         }
     }
 
@@ -426,6 +471,62 @@ public class fPrincipal extends javax.swing.JFrame {
 
     public void moverZombie(JLabel refLabel, int x, int y) {
         refLabel.setLocation(x, y);
+    }
+
+    private void generarZombies(String tipo) {
+        int tamano = capacidadEjercito;
+        Random rand = new Random();
+
+        for (int i = 0; i < tamano; i++) {
+            JLabel nuevoLabel = new JLabel();
+            nuevoLabel.setOpaque(false);
+            nuevoLabel.setSize(30, 30);
+
+            int fila = 0, col = 0;
+            boolean posicionValida = false;
+            int intentos = 0;
+
+            while (!posicionValida && intentos < 100) {
+                intentos++;
+
+                int borde = rand.nextInt(4); // 0=arriba, 1=abajo, 2=izquierda, 3=derecha
+                switch (borde) {
+                    case 0 -> {
+                        fila = 0;
+                        col = rand.nextInt(TAMANO_TERRENO);
+                    }
+                    case 1 -> {
+                        fila = TAMANO_TERRENO - 1;
+                        col = rand.nextInt(TAMANO_TERRENO);
+                    }
+                    case 2 -> {
+                        col = 0;
+                        fila = rand.nextInt(TAMANO_TERRENO);
+                    }
+                    case 3 -> {
+                        col = TAMANO_TERRENO - 1;
+                        fila = rand.nextInt(TAMANO_TERRENO);
+                    }
+                }
+
+                if (!terreno[fila][col].estaOcupada()) {
+                    posicionValida = true;
+                }
+            }
+
+            Point ubicacion = terreno[fila][col].getPosicion();
+            nuevoLabel.setLocation(ubicacion);
+
+            Zombie newZombie = new ZombieContacto(this, "Zombie - De Contacto",
+                    0, 0, 0, 0, 0, 0, 0, "/Imagenes/zombie4.gif", 0);
+
+            newZombie.setRefLabel(nuevoLabel);
+            atacantes.add(newZombie);
+
+            terreno[fila][col].insertarTropa(newZombie);
+        }
+
+        pnlTerreno.repaint();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
