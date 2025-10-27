@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.thewalkingtec.poo;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaImpacto;
@@ -42,7 +38,10 @@ public class fPrincipal extends javax.swing.JFrame {
     private ArrayList<Defensa> ejercito = new ArrayList<Defensa>();
     private ArrayList<Zombie> atacantes = new ArrayList<Zombie>();
     private ArrayList<Componente> defensasDisponibles = new ArrayList<Componente>();
+    private ArrayList<Zombie> zombiesDisponibles = new ArrayList<Zombie>();
     private ReliquiaDeLaVida reliquia = new ReliquiaDeLaVida(this, "Reliquia", 100, "/Imagenes/fotoArbol.png");
+    private static final int NIVELES_BASE = 10;  // cantidad de niveles principales
+    private boolean modoInfinito = false;
     boolean reliquiaPlaced = false;
 
     //Atributos de juego
@@ -58,8 +57,7 @@ public class fPrincipal extends javax.swing.JFrame {
         initComponents();
         inicializarTerreno();
         generarTerreno();
-        inicializarDefensas();
-
+        cargarDefensas();
     }
 
     /**
@@ -86,6 +84,8 @@ public class fPrincipal extends javax.swing.JFrame {
         lblCantZombies = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         lblCantDefensas = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        lblNivel = new javax.swing.JLabel();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -174,6 +174,14 @@ public class fPrincipal extends javax.swing.JFrame {
         lblCantDefensas.setForeground(new java.awt.Color(0, 0, 0));
         lblCantDefensas.setText("0");
 
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("NIvel:");
+
+        lblNivel.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        lblNivel.setForeground(new java.awt.Color(0, 0, 0));
+        lblNivel.setText("1");
+
         javax.swing.GroupLayout pnlUtilidadesLayout = new javax.swing.GroupLayout(pnlUtilidades);
         pnlUtilidades.setLayout(pnlUtilidadesLayout);
         pnlUtilidadesLayout.setHorizontalGroup(
@@ -199,11 +207,10 @@ public class fPrincipal extends javax.swing.JFrame {
                                     .addGroup(pnlUtilidadesLayout.createSequentialGroup()
                                         .addGroup(pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel2)
-                                            .addGroup(pnlUtilidadesLayout.createSequentialGroup()
-                                                .addGap(6, 6, 6)
-                                                .addGroup(pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(lblCantZombies)
-                                                    .addComponent(lblCantDefensas))))
+                                            .addComponent(lblCantDefensas)
+                                            .addComponent(lblCantZombies)
+                                            .addComponent(lblNivel)
+                                            .addComponent(jLabel3))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(6, 6, 6)))
@@ -216,15 +223,20 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addGroup(pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlUtilidadesLayout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblCantZombies)
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblNivel)
                         .addGap(28, 28, 28)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblCantZombies)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblCantDefensas)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPausa, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -262,7 +274,10 @@ public class fPrincipal extends javax.swing.JFrame {
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
         if (reliquiaPlaced) {
-            generarZombies("s");
+            if (atacantes.size() < capacidadEjercito) {
+                generarZombies("s");
+            }
+
             inicializarJuego();
             btnIniciar.setEnabled(false);
         } else {
@@ -571,35 +586,84 @@ public class fPrincipal extends javax.swing.JFrame {
             reliquia.setStop();
         }
 
-        int opcion = javax.swing.JOptionPane.showConfirmDialog(null,
-                "¿Deseas avanzar al siguiente nivel?",
-                "Fin del Nivel",
-                javax.swing.JOptionPane.YES_NO_OPTION);
-
-        if (opcion == javax.swing.JOptionPane.YES_OPTION) {
-            subirDeNivel();
-            btnIniciar.setEnabled(true);
-        }
         System.out.println("Juego detenido (todos los hilos detenidos).");
+
+        // Verificar si se llegó al nivel 10
+        if (nivelActual >= NIVELES_BASE && !modoInfinito) {
+            int opcion = javax.swing.JOptionPane.showOptionDialog(
+                    null,
+                    "¡Llos 10 niveles fueron completados!\n¿Deseas seguir jugando niveles infinitos?",
+                    "Fin del Juego Base",
+                    javax.swing.JOptionPane.YES_NO_OPTION,
+                    javax.swing.JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new String[]{"Seguir jugando", "Vencer el juego"},
+                    "Seguir jugando"
+            );
+
+            if (opcion == javax.swing.JOptionPane.YES_OPTION) {
+                modoInfinito = true;
+                subirDeNivel();
+                btnIniciar.setEnabled(true);
+                txaLog.append("Modo infinito activado. ¡Los enemigos se harán más fuertes!\n");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(null, "¡Felicidades! Pasaste el juego.");
+                System.exit(0);
+            }
+        } else {
+            // Modo del juego
+            int opcion = javax.swing.JOptionPane.showConfirmDialog(null,
+                    "¿Deseas avanzar al siguiente nivel?",
+                    "Fin del Nivel",
+                    javax.swing.JOptionPane.YES_NO_OPTION);
+
+            if (opcion == javax.swing.JOptionPane.YES_OPTION) {
+                subirDeNivel();
+                btnIniciar.setEnabled(true);
+            }
+        }
     }
 
     public void subirDeNivel() {
-        java.util.Random rand = new java.util.Random();
-
-        for (Defensa defensa : ejercito) {
-            int porcentaje = 5 + rand.nextInt(16); // 5–20%
-            int nuevaVida = (int) (defensa.getVida() * (1 + porcentaje / 100.0));
-            defensa.setVida(nuevaVida);
-            System.out.println(defensa.getNombre() + " mejoró " + porcentaje + "% su resistencia.");
-        }
-
-        for (Zombie zombie : atacantes) {
-            int porcentaje = 5 + rand.nextInt(16);
-            zombie.setVida((int) (zombie.getVida() * (1 + porcentaje / 100.0)));
-            System.out.println(zombie.getNombre() + " mejoró " + porcentaje + "% su resistencia.");
-        }
+        Random rand = new Random();
 
         nivelActual++;
+        capacidadEjercito += 5;
+
+        lblNivel.setText("Nivel: " + nivelActual);
+
+        //  Aumentar dificultad más vida y ataque
+        limpiarTerreno();
+        atacantes.clear();
+        ejercito.clear();
+        generarZombies("s");
+
+        for (Zombie zombie : atacantes) {
+            if (zombie != null) {
+                int mejora = 10 + rand.nextInt(15); // 10–25%
+                zombie.setVida((int) (zombie.getVida() * (1 + mejora / 100.0)));
+                zombie.setAtaquePorUnidad(zombie.getAtaquePorUnidad() + rand.nextInt(3)); // +0 a +2 ataque
+            }
+        }
+
+        // Mejorar defensas  más ataque y vida
+        for (Componente defensa : defensasDisponibles) {
+            if (defensa != null) {
+                int mejora = 5 + rand.nextInt(10); // 5–15%
+                defensa.setVida((int) (defensa.getVida() * (1 + mejora / 100.0)));
+                if (!(defensa instanceof ReliquiaDeLaVida)) {
+                    ((Defensa) defensa).setAtaquePorUnidad(((Defensa) defensa).getAtaquePorUnidad() + rand.nextInt(2)); // +0 o +1 daño
+                }
+            }
+        }
+
+        inicializarDefensas();
+
+        txaLog.append("----- Nivel " + nivelActual + " iniciado -----\n");
+        txaLog.append("Los zombies ahora son más fuertes y más numerosos.\n");
+
+        actualizarContadores();
+        pnlComponentes.repaint();
     }
 
     public void iniciarJuego() {
@@ -610,15 +674,21 @@ public class fPrincipal extends javax.swing.JFrame {
         inicializarJuego();
     }
 
-    public void inicializarDefensas() {
+    public void cargarDefensas() {
         defensasDisponibles.add(reliquia);
 
         defensasDisponibles.add(new DefensaContacto(this, "Hulk - De Contacto", 2, 100, 1, 1, 1, 0, 1, "/Imagenes/defensa1.gif"));
-        defensasDisponibles.add(new DefensaMedioAlcance(this, "Archer - Medio Alcance", 3, 80, 1, 1, 1, 0, 3, "/Imagenes/defensa1.gif"));
+        defensasDisponibles.add(new DefensaMedioAlcance(this, "Archer - Medio Alcance", 50, 80, 1, 1, 1, 0, 3, "/Imagenes/defensa1.gif"));
         defensasDisponibles.add(new DefensaAerea(this, "Drone - Aéreo", 2, 70, 2, 1, 1, 0, 2, "/Imagenes/defensa1.gif"));
         defensasDisponibles.add(new DefensaImpacto(this, "Mine - Impacto", 10, 40, 1, 1, 1, 0, 1, "/Imagenes/defensa1.gif"));
         defensasDisponibles.add(new DefensaAtaqueMultiple(this, "Sentry - Ataque Múltiple", 2, 90, 2, 1, 1, 0, 3, "/Imagenes/defensa1.gif"));
         defensasDisponibles.add(new DefensaBloque(this, "Wall - Bloque", 0, 200, 0, 1, 1, 0, 0, "/Imagenes/defensa1.gif"));
+        inicializarDefensas();
+    }
+
+    public void inicializarDefensas() {
+        // 🔹 Limpiar panel antes de volver a construirlo
+        pnlComponentes.removeAll();
 
         int i = 0;
         for (Componente defensa : defensasDisponibles) {
@@ -634,7 +704,6 @@ public class fPrincipal extends javax.swing.JFrame {
             }
         }
 
-        // 🔄 Asegurar visibilidad en scroll
         pnlComponentes.setPreferredSize(new java.awt.Dimension(245, defensasDisponibles.size() * 70));
         pnlComponentes.revalidate();
         pnlComponentes.repaint();
@@ -731,8 +800,19 @@ public class fPrincipal extends javax.swing.JFrame {
             Point ubicacion = terreno[fila][col].getPosicion();
             nuevoLabel.setLocation(ubicacion);
 
-            Zombie newZombie = new ZombieContacto(this, "Zombie - De Contacto",
-                    5, 25, 1, 0, 0, 0, 1, "/Imagenes/zombie4.gif", 1);
+            Zombie newZombie = new ZombieContacto(
+                    this,
+                    "Zombie - De Contacto (Lvl " + (nivelActual + 1) + ")",
+                    5 + nivelActual, //  ataque escala con el nivel
+                    25 + (nivelActual * 10), //  vida también escala
+                    1,
+                    0,
+                    0,
+                    0,
+                    1,
+                    "/Imagenes/zombie4.gif",
+                    1
+            );
 
             newZombie.setPosicionMatriz(new Point(fila, col));
             newZombie.setRefLabel(nuevoLabel);
@@ -773,18 +853,70 @@ public class fPrincipal extends javax.swing.JFrame {
         lblCantDefensas.setText(String.valueOf(vivosDefensas));
     }
 
+    public void limpiarTerreno() {
+        // Eliminar zombies
+        for (Zombie zombie : atacantes) {
+            if (zombie != null) {
+                // Quitar del panel visual
+                if (zombie.getRefLabel() != null) {
+                    pnlTerreno.remove(zombie.getRefLabel());
+                }
+
+                // Liberar la casilla del terreno
+                Point pos = zombie.getPosicionMatriz();
+                if (pos != null) {
+                    terreno[pos.x][pos.y].vaciarCasilla();
+                }
+            }
+        }
+
+        // Eliminar defensas
+        for (Defensa defensa : ejercito) {
+            if (defensa != null) {
+                if (defensa.getRefLabel() != null) {
+                    pnlTerreno.remove(defensa.getRefLabel());
+                }
+
+                Point pos = defensa.getPosicionMatriz();
+                if (pos != null) {
+                    terreno[pos.x][pos.y].vaciarCasilla();
+                }
+            }
+        }
+
+        if (reliquia.getRefLabel() != null) {
+            pnlTerreno.remove(reliquia.getRefLabel());
+        }
+        Point pos = reliquia.getPosicionMatriz();
+        if (pos != null) {
+            terreno[pos.x][pos.y].vaciarCasilla();
+        }
+
+        reliquiaPlaced = false;
+
+        // Actualizar contadores e interfaz
+        actualizarContadores();
+        pnlTerreno.revalidate();
+        pnlTerreno.repaint();
+
+        txaLog.append("Se limpiaron las unidades destruidas del terreno.\n");
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIniciar;
     private javax.swing.JButton btnPausa;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblCantDefensas;
     private javax.swing.JLabel lblCantZombies;
+    private javax.swing.JLabel lblNivel;
     private javax.swing.JPanel pnlComponentes;
     private javax.swing.JPanel pnlTerreno;
     private javax.swing.JPanel pnlUtilidades;

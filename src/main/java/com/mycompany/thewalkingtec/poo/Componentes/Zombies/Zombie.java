@@ -40,6 +40,10 @@ public abstract class Zombie extends Componente {
         return velocidad;
     }
 
+    public void setAtaquePorUnidad(int ataquePorUnidad) {
+        this.ataquePorUnidad = ataquePorUnidad;
+    }
+
     public boolean isVolador() {
         return volador;
     }
@@ -122,6 +126,8 @@ public abstract class Zombie extends Componente {
 
                     // Mover zombie en el terreno
                     super.getRefPantalla().moverZombie(super.getRefLabel(), x, y);
+                    System.out.println(getNombre() + " se mueve hacia (" + x + ", " + y + ")");
+
 
                     // Verificar si ya está cerca de la reliquia
                     double distanciaReliquia = actual.distance(objetivo);
@@ -142,6 +148,9 @@ public abstract class Zombie extends Componente {
             }
         }
     }
+
+    @Override
+    public abstract Componente clonar(fPrincipal refPantalla);
 
     public void setPause() {
         this.isPause = !this.isPause;

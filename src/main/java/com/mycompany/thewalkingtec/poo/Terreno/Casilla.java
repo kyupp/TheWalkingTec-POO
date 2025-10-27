@@ -1,4 +1,5 @@
 package com.mycompany.thewalkingtec.poo.Terreno;
+
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
 import java.awt.Color;
 import java.awt.Point;
@@ -24,7 +25,8 @@ public class Casilla {
     private Componente tropa;        // Defensa o zombie asignado a la casilla
 
     // Constructor vacío
-    public Casilla() {}
+    public Casilla() {
+    }
 
     // Constructor principal
     public Casilla(JPanel pnlTerreno, JTextArea txaLog, Point coordenadas, JLabel lblCasilla) {
@@ -69,13 +71,13 @@ public class Casilla {
     public void setPosicion(Point coordenadas) {
         this.coordenadas = coordenadas;
     }
-    
+
     public void insertarTropa(Componente tropa) {
         JLabel label = tropa.getRefLabel();
         label.setSize(lblCasilla.getSize()); // mismo tamaño que la casilla
         label.setLocation(lblCasilla.getLocation()); // se alinea exactamente a la casilla
         label.setOpaque(true);
-        
+
         pnlTerreno.add(label);
         pnlTerreno.setComponentZOrder(label, 0); // poner la tropa encima de la casilla
         pnlTerreno.repaint();
@@ -103,6 +105,27 @@ public class Casilla {
         }
         this.seleccionada = !this.seleccionada;
         lblCasilla.setBackground(colorActual);
+    }
+
+    public void vaciarCasilla() {
+        try {
+            // Si hay una tropa en esta casilla, eliminar su label del panel
+            if (tropa != null && tropa.getRefLabel() != null) {
+                pnlTerreno.remove(tropa.getRefLabel());
+                pnlTerreno.revalidate();
+                pnlTerreno.repaint();
+                System.out.println("Tropa eliminada visualmente de la casilla en " + coordenadas);
+            }
+        } catch (Exception e) {
+            System.err.println("Error al vaciar casilla: " + e.getMessage());
+        }
+
+        // Restaurar estado original
+        this.tropa = null;
+        this.ocupada = false;
+        this.seleccionada = false;
+        this.colorActual = colorOriginal;
+        this.lblCasilla.setBackground(colorOriginal);
     }
 
     public Componente getTropa() {

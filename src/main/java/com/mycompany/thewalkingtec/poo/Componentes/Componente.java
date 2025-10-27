@@ -251,6 +251,7 @@ public abstract class Componente extends Thread {
     }
 
     public void setVida(int vida) {
+        this.vidaMaxima = vida;
         this.vida = vida;
     }
 }

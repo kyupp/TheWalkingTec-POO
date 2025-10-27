@@ -9,16 +9,28 @@ import com.mycompany.thewalkingtec.poo.fPrincipal;
  */
 public class ZombieContacto extends Zombie {
 
-    public ZombieContacto(fPrincipal refPantalla, String nombre ,int ataquePorUnidad, int vida, int golpesPorSegundo,
-                          int nivel, int campos, int nivelDeAparicion, int alcance, 
-                          String apariencia, int velocidad) {
+    public ZombieContacto(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo,
+            int nivel, int campos, int nivelDeAparicion, int alcance,
+            String apariencia, int velocidad) {
 
-        super(refPantalla, nombre, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, 
-              nivelDeAparicion, alcance, apariencia, velocidad, false);
+        super(refPantalla, nombre, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos,
+                nivelDeAparicion, alcance, apariencia, velocidad, false);
     }
-    
+
     @Override
     public Componente clonar(fPrincipal refPantalla) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return new ZombieContacto(
+                refPantalla,
+                this.getNombre(),
+                this.getAtaquePorUnidad(),
+                this.getVida(),
+                this.getGolpesPorSegundo(),
+                this.getNivel(),
+                this.getCampos(),
+                this.getNivelDeAparicion(),
+                this.getAlcance(),
+                this.getApariencia(),
+                this.getVelocidad()
+        );
     }
 }

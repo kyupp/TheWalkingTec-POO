@@ -117,4 +117,10 @@ public class Defensa extends Componente {
         return ataquePorUnidad;
     }
 
+    public void setAtaquePorUnidad(int ataquePorUnidad) {
+        this.ataquePorUnidad = ataquePorUnidad;
+    }
+    
+    
+
 }
