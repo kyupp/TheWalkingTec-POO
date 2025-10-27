@@ -5,11 +5,9 @@
 package com.mycompany.thewalkingtec.poo.Componentes;
 
 import com.mycompany.thewalkingtec.poo.fPrincipal;
+import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import java.awt.Image;
-import java.awt.Point;
-import static java.lang.Thread.sleep;
 
 public abstract class Componente extends Thread {
 
@@ -53,12 +51,9 @@ public abstract class Componente extends Thread {
     public void setRefLabel(JLabel refLabel) {
         this.refLabel = refLabel;
         try {
-            ImageIcon iconoOriginal = new ImageIcon(getClass().getResource(apariencia));
-            Image imagenEscalada = iconoOriginal.getImage()
-                    .getScaledInstance(refLabel.getWidth(), refLabel.getHeight(), Image.SCALE_SMOOTH);
+            ImageIcon iconoOriginal = new ImageIcon(new ImageIcon(getClass().getResource(apariencia)).getImage().getScaledInstance(refLabel.getWidth(), refLabel.getHeight(), Image.SCALE_DEFAULT));
+            refLabel.setIcon(iconoOriginal);
             refLabel.setOpaque(false);
-            refLabel.setIcon(new ImageIcon(imagenEscalada));
-            refLabel.repaint();
         } catch (Exception e) {
             System.err.println(" Error cargando imagen: " + apariencia);
         }
@@ -135,54 +130,6 @@ public abstract class Componente extends Thread {
     }
 
     public abstract Componente clonar(fPrincipal refPantalla);
-
-    public void run() {
-
-        while (isRunning) {
-            try {
-                //1. Esperar velocidad milisegundos
-                sleep(1000);
-                //2. Mover el label aleatoriamente: Determinar la posición: donde está el objetivo para determinar a donde debo ir
-                Point puntoObjetivo = refPantalla.getObjetivoLocation();
-                Point puntoActual = refLabel.getLocation();
-                int x = puntoActual.x;
-                int y = puntoActual.y;
-                //Desplaza a la derecha       
-                if (x < puntoObjetivo.x) {
-                    x += 20;
-                    //Desplaza a la izquierda  
-                } else if (x > puntoObjetivo.x) {
-                    x -= 20;
-                }
-
-                //Desplaza para abajo  
-                if (y < puntoObjetivo.y) {
-                    y += 20;
-                    //Desplaza para arriba 
-                } else if (y > puntoObjetivo.y) {
-                    y -= 20;
-                }
-                //3. Pintar el movimiento del label con el metodo de la pantalla, setLocation
-                refPantalla.moverSoldado(refLabel, x, y);
-
-                //4. Atacar TODO: Ataquen por proximidad, también que reciban ataque por proximidad
-                //atacar(refPantalla.getObjetivo());
-                System.out.println("Eject");
-                while (isPause) {
-                    try {
-                        sleep(500);
-                    } catch (InterruptedException ex) {
-                        //System.getLogger(Soldado.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                    }
-                }
-            } catch (InterruptedException ex) {
-                System.getLogger(Componente.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-            }
-        }
-    }
-        
-
-    
 
     public void setPause() {
         this.isPause = !this.isPause;
