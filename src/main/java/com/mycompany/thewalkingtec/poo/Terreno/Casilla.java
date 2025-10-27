@@ -75,7 +75,7 @@ public class Casilla {
         label.setSize(lblCasilla.getSize()); // mismo tamaño que la casilla
         label.setLocation(lblCasilla.getLocation()); // se alinea exactamente a la casilla
         label.setOpaque(true);
-
+        
         pnlTerreno.add(label);
         pnlTerreno.setComponentZOrder(label, 0); // poner la tropa encima de la casilla
         pnlTerreno.repaint();

@@ -4,6 +4,7 @@
  */
 package com.mycompany.thewalkingtec.poo.Componentes.Defensas;
 
+import com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 
 /**
@@ -11,13 +12,38 @@ import com.mycompany.thewalkingtec.poo.fPrincipal;
  * @author mathiasviquez
  */
 public class DefensaAtaqueMultiple extends DefensaMedioAlcance{
-    
-    public DefensaAtaqueMultiple(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
-        super(refPantalla, nombre ,ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
+    private int cantidadAtaques = 3;
+    public DefensaAtaqueMultiple(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeAparicion, int alcance, String apariencia) {
+        super(refPantalla, nombre ,ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeAparicion, alcance, apariencia);
+        
     }
     
-    public void lanzarAtaqueMultiple(){
-        
+    @Override
+    public void run() {
+        while (!estaDestruido()) {
+            try {
+                if (isPause()) { Thread.sleep(200); continue; }
+
+                int atacados = 0;
+                for (Zombie zombie : getRefPantalla().getAtacantes()) {
+                    if (zombie == null || zombie.estaDestruido()) continue;
+
+                    double distancia = getRefLabel().getLocation().distance(zombie.getRefLabel().getLocation());
+                    if (distancia <= getAlcance() * 30) {
+                        zombie.recibirGolpe(getAtaquePorUnidad(), this);
+                        atacados++;
+                        if (atacados >= cantidadAtaques) break;
+                    }
+                }
+
+                if (atacados > 0) {
+                    Thread.sleep(1000 / Math.max(1, getGolpesPorSegundo()));
+                } else {
+                    Thread.sleep(300);
+                }
+
+            } catch (InterruptedException e) { break; }
+        }
     }
     
 }

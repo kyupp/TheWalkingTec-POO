@@ -9,6 +9,5 @@ package com.mycompany.thewalkingtec.poo.Componentes;
  * @author kyup
  */
 public interface IVolador {
-    public void volar();
     public void buscarObjetivo();
 }

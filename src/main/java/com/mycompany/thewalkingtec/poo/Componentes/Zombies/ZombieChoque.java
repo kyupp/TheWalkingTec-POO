@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.thewalkingtec.poo.Componentes.Zombies;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
@@ -22,11 +18,6 @@ public class ZombieChoque extends Zombie {
         super(refPantalla, nombre, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, 
               nivelDeAparicion, alcance, apariencia, velocidad, false);
         this.radioExplosion = radioExplosion;
-    }
-
-    @Override
-    public void mover() {
-        // busca objetivo y al colisionar se destruye
     }
 
     public void explotar() {

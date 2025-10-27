@@ -6,12 +6,26 @@ package com.mycompany.thewalkingtec.poo.Componentes;
 
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 import java.awt.Image;
+import java.awt.Point;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+
+/**
+ *
+ * @author kyup
+ */
 
 public abstract class Componente extends Thread {
 
-    // 🔹 Atributos principales
+    //  Atributos principales
+    private static int contadorDefensas = 1;
+    private static int contadorZombies = 1;
+    private static int contadorReliquias = 1;
+
     private String nombre;
     private int vidaMaxima;
     private int vida;
@@ -21,19 +35,20 @@ public abstract class Componente extends Thread {
     private int nivelDeAparicion;
     private int alcance;
     private String apariencia;
-    private boolean isRunning = true;
-    private boolean isPause = false;
+    private String id;
+    private Point posicionMatriz;
 
-    // 🔹 Referencias a la interfaz
+    private ArrayList<RegistroAtaque> registroAtaques = new ArrayList<>();
+    private ArrayList<RegistroAtaque> registroAtaquesRecibidos = new ArrayList<>();
+
     private JLabel refLabel;
     private fPrincipal refPantalla;
 
-    // 🔹 Constructores
-    public Componente() {
-    }
+    //  Constructor base
+    public Componente() {}
 
     public Componente(fPrincipal refPantalla, String nombre, int vida, int golpesPorSegundo, int nivel,
-            int campos, int nivelDeAparicion, int alcance, String apariencia) {
+                      int campos, int nivelDeAparicion, int alcance, String apariencia) {
         this.refLabel = null;
         this.refPantalla = refPantalla;
         this.nombre = nombre;
@@ -45,40 +60,179 @@ public abstract class Componente extends Thread {
         this.nivelDeAparicion = nivelDeAparicion;
         this.alcance = alcance;
         this.apariencia = apariencia;
+
+        // Asignar ID según tipo
+        if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa)
+            this.id = "D" + (contadorDefensas++);
+        else if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie)
+            this.id = "Z" + (contadorZombies++);
+        else if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.ReliquiaDeLaVida)
+            this.id = "R" + (contadorReliquias++);
     }
 
-    // 🔹 Métodos de imagen y UI
-    public void setRefLabel(JLabel refLabel) {
-        this.refLabel = refLabel;
-        try {
-            ImageIcon iconoOriginal = new ImageIcon(new ImageIcon(getClass().getResource(apariencia)).getImage().getScaledInstance(refLabel.getWidth(), refLabel.getHeight(), Image.SCALE_DEFAULT));
-            refLabel.setIcon(iconoOriginal);
-            refLabel.setOpaque(false);
-        } catch (Exception e) {
-            System.err.println(" Error cargando imagen: " + apariencia);
+    //  Métodos para reiniciar los contadores entre partidas
+    public static void resetearContadores() {
+        contadorDefensas = 1;
+        contadorZombies = 1;
+        contadorReliquias = 1;
+    }
+    
+    //  Registro de ataques
+    public void registrarAtaque(Componente objetivo, int danio, int vidaAntes, int vidaDespues) {
+        registroAtaques.add(new RegistroAtaque(
+                this.nombre + " [" + this.id + "]",
+                objetivo.nombre + " [" + objetivo.id + "]",
+                danio, vidaAntes, vidaDespues
+        ));
+    }
+
+    public void registrarAtaqueRecibido(Componente atacante, int danio, int vidaAntes, int vidaDespues) {
+        registroAtaquesRecibidos.add(new RegistroAtaque(
+                atacante.nombre + " [" + atacante.id + "]",
+                this.nombre + " [" + this.id + "]",
+                danio, vidaAntes, vidaDespues
+        ));
+    }
+
+    //  Cuando recibe daño
+    public void recibirGolpe(int golpe, Componente atacante) {
+        int vidaAntes = this.vida;
+        this.vida = Math.max(0, this.vida - Math.abs(golpe));
+        int vidaDespues = this.vida;
+
+        if (atacante != null) {
+            atacante.registrarAtaque(this, Math.abs(golpe), vidaAntes, vidaDespues);
+            this.registrarAtaqueRecibido(atacante, Math.abs(golpe), vidaAntes, vidaDespues);
+        }
+
+        if (this.vida <= 0) {
+            marcarDestruido();
+            this.refPantalla.actualizarContadores();
         }
     }
 
+    private void marcarDestruido() {
+        if (refLabel != null) {
+            refLabel.setIcon(null);
+            refLabel.setOpaque(true);
+
+            if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie)
+                refLabel.setBackground(new java.awt.Color(180, 0, 0));
+            else if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa)
+                refLabel.setBackground(new java.awt.Color(80, 80, 80));
+            else if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.ReliquiaDeLaVida)
+                refLabel.setBackground(new java.awt.Color(0, 0, 0));
+        }
+
+        if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie)
+            refPantalla.comprobarGanar();
+        else if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.ReliquiaDeLaVida)
+            refPantalla.comprobarPerder();
+    }
+
+    //  Mostrar información básica
+    public void mostrarInformacion() {
+        JDialog dialogo = new JDialog();
+        dialogo.setTitle("Información de " + nombre);
+        dialogo.setSize(380, 340);
+        dialogo.setLocationRelativeTo(null);
+        dialogo.setModal(false);
+        dialogo.setLayout(null);
+
+        JLabel lblNombre = new JLabel("Nombre: " + nombre);
+        lblNombre.setBounds(15, 10, 340, 20);
+        dialogo.add(lblNombre);
+
+        JLabel lblId = new JLabel("ID: " + id);
+        lblId.setBounds(15, 35, 340, 20);
+        dialogo.add(lblId);
+
+        JLabel lblVida = new JLabel("Vida: " + vida + " / " + vidaMaxima);
+        lblVida.setBounds(15, 60, 340, 20);
+        dialogo.add(lblVida);
+
+        if (posicionMatriz != null) {
+            JLabel lblCoord = new JLabel("Matriz: (" + posicionMatriz.x + ", " + posicionMatriz.y + ")");
+            lblCoord.setBounds(15, 85, 340, 20);
+            dialogo.add(lblCoord);
+        }
+
+        String texto = " ATAQUES REALIZADOS:\n";
+        texto += registroAtaques.isEmpty() ? "   Ninguno.\n" : "";
+        for (RegistroAtaque r : registroAtaques)
+            texto += "   " + r.toString() + "\n";
+
+        texto += "\n ATAQUES RECIBIDOS:\n";
+        texto += registroAtaquesRecibidos.isEmpty() ? "   Ninguno.\n" : "";
+        for (RegistroAtaque r : registroAtaquesRecibidos)
+            texto += "   " + r.toString() + "\n";
+
+        JTextArea area = new JTextArea(texto);
+        area.setEditable(false);
+        area.setFont(new java.awt.Font("Consolas", java.awt.Font.PLAIN, 11));
+        JScrollPane scroll = new JScrollPane(area);
+        scroll.setBounds(15, 120, 340, 160);
+        dialogo.add(scroll);
+
+        dialogo.setVisible(true);
+    }
+
+    //  Imagen
+    public void setRefLabel(JLabel refLabel) {
+        this.refLabel = refLabel;
+        try {
+            ImageIcon icono = new ImageIcon(
+                    new ImageIcon(getClass().getResource(apariencia))
+                            .getImage().getScaledInstance(refLabel.getWidth(), refLabel.getHeight(), Image.SCALE_DEFAULT)
+            );
+            refLabel.setIcon(icono);
+            refLabel.setOpaque(false);
+        } catch (Exception e) {
+            System.err.println("Error cargando imagen: " + apariencia);
+        }
+
+        refLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mostrarInformacion();
+            }
+        });
+    }
+
+    //  Getters & Setters
+    public String getCompId() { 
+        return id; 
+    }
+    public String getNombre() { 
+        return nombre; }
+    public int getVida() { return vida; 
+    }
+    public int getGolpesPorSegundo() {
+        return golpesPorSegundo; 
+    }
+    public int getAlcance() { 
+        return alcance; 
+    }
+    public Point getPosicionMatriz() {
+        return posicionMatriz;
+    }
+    public void setPosicionMatriz(Point p) {
+        this.posicionMatriz = p; 
+    }
+    public boolean estaDestruido() {
+        return vida <= 0; 
+    }
+    public String getApariencia() { 
+        return apariencia;
+    }
     public JLabel getRefLabel() {
         return refLabel;
     }
-
-    // 🔹 Getters y setters
-    public String getApariencia() {
-        return apariencia;
+    public fPrincipal getRefPantalla() {
+        return refPantalla;
     }
-
-    public int getVida() {
-        return vida;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public int getGolpesPorSegundo() {
-        return golpesPorSegundo;
-    }
+   
+    public abstract Componente clonar(fPrincipal refPantalla);
 
     public int getNivel() {
         return nivel;
@@ -92,51 +246,11 @@ public abstract class Componente extends Thread {
         return nivelDeAparicion;
     }
 
-    public int getAlcance() {
-        return alcance;
-    }
-
-    public fPrincipal getRefPantalla() {
-        return refPantalla;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setRefPantalla(fPrincipal refPantalla) {
+        this.refPantalla = refPantalla;
     }
 
     public void setVida(int vida) {
         this.vida = vida;
-    }
-
-    public void setNivel(int nivel) {
-        this.nivel = nivel;
-    }
-
-    public void subirNivel() {
-        this.nivel++;
-        // Mejoras
-    }
-
-    public void recibirGolpe(int golpe) {
-        this.vida = Math.max(this.vida - golpe, 0);
-    }
-
-    public void resetearVida() {
-        this.vida = this.vidaMaxima;
-    }
-
-    public boolean estaDestruido() {
-        return this.vida <= 0;
-    }
-
-    public abstract Componente clonar(fPrincipal refPantalla);
-
-    public void setPause() {
-        this.isPause = !this.isPause;
-    }
-
-    public void setStop() {
-        this.isRunning = false;
-        this.isPause = false;
     }
 }
