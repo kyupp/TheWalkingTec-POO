@@ -687,7 +687,7 @@ public class fPrincipal extends javax.swing.JFrame {
     }
 
     public void inicializarDefensas() {
-        // 🔹 Limpiar panel antes de volver a construirlo
+        //  Limpiar panel antes de volver a construirlo
         pnlComponentes.removeAll();
 
         int i = 0;
