@@ -5,12 +5,9 @@
 package com.mycompany.thewalkingtec.poo.Componentes.Zombies;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
-import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 import java.awt.Point;
 import static java.lang.Thread.sleep;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 
 /**
  *
@@ -106,6 +103,10 @@ public abstract class Zombie extends Componente{
     public void setStop() {
         this.isRunning = false;
         this.isPause = false;
+    }
+    
+    public boolean isPause(){
+        return isPause;
     }
     
 }

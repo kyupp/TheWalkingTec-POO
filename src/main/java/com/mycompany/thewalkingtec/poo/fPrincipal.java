@@ -6,6 +6,7 @@ package com.mycompany.thewalkingtec.poo;
 
 import com.mycompany.thewalkingtec.poo.Componentes.ReliquiaDeLaVida;
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
+import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaContacto;
 import com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie;
 import com.mycompany.thewalkingtec.poo.Componentes.Zombies.ZombieContacto;
@@ -33,7 +34,7 @@ public class fPrincipal extends javax.swing.JFrame {
     //Componentes del juego
     private int TAMANO_TERRENO = 25;
     private Casilla[][] terreno = new Casilla[25][25];
-    private ArrayList<Componente> ejercito = new ArrayList<Componente>();
+    private ArrayList<Defensa> ejercito = new ArrayList<Defensa>();
     private ArrayList<Zombie> atacantes = new ArrayList<Zombie>();
     private ArrayList<Componente> defensasDisponibles = new ArrayList<Componente>();
     private ReliquiaDeLaVida reliquia = new ReliquiaDeLaVida(this, "Reliquia", 100, "/Imagenes/fotoArbol.png");
@@ -66,13 +67,23 @@ public class fPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
         pnlTerreno = new javax.swing.JPanel();
         pnlUtilidades = new javax.swing.JPanel();
-        tbPnlComponentes = new javax.swing.JTabbedPane();
-        pnlComponentes = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txaLog = new javax.swing.JTextArea();
         btnIniciar = new javax.swing.JButton();
+        btnPausa = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
+        pnlComponentes = new javax.swing.JPanel();
+
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(jList1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1170, 790));
@@ -98,8 +109,32 @@ public class fPrincipal extends javax.swing.JFrame {
         pnlUtilidades.setMinimumSize(new java.awt.Dimension(400, 760));
         pnlUtilidades.setPreferredSize(new java.awt.Dimension(400, 750));
 
-        tbPnlComponentes.setBackground(new java.awt.Color(255, 255, 102));
-        tbPnlComponentes.setOpaque(true);
+        txaLog.setColumns(20);
+        txaLog.setRows(5);
+        jScrollPane1.setViewportView(txaLog);
+
+        btnIniciar.setText("Iniciar");
+        btnIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarActionPerformed(evt);
+            }
+        });
+
+        btnPausa.setText("Pausa");
+        btnPausa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPausaActionPerformed(evt);
+            }
+        });
+
+        btnSalir.setBackground(new java.awt.Color(255, 102, 102));
+        btnSalir.setForeground(new java.awt.Color(255, 255, 255));
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlComponentesLayout = new javax.swing.GroupLayout(pnlComponentes);
         pnlComponentes.setLayout(pnlComponentesLayout);
@@ -112,19 +147,6 @@ public class fPrincipal extends javax.swing.JFrame {
             .addGap(0, 329, Short.MAX_VALUE)
         );
 
-        tbPnlComponentes.addTab("tab1", pnlComponentes);
-
-        txaLog.setColumns(20);
-        txaLog.setRows(5);
-        jScrollPane1.setViewportView(txaLog);
-
-        btnIniciar.setText("Iniciar");
-        btnIniciar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIniciarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout pnlUtilidadesLayout = new javax.swing.GroupLayout(pnlUtilidades);
         pnlUtilidades.setLayout(pnlUtilidadesLayout);
         pnlUtilidadesLayout.setHorizontalGroup(
@@ -132,23 +154,30 @@ public class fPrincipal extends javax.swing.JFrame {
             .addGroup(pnlUtilidadesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUtilidadesLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 142, Short.MAX_VALUE)
                         .addGroup(pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUtilidadesLayout.createSequentialGroup()
-                                .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(9, 9, 9))
-                            .addComponent(tbPnlComponentes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(pnlComponentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlUtilidadesLayout.createSequentialGroup()
+                                .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnPausa, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(6, 6, 6)))
                 .addContainerGap())
         );
         pnlUtilidadesLayout.setVerticalGroup(
             pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlUtilidadesLayout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addComponent(tbPnlComponentes, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21)
+                .addComponent(pnlComponentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnPausa, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1)
                 .addContainerGap())
@@ -173,14 +202,23 @@ public class fPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
-        // TODO add your handling code here:
         if (reliquiaPlaced) {
             generarZombies("s");
-            inicializarZombies();
+            inicializarJuego();
         } else {
             System.out.println("No se puede iniciar");
         }
     }//GEN-LAST:event_btnIniciarActionPerformed
+
+    private void btnPausaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPausaActionPerformed
+        // TODO add your handling code here:
+        pausar();
+    }//GEN-LAST:event_btnPausaActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        // TODO: Guardar en el archivo todo
+
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -344,7 +382,7 @@ public class fPrincipal extends javax.swing.JFrame {
                         fPrincipal.this.reliquia = (ReliquiaDeLaVida) nuevaEstructura;
                         reliquiaPlaced = true;
                     } else {
-                        fPrincipal.this.ejercito.add(nuevaEstructura);
+                        fPrincipal.this.ejercito.add((Defensa) nuevaEstructura);
                     }
 
                     terreno[fila][col].insertarTropa(nuevaEstructura);
@@ -434,7 +472,7 @@ public class fPrincipal extends javax.swing.JFrame {
 //        for (Componente estructura : ejercito) {
 //            estructura.start();
 //        }
-        inicializarZombies();
+        inicializarJuego();
     }
 
     public void inicializarDefensas() {
@@ -451,13 +489,34 @@ public class fPrincipal extends javax.swing.JFrame {
             }
         }
     }
+    
+    public void pausar() {
+        //leer defensas del archivo
+        //Cargar a los zombies al arrayList defensas disponibles
+        //Habilitar las que esten al nivel
+        for (Zombie zombie : atacantes) {
+                zombie.setPause();  
+        }
+        
+        for (Defensa defensa : ejercito) {
+            if(defensa.isPause()){
+                defensa.setPause();
+            }else{
+                defensa.setPause();
+            }
+        }
+    }
 
-    public void inicializarZombies() {
+    public void inicializarJuego() {
         //leer defensas del archivo
         //Cargar a los zombies al arrayList defensas disponibles
         //Habilitar las que esten al nivel
         for (Zombie zombies : atacantes) {
             zombies.start();
+        }
+        
+         for (Defensa defensa : ejercito) {
+            defensa.start();
         }
     }
 
@@ -531,11 +590,14 @@ public class fPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIniciar;
+    private javax.swing.JButton btnPausa;
+    private javax.swing.JButton btnSalir;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel pnlComponentes;
     private javax.swing.JPanel pnlTerreno;
     private javax.swing.JPanel pnlUtilidades;
-    private javax.swing.JTabbedPane tbPnlComponentes;
     private javax.swing.JTextArea txaLog;
     // End of variables declaration//GEN-END:variables
 }
