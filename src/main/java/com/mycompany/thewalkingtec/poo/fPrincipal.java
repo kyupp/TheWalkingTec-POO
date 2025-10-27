@@ -10,7 +10,10 @@ import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaBloque;
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaContacto;
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaMedioAlcance;
 import com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie;
+import com.mycompany.thewalkingtec.poo.Componentes.Zombies.ZombieAereo;
+import com.mycompany.thewalkingtec.poo.Componentes.Zombies.ZombieChoque;
 import com.mycompany.thewalkingtec.poo.Componentes.Zombies.ZombieContacto;
+import com.mycompany.thewalkingtec.poo.Componentes.Zombies.ZombieMedianoAlcance;
 import com.mycompany.thewalkingtec.poo.Terreno.Casilla;
 import java.awt.Color;
 import java.awt.Image;
@@ -45,7 +48,7 @@ public class fPrincipal extends javax.swing.JFrame {
     boolean reliquiaPlaced = false;
 
     //Atributos de juego
-    private int nivelActual = 0;
+    private int nivelActual = 1;
     private int capacidadEjercito = 20;
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(fPrincipal.class.getName());
@@ -58,6 +61,7 @@ public class fPrincipal extends javax.swing.JFrame {
         inicializarTerreno();
         generarTerreno();
         cargarDefensas();
+        cargarZombies();
     }
 
     /**
@@ -275,7 +279,7 @@ public class fPrincipal extends javax.swing.JFrame {
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
         if (reliquiaPlaced) {
             if (atacantes.size() < capacidadEjercito) {
-                generarZombies("s");
+                generarZombies();
             }
 
             inicializarJuego();
@@ -585,6 +589,17 @@ public class fPrincipal extends javax.swing.JFrame {
         if (reliquia != null) {
             reliquia.setStop();
         }
+        
+         //  Aumentar dificultad más vida y ataque
+        atacantes.clear();
+        ejercito.clear();
+
+        try {
+            // Evita bug de Nimbus al crear JOptionPane
+            javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception ex) {
+            System.out.println("Error al cambiar LookAndFeel: " + ex.getMessage());
+        }
 
         System.out.println("Juego detenido (todos los hilos detenidos).");
 
@@ -611,6 +626,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 System.exit(0);
             }
         } else {
+
             // Modo del juego
             int opcion = javax.swing.JOptionPane.showConfirmDialog(null,
                     "¿Deseas avanzar al siguiente nivel?",
@@ -632,11 +648,8 @@ public class fPrincipal extends javax.swing.JFrame {
 
         lblNivel.setText("Nivel: " + nivelActual);
 
-        //  Aumentar dificultad más vida y ataque
         limpiarTerreno();
-        atacantes.clear();
-        ejercito.clear();
-        generarZombies("s");
+        generarZombies();
 
         for (Zombie zombie : atacantes) {
             if (zombie != null) {
@@ -752,11 +765,95 @@ public class fPrincipal extends javax.swing.JFrame {
         return this.reliquia;
     }
 
-    public void moverZombie(JLabel refLabel, int x, int y) {
+    public void mover(JLabel refLabel, int x, int y) {
         refLabel.setLocation(x, y);
     }
 
-    private void generarZombies(String tipo) {
+    public void moverDefensaAerea(Defensa defensa, int x, int y) {
+        // Liberar casilla antigua
+        Point posAntigua = defensa.getPosicionMatriz();
+        if (posAntigua != null && posAntigua.x >= 0 && posAntigua.x < TAMANO_TERRENO
+                && posAntigua.y >= 0 && posAntigua.y < TAMANO_TERRENO) {
+            terreno[posAntigua.x][posAntigua.y].vaciarCasilla();
+        }
+
+        // Actualizar posición visual
+        defensa.getRefLabel().setLocation(x, y);
+
+        // Calcular nueva posición en la matriz
+        int nuevaFila = y / 30;
+        int nuevaCol = x / 30;
+
+        // Verificar límites válidos
+        if (nuevaFila >= 0 && nuevaFila < TAMANO_TERRENO
+                && nuevaCol >= 0 && nuevaCol < TAMANO_TERRENO) {
+            defensa.setPosicionMatriz(new Point(nuevaFila, nuevaCol));
+            terreno[nuevaFila][nuevaCol].insertarTropa(defensa);
+        }
+
+        pnlTerreno.repaint();
+    }
+
+    public void cargarZombies() {
+        zombiesDisponibles.clear();
+
+        // Zombie de contacto (se mueve y ataca por contacto)
+        zombiesDisponibles.add(new ZombieContacto(
+                this,
+                "Zombie - Contacto (Lvl " + (nivelActual + 1) + ")",
+                5 + nivelActual, // ataque
+                25 + (nivelActual * 10), // vida
+                1, // golpesPorSegundo
+                1, 1, 0, // nivel, campos, nivelDeAparicion
+                1, // alcance (casillas)
+                "/Imagenes/zombie_contacto.gif",
+                1 // velocidad
+        ));
+
+        // Zombie de medio alcance (ataca desde distancia)
+        zombiesDisponibles.add(new ZombieMedianoAlcance(
+                this,
+                "Zombie - Medio Alcance (Lvl " + (nivelActual + 1) + ")",
+                4 + nivelActual,
+                30 + (nivelActual * 12),
+                1,
+                1, 1, 0,
+                3, // alcance en casillas
+                "/Imagenes/zombie_medio.gif",
+                2 // velocidad
+        ));
+
+        // Zombie aéreo (vuela, ataca la reliquia y solo puede ser atacado por aéreos según defensas)
+        zombiesDisponibles.add(new ZombieAereo(
+                this,
+                "Zombie - Aéreo (Lvl " + (nivelActual + 1) + ")",
+                6 + nivelActual,
+                20 + (nivelActual * 8),
+                1,
+                1, 1, 0,
+                1,
+                "/Imagenes/zombie_aereo.gif",
+                3, // velocidad
+                true
+        ));
+
+        // Zombie de choque (explota al contacto, radio en casillas)
+        zombiesDisponibles.add(new ZombieChoque(
+                this,
+                "Zombie - Choque (Lvl " + (nivelActual + 1) + ")",
+                8 + nivelActual,
+                35 + (nivelActual * 12),
+                1,
+                1, 1, 0,
+                1,
+                "/Imagenes/zombie_choque.gif",
+                1, // velocidad
+                2 // radioExplosion (en casillas)
+        ));
+        
+    }
+
+    private void generarZombies() {
         int tamano = capacidadEjercito;
         Random rand = new Random();
 
@@ -800,19 +897,13 @@ public class fPrincipal extends javax.swing.JFrame {
             Point ubicacion = terreno[fila][col].getPosicion();
             nuevoLabel.setLocation(ubicacion);
 
-            Zombie newZombie = new ZombieContacto(
-                    this,
-                    "Zombie - De Contacto (Lvl " + (nivelActual + 1) + ")",
-                    5 + nivelActual, //  ataque escala con el nivel
-                    25 + (nivelActual * 10), //  vida también escala
-                    1,
-                    0,
-                    0,
-                    0,
-                    1,
-                    "/Imagenes/zombie4.gif",
-                    1
-            );
+            if (zombiesDisponibles.isEmpty()) {
+                cargarZombies(); // o manejar caso vacío
+            }
+
+            int random = new Random().nextInt(zombiesDisponibles.size());
+            Zombie temporal = zombiesDisponibles.get(random);
+            Zombie newZombie = (Zombie) temporal.clonar(this); zombiesDisponibles.get(random);
 
             newZombie.setPosicionMatriz(new Point(fila, col));
             newZombie.setRefLabel(nuevoLabel);
@@ -900,6 +991,10 @@ public class fPrincipal extends javax.swing.JFrame {
         pnlTerreno.repaint();
 
         txaLog.append("Se limpiaron las unidades destruidas del terreno.\n");
+    }
+
+    public Casilla[][] getTerreno() {
+        return terreno;
     }
 
 

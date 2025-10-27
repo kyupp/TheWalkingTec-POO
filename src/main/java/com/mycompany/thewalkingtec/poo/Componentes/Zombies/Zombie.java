@@ -125,7 +125,7 @@ public abstract class Zombie extends Componente {
                     }
 
                     // Mover zombie en el terreno
-                    super.getRefPantalla().moverZombie(super.getRefLabel(), x, y);
+                    super.getRefPantalla().mover(super.getRefLabel(), x, y);
                     System.out.println(getNombre() + " se mueve hacia (" + x + ", " + y + ")");
 
 

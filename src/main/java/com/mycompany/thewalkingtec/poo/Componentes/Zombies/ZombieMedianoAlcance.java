@@ -17,12 +17,20 @@ public class ZombieMedianoAlcance extends Zombie {
               nivelDeAparicion, alcance, apariencia, velocidad, false);
     }
 
-    public void mover() {
-        // se detiene cuando hay defensa en rango de alcance
-    }
-
     @Override
     public Componente clonar(fPrincipal refPantalla) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return new ZombieMedianoAlcance(
+                refPantalla,
+                this.getNombre(),
+                this.getAtaquePorUnidad(),
+                this.getVida(),
+                this.getGolpesPorSegundo(),
+                this.getNivel(),
+                this.getCampos(),
+                this.getNivelDeAparicion(),
+                this.getAlcance(),
+                this.getApariencia(),
+                this.getVelocidad()
+        );
     }
 }

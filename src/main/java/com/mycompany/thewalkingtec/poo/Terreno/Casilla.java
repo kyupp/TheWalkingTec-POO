@@ -39,16 +39,6 @@ public class Casilla {
         // Listener para interacción visual (hover y click)
         lblCasilla.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                if (!ocupada) {
-                    txaLog.append("Se clickeó sobre: X: "
-                            + lblCasilla.getLocation().getX() + ", Y: "
-                            + lblCasilla.getLocation().getY() + "\n");
-                    seleccionar();
-                }
-            }
-
-            @Override
             public void mouseEntered(MouseEvent e) {
                 if (!ocupada) {
                     lblCasilla.setBackground(new java.awt.Color(66, 66, 245));

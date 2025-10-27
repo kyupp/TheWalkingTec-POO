@@ -3,6 +3,7 @@ package com.mycompany.thewalkingtec.poo.Componentes.Zombies;
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
 import com.mycompany.thewalkingtec.poo.Componentes.IVolador;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
+import java.awt.Point;
 
 /**
  *
@@ -16,12 +17,32 @@ public class ZombieAereo extends Zombie implements IVolador{
 
     @Override
     public void buscarObjetivo() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (getRefPantalla() == null || getRefLabel() == null || getRefPantalla().getObjetivo() == null) {
+            return;
+        }
+        Point objetivo = getRefPantalla().getObjetivoLocation();
+        double distancia = getRefLabel().getLocation().distance(objetivo);
+        if (distancia <= getAlcance() * 30) {
+            getRefPantalla().getObjetivo().recibirGolpe(this.getAtaquePorUnidad(), this);
+        }
     }
 
     @Override
     public Componente clonar(fPrincipal refPantalla) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return new ZombieAereo(
+                refPantalla,
+                this.getNombre(),
+                this.getAtaquePorUnidad(),
+                this.getVida(),
+                this.getGolpesPorSegundo(),
+                this.getNivel(),
+                this.getCampos(),
+                this.getNivelDeAparicion(),
+                this.getAlcance(),
+                this.getApariencia(),
+                this.getVelocidad(),
+                true
+        );
     }
     
 }

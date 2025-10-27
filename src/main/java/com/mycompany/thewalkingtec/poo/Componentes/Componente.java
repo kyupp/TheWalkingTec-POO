@@ -13,6 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -37,6 +38,7 @@ public abstract class Componente extends Thread {
     private String apariencia;
     private String id;
     private Point posicionMatriz;
+    private boolean estaDestruido;
 
     private ArrayList<RegistroAtaque> registroAtaques = new ArrayList<>();
     private ArrayList<RegistroAtaque> registroAtaquesRecibidos = new ArrayList<>();
@@ -68,6 +70,8 @@ public abstract class Componente extends Thread {
             this.id = "Z" + (contadorZombies++);
         else if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.ReliquiaDeLaVida)
             this.id = "R" + (contadorReliquias++);
+        
+        estaDestruido = false;
     }
 
     //  Métodos para reiniciar los contadores entre partidas
@@ -112,22 +116,26 @@ public abstract class Componente extends Thread {
     }
 
     private void marcarDestruido() {
-        if (refLabel != null) {
-            refLabel.setIcon(null);
-            refLabel.setOpaque(true);
-
-            if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie)
-                refLabel.setBackground(new java.awt.Color(180, 0, 0));
-            else if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa)
-                refLabel.setBackground(new java.awt.Color(80, 80, 80));
-            else if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.ReliquiaDeLaVida)
-                refLabel.setBackground(new java.awt.Color(0, 0, 0));
-        }
-
-        if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie)
-            refPantalla.comprobarGanar();
-        else if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.ReliquiaDeLaVida)
-            refPantalla.comprobarPerder();
+        this.estaDestruido = true;
+        // Todas las actualizaciones de UI deben ejecutarse en el EDT
+        SwingUtilities.invokeLater(() -> {
+            try {
+                if (getRefLabel() != null) {
+                    getRefLabel().setVisible(false);
+                }
+            } catch (Exception ex) {
+                // ignorar
+            }
+            try {
+                // Notificar al frame que compruebe fin de juego y actualice contadores (EDT)
+                if (getRefPantalla() != null) {
+                    getRefPantalla().actualizarContadores();
+                    getRefPantalla().comprobarPerder();
+                }
+            } catch (Exception ex) {
+                // ignorar
+            }
+        });
     }
 
     //  Mostrar información básica
