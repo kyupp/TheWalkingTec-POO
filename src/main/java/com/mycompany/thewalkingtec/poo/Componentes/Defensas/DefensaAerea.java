@@ -16,6 +16,10 @@ public class DefensaAerea extends Defensa implements IVolador{
 
     public DefensaAerea() {
     }
+
+    public DefensaAerea(String nombre, int vida, int ataquePorUnidad, int campos, int nivelDeAparicion, int alcance) {
+        super(nombre, vida, ataquePorUnidad, campos, nivelDeAparicion, alcance);
+    }
     
     public DefensaAerea(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
         super(refPantalla, nombre,ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);

@@ -14,6 +14,10 @@ public class DefensaBloque extends Defensa {
 
     public DefensaBloque() {
     }
+
+    public DefensaBloque(String nombre, int vida, int campos, int nivelDeAparicion) {
+        super(nombre, vida, 0, campos, nivelDeAparicion, 0);
+    }
     
     public DefensaBloque(fPrincipal refPantalla,String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
         super(refPantalla,  nombre, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);

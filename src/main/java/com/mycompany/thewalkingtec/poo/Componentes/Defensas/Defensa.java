@@ -23,6 +23,13 @@ public class Defensa extends Componente {
     public Defensa() {
     }
 
+    public Defensa( String nombre, int vida, int ataquePorUnidad ,int campos, int nivelDeAparicion, int alcance) {
+        super(nombre, vida, campos, nivelDeAparicion, alcance);
+        this.ataquePorUnidad = ataquePorUnidad;
+    }
+    
+    
+
     public Defensa(fPrincipal refPantalla, String nombre ,int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
         super(refPantalla, nombre, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
         this.ataquePorUnidad = ataquePorUnidad;

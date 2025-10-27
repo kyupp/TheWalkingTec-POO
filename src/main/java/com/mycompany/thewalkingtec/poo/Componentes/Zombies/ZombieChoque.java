@@ -18,6 +18,14 @@ public class ZombieChoque extends Zombie {
     public ZombieChoque() {
     }
 
+    public ZombieChoque(String nombre, int vida, int ataquePorUnidad, int campos, int nivelDeAparicion, int alcance, int velocidad) {
+        super(nombre, vida, ataquePorUnidad, campos, nivelDeAparicion, alcance, velocidad, false);
+        
+        this.radioExplosion = alcance;
+    }
+    
+    
+
     public ZombieChoque(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo,
                         int nivel, int campos, int nivelDeAparicion, int alcance, 
                         String apariencia, int velocidad, int radioExplosion) {

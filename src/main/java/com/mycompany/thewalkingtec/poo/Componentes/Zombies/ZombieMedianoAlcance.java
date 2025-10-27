@@ -18,6 +18,10 @@ public class ZombieMedianoAlcance extends Zombie {
 
     public ZombieMedianoAlcance() {
     }
+
+    public ZombieMedianoAlcance(String nombre, int vida, int ataquePorUnidad, int campos, int nivelDeAparicion, int alcance, int velocidad) {
+        super(nombre, vida, ataquePorUnidad, campos, nivelDeAparicion, alcance, velocidad, false);
+    }
     
     public ZombieMedianoAlcance(fPrincipal refPantalla,String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo,
                                 int nivel, int campos, int nivelDeAparicion, int alcance, 

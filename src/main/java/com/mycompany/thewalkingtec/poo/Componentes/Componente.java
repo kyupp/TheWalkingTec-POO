@@ -32,6 +32,16 @@ public abstract class Componente extends Thread {
     public Componente() {
     }
 
+    public Componente(String nombre, int vida, int campos, int nivelDeAparicion, int alcance) {
+        this.nombre = nombre;
+        this.vida = vida;
+        this.campos = campos;
+        this.nivelDeAparicion = nivelDeAparicion;
+        this.alcance = alcance;
+    }
+    
+    
+
     public Componente(fPrincipal refPantalla, String nombre, int vida, int golpesPorSegundo, int nivel,
             int campos, int nivelDeAparicion, int alcance, String apariencia) {
         this.refLabel = null;
@@ -62,6 +72,12 @@ public abstract class Componente extends Thread {
     public JLabel getRefLabel() {
         return refLabel;
     }
+
+    public void setRefPantalla(fPrincipal refPantalla) {
+        this.refPantalla = refPantalla;
+    }
+    
+    
 
     // 🔹 Getters y setters
     public String getApariencia() {

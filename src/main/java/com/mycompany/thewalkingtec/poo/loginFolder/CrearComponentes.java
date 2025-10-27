@@ -4,6 +4,7 @@
  */
 package com.mycompany.thewalkingtec.poo.loginFolder;
 
+import com.mycompany.thewalkingtec.poo.Componentes.Componente;
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaAerea;
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.DefensaAtaqueMultiple;
@@ -16,7 +17,22 @@ import com.mycompany.thewalkingtec.poo.Componentes.Zombies.ZombieAereo;
 import com.mycompany.thewalkingtec.poo.Componentes.Zombies.ZombieChoque;
 import com.mycompany.thewalkingtec.poo.Componentes.Zombies.ZombieContacto;
 import com.mycompany.thewalkingtec.poo.Componentes.Zombies.ZombieMedianoAlcance;
+import java.awt.Image;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import java.io.*;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  *
@@ -37,22 +53,69 @@ public class CrearComponentes extends javax.swing.JFrame {
         initComponents();
     }
     
+    private int verificarName(ArrayList lista, int tipo){
+        
+        String name;
+        
+        for (int i =0; lista.size() > i; i++){
+                            
+            switch (tipo){
+                    
+                case 1 -> {
+                    
+                    name = this.txtFldNameZombie.getText();
+                    
+                    if (((Zombie) lista.get(i)).getNombre().equals(name)){
+                        
+                        this.txtFldAlertaNameZombie.setText("Este zombie ya se encuentra almacenado");
+                        return 1;
+                        
+                    }
+                }
+                case 2 -> {
+                    
+                    name = this.txtFldNameArmas.getText();
+                    
+                    if (((Defensa) lista.get(i)).getNombre().equals(name)){
+                        
+                        this.txtFldAlertaNameArma.setText("Esta arma ya se encuentra almacenada");
+                        return 1;
+                        
+                    }
+                }
+                case 3 -> {
+                    
+                    name = this.txtFldNameBloques.getText();
+                    
+                    if (((DefensaBloque) lista.get(i)).getNombre().equals(name)){
+                        
+                        this.txtFldAlertaNameBloques.setText("Este bloque ya se encuentra almacenado");
+                        return 1;
+                        
+                    }
+                }     
+            }
+        }
+        
+        return 0;   
+    }
+    
     private void crearZombie(String name, int life, int type, int damage, int fields, int appearance, int range){
         
         Zombie newZombie;
         
         switch (type){
             case 1 -> {
-                newZombie = new ZombieAereo();
+                newZombie = new ZombieAereo(name, life, damage, fields, appearance, range, 1);
             }
             case 2 -> {
-                newZombie = new ZombieChoque();
+                newZombie = new ZombieChoque(name, life, damage, fields, appearance, range, 1);
             }
             case 3 -> {
-                newZombie = new ZombieContacto();
+                newZombie = new ZombieContacto(name, life, damage, fields, appearance, range, 1);
             }
             default ->{
-                newZombie = new ZombieMedianoAlcance();
+                newZombie = new ZombieMedianoAlcance(name, life, damage, fields, appearance, range, 1);
             }
         }
         
@@ -67,20 +130,20 @@ public class CrearComponentes extends javax.swing.JFrame {
         
         switch (type){
             case 1 -> {
-                newArma = new DefensaAerea();
+                newArma = new DefensaAerea(name, life, damage, fields, appearance, range);
             }
             case 2 -> {
-                newArma = new DefensaImpacto();
+                newArma = new DefensaImpacto(name, life, damage, fields, appearance, range);
             }
             case 3 -> {
-                newArma = new DefensaContacto();
+                newArma = new DefensaContacto(name, life, damage, fields, appearance, range);
             }
             case 4 -> {
-                newArma = new DefensaMedioAlcance();
+                newArma = new DefensaMedioAlcance(name, life, damage, fields, appearance, range);
             }
             default -> {
                 
-                newArma = new DefensaAtaqueMultiple();
+                newArma = new DefensaAtaqueMultiple(name, life, damage, fields, appearance, range);
                 
             }
         }
@@ -92,7 +155,7 @@ public class CrearComponentes extends javax.swing.JFrame {
     
     private void crearBloque(String name, int life, int fields ,int appearance){
         
-        DefensaBloque newBloque = new DefensaBloque();
+        DefensaBloque newBloque = new DefensaBloque(name, life, fields, appearance);
         
         listaDeBloques.add(newBloque);
         
@@ -146,15 +209,29 @@ public class CrearComponentes extends javax.swing.JFrame {
         
         String rangeStr = this.txtFldRangeZombie.getText();
         
-        if (rangeStr.equals("")){
+        String image1 = this.txtFldImageZombie1.getText();
+        
+        String image2 = this.txtFldImageZombie2.getText();
+        
+        String pathImage = "src/main/resources/zombieImages/" + name + "_image";
+        
+        System.out.println(image1 + "");
+        System.out.println(image2 + "");
+        System.out.println("QUE PASAAAA ");
+        //System.out.println(pathImage + "\n");
+        
+        if (saveImageFromURL(image1, pathImage, 1, 1) && saveImageFromURL(image2, pathImage, 1, 2)){
             
-            crearZombie(name, life, type, damage, fields, appearance, 0);
+            if (rangeStr.equals("")){
             
-        } else{
-            
-            int range = Integer.parseInt(rangeStr);
-            crearZombie(name, life, type, damage, fields, appearance, range);
-            
+                crearArma(name, life, type, damage, fields, appearance, 0);
+
+            } else{
+
+                int range = Integer.parseInt(rangeStr);
+                crearArma(name, life, type, damage, fields, appearance, range);
+
+            }    
         }
         
     }
@@ -175,15 +252,28 @@ public class CrearComponentes extends javax.swing.JFrame {
         
         String rangeStr = this.txtFldRangeArmas.getText();
         
-        if (rangeStr.equals("")){
+        String image1 = this.txtFldImageArmas1.getText();
+        
+        String image2 = this.txtFldImageArmas2.getText();
+        
+        String pathImage = "src/main/resources/armasImages/" + name + "_image";
+        
+        System.out.println(image1 + "\n");
+        System.out.println(image2 + "\n");
+        System.out.println(pathImage + "\n");
+        
+        if (saveImageFromURL(image1, pathImage, 2, 1) && saveImageFromURL(image2, pathImage, 2, 2)){
             
-            crearArma(name, life, type, damage, fields, appearance, 0);
+            if (rangeStr.equals("")){
             
-        } else{
-            
-            int range = Integer.parseInt(rangeStr);
-            crearArma(name, life, type, damage, fields, appearance, range);
-            
+                crearArma(name, life, type, damage, fields, appearance, 0);
+
+            } else{
+
+                int range = Integer.parseInt(rangeStr);
+                crearArma(name, life, type, damage, fields, appearance, range);
+
+            }    
         }
     }
     
@@ -197,8 +287,21 @@ public class CrearComponentes extends javax.swing.JFrame {
         
         int appearance = Integer.parseInt(this.txtFldAppearanceBloques.getText());
         
-        crearBloque(name, life, fields, appearance);
-     
+        String image1 = this.txtFldImageBloques1.getText();
+        
+        String image2 = this.txtFldImageBloques2.getText();
+        
+        String pathImage = "src/main/resources/bloquesImages/" + name + "_image";
+        
+        System.out.println(image1 + "\n");
+        System.out.println(image2 + "\n");
+        System.out.println(pathImage + "\n");
+        
+        if (saveImageFromURL(image1, pathImage, 3, 1) && saveImageFromURL(image2, pathImage, 3, 2)){
+            
+            crearBloque(name, life, fields, appearance);
+
+        }    
     }
     
     public boolean esUnaPalabra(String text){
@@ -265,7 +368,7 @@ public class CrearComponentes extends javax.swing.JFrame {
                 range = this.txtFldRangeArmas.getText();
                 if (esUnNumero(range) || range.equals("")) {
                     String opcion = (String) this.cmbBxTypeArmas.getSelectedItem();
-                    if (opcion.equals("Impacto") || range.equals("")) return 0;
+                    if (opcion.equals("Impacto") || range.equals("") || opcion.equals("Ataque Multiple")) return 0;
                     this.txtFldAlertaRangeArma.setText("Esta opción solo se permite para tipo impacto");
                     break;
                 }
@@ -341,6 +444,9 @@ public class CrearComponentes extends javax.swing.JFrame {
                         verificaciones++;
                     case 5:
                         contador += verificarCampos(tipo);
+                        verificaciones++;
+                    case 6:
+                        contador += verificarName(this.listaDeZombies, tipo);
                 }
             }
             case 2 -> {
@@ -359,6 +465,9 @@ public class CrearComponentes extends javax.swing.JFrame {
                         verificaciones++;
                     case 5:
                         contador += verificarCampos(tipo);
+                        verificaciones++;
+                    case 6:
+                        contador += verificarName(this.listaDeArmas, tipo);
                 }                
             }
             case 3 -> {
@@ -371,11 +480,157 @@ public class CrearComponentes extends javax.swing.JFrame {
                         verificaciones++;
                     case 3:
                         contador += verificarCampos(tipo);
+                        verificaciones++;
+                    case 4:
+                        contador += verificarName(this.listaDeBloques, tipo);
                 }                
             }
         }
         
         return contador;
+    }
+    
+        public void writeObject (String filePath, int tipo)
+    {
+        try{
+            //use buffering
+            OutputStream file = new FileOutputStream(filePath);
+            OutputStream buffer = new BufferedOutputStream(file);
+            ObjectOutput output = new ObjectOutputStream(buffer);
+            
+            switch (tipo){
+                case 1 -> {
+                    try{
+                        for (int i =0; listaDeZombies.size() > i; i++){
+
+                            output.writeObject(listaDeZombies.get(i));
+
+                        }
+                    }
+                    finally{
+                        output.close();
+                    }
+                }
+                case 2 -> {
+                    try{
+                        for (int i =0; listaDeArmas.size() > i; i++){
+
+                            output.writeObject(listaDeArmas.get(i));
+
+                        }
+                    }
+                    finally{
+                        output.close();
+                    }
+                }
+                case 3 -> {
+                    try{
+                        for (int i =0; listaDeBloques.size() > i; i++){
+
+                            output.writeObject(listaDeBloques.get(i));
+
+                        }
+                    }
+                    finally{
+                        output.close();
+                    }
+                }
+            }
+          }  
+          catch(IOException ex){
+              
+          }
+        
+    }
+        
+    public int setRefLabel(JLabel refLabel, String appearance) {
+        try {
+            ImageIcon iconoOriginal = new ImageIcon(new ImageIcon(appearance).getImage().getScaledInstance(refLabel.getWidth(), refLabel.getHeight(), Image.SCALE_DEFAULT));
+            refLabel.setIcon(iconoOriginal);
+            refLabel.setOpaque(false);
+            return 0;
+        } catch (Exception e) {
+            System.err.println(" Error cargando imagen: " + appearance);
+            return 1;
+        }
+    }
+    
+    public boolean saveImageFromURL(String imageUrl, String savePath, int type, int imagen){
+        
+        savePath += imagen + ".png";
+        
+        switch (type){
+            case 1 -> {
+                try (InputStream in = new URL(imageUrl).openStream()) {
+                    
+                    Files.copy(in, Paths.get(savePath));
+                    System.out.println("Imagen guardada en: " + savePath);
+                    
+                    if (imagen == 1){
+                        setRefLabel(this.lblZombieImageOutput1, savePath);
+                    } else{
+                        setRefLabel(this.lblZombieImageOutput2, savePath);
+                    }
+                    
+                } catch (IOException e) {
+                    
+                    System.out.println("Error al descargar o guardar la imagen: " + e.getMessage());
+                    if (imagen == 1){
+                        this.txtFldAlertaImageZombie1.setText("Imagen no encontrada");
+                    } else{
+                        this.txtFldAlertaImageZombie2.setText("Imagen no encontrada");
+                    }
+                    return false;
+                }
+            }
+            case 2 -> {
+                try (InputStream in = new URL(imageUrl).openStream()) {
+                    
+                    Files.copy(in, Paths.get(savePath));
+                    System.out.println("Imagen guardada en: " + savePath);
+                    
+                    if (imagen == 1){
+                        setRefLabel(this.lblArmasImageOutput1, savePath);
+                    } else{
+                        setRefLabel(this.lblArmasImageOutput2, savePath);
+                    }
+                    
+                } catch (IOException e) {
+                    
+                    System.out.println("Error al descargar o guardar la imagen: " + e.getMessage());
+                    if (imagen == 1){
+                        this.txtFldAlertaImageArma1.setText("Imagen no encontrada");
+                    } else{
+                        this.txtFldAlertaImageArma2.setText("Imagen no encontrada");
+                    }
+                    return false;
+                }
+            }
+            case 3 -> {
+                try (InputStream in = new URL(imageUrl).openStream()) {
+                    
+                    Files.copy(in, Paths.get(savePath));
+                    System.out.println("Imagen guardada en: " + savePath);
+                    
+                    if (imagen == 1){
+                        setRefLabel(this.lblBloquesImageOutput1, savePath);
+                    } else{
+                        setRefLabel(this.lblBloquesImageOutput2, savePath);
+                    }
+                    
+                } catch (IOException e) {
+                    
+                    System.out.println("Error al descargar o guardar la imagen: " + e.getMessage());
+                    if (imagen == 1){
+                        this.txtFldAlertaImageBloques1.setText("Imagen no encontrada");
+                    } else{
+                        this.txtFldAlertaImageBloques2.setText("Imagen no encontrada");
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -503,7 +758,6 @@ public class CrearComponentes extends javax.swing.JFrame {
         txtFldAlertaNameZombie.setEditable(false);
         txtFldAlertaNameZombie.setBackground(new java.awt.Color(204, 204, 204));
         txtFldAlertaNameZombie.setForeground(new java.awt.Color(204, 0, 0));
-        txtFldAlertaNameZombie.setText("Este zombie ya se encuentra almacenado");
         txtFldAlertaNameZombie.setBorder(null);
 
         lblZombieImageOutput1.setBackground(new java.awt.Color(204, 204, 255));
@@ -524,7 +778,6 @@ public class CrearComponentes extends javax.swing.JFrame {
         txtFldAlertaImageZombie1.setEditable(false);
         txtFldAlertaImageZombie1.setBackground(new java.awt.Color(204, 204, 204));
         txtFldAlertaImageZombie1.setForeground(new java.awt.Color(204, 0, 0));
-        txtFldAlertaImageZombie1.setText("Imagen no encontrada");
         txtFldAlertaImageZombie1.setBorder(null);
 
         lblImageZombie2.setBackground(new java.awt.Color(102, 102, 102));
@@ -541,7 +794,6 @@ public class CrearComponentes extends javax.swing.JFrame {
         txtFldAlertaImageZombie2.setEditable(false);
         txtFldAlertaImageZombie2.setBackground(new java.awt.Color(204, 204, 204));
         txtFldAlertaImageZombie2.setForeground(new java.awt.Color(204, 0, 0));
-        txtFldAlertaImageZombie2.setText("Imagen no encontrada");
         txtFldAlertaImageZombie2.setBorder(null);
 
         lblLifeZombie.setBackground(new java.awt.Color(102, 102, 102));
@@ -828,7 +1080,6 @@ public class CrearComponentes extends javax.swing.JFrame {
         txtFldAlertaNameBloques.setEditable(false);
         txtFldAlertaNameBloques.setBackground(new java.awt.Color(204, 204, 204));
         txtFldAlertaNameBloques.setForeground(new java.awt.Color(204, 0, 0));
-        txtFldAlertaNameBloques.setText("Este bloque ya se encuentra almacenado");
         txtFldAlertaNameBloques.setBorder(null);
         txtFldAlertaNameBloques.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -854,7 +1105,6 @@ public class CrearComponentes extends javax.swing.JFrame {
         txtFldAlertaImageBloques1.setEditable(false);
         txtFldAlertaImageBloques1.setBackground(new java.awt.Color(204, 204, 204));
         txtFldAlertaImageBloques1.setForeground(new java.awt.Color(204, 0, 0));
-        txtFldAlertaImageBloques1.setText("Imagen no encontrada");
         txtFldAlertaImageBloques1.setBorder(null);
 
         lblImageBloques2.setBackground(new java.awt.Color(102, 102, 102));
@@ -871,7 +1121,6 @@ public class CrearComponentes extends javax.swing.JFrame {
         txtFldAlertaImageBloques2.setEditable(false);
         txtFldAlertaImageBloques2.setBackground(new java.awt.Color(204, 204, 204));
         txtFldAlertaImageBloques2.setForeground(new java.awt.Color(204, 0, 0));
-        txtFldAlertaImageBloques2.setText("Imagen no encontrada");
         txtFldAlertaImageBloques2.setBorder(null);
 
         lblLifeBloques.setBackground(new java.awt.Color(102, 102, 102));
@@ -1187,19 +1436,21 @@ public class CrearComponentes extends javax.swing.JFrame {
         txtFldAlertaNameArma.setEditable(false);
         txtFldAlertaNameArma.setBackground(new java.awt.Color(204, 204, 204));
         txtFldAlertaNameArma.setForeground(new java.awt.Color(204, 0, 0));
-        txtFldAlertaNameArma.setText("Esta arma ya se encuentra almacenada");
         txtFldAlertaNameArma.setBorder(null);
+        txtFldAlertaNameArma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFldAlertaNameArmaActionPerformed(evt);
+            }
+        });
 
         txtFldAlertaImageArma1.setEditable(false);
         txtFldAlertaImageArma1.setBackground(new java.awt.Color(204, 204, 204));
         txtFldAlertaImageArma1.setForeground(new java.awt.Color(204, 0, 0));
-        txtFldAlertaImageArma1.setText("Imagen no encontrada");
         txtFldAlertaImageArma1.setBorder(null);
 
         txtFldAlertaImageArma2.setEditable(false);
         txtFldAlertaImageArma2.setBackground(new java.awt.Color(204, 204, 204));
         txtFldAlertaImageArma2.setForeground(new java.awt.Color(204, 0, 0));
-        txtFldAlertaImageArma2.setText("Imagen no encontrada");
         txtFldAlertaImageArma2.setBorder(null);
 
         txtFldAlertaLifeArma.setEditable(false);
@@ -1444,6 +1695,7 @@ public class CrearComponentes extends javax.swing.JFrame {
         
         if (verificarDatos(2) == 0){
             obtenerDatosArma();
+            writeObject("src/main/resources/datos/datosArmas", 2);
         } else{
             System.out.println("NO SE PUDOOO INGRESAR EL ARMAAA :<<<");
         }
@@ -1462,6 +1714,7 @@ public class CrearComponentes extends javax.swing.JFrame {
         
         if (verificarDatos(1) == 0){
             obtenerDatosZombie();
+            writeObject("src/main/resources/datos/datosZombies", 1);
         } else{
             System.out.println("NO SE PUDOOOO INGRESAR EL ZOMBIEEE :<");
         }
@@ -1478,6 +1731,7 @@ public class CrearComponentes extends javax.swing.JFrame {
         
         if (verificarDatos(3) == 0){
             obtenerDatosBloque();
+            writeObject(System.getProperty("src/main/resources/datos/datosBloques"), 3);
         } else{
             System.out.println("NO SE PUDOOOO INGRESAR EL BLOQUEEEE :<");
         }
@@ -1486,6 +1740,10 @@ public class CrearComponentes extends javax.swing.JFrame {
     private void txtFldAlertaNameBloquesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldAlertaNameBloquesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFldAlertaNameBloquesActionPerformed
+
+    private void txtFldAlertaNameArmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldAlertaNameArmaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFldAlertaNameArmaActionPerformed
 
     /**
      * @param args the command line arguments
