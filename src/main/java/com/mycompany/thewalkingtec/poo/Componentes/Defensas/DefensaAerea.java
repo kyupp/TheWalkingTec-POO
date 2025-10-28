@@ -6,6 +6,7 @@ package com.mycompany.thewalkingtec.poo.Componentes.Defensas;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
+import com.mycompany.thewalkingtec.poo.Componentes.IAtaque;
 import com.mycompany.thewalkingtec.poo.Componentes.IVolador;
 import com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
@@ -15,8 +16,8 @@ import java.awt.Point;
  *
  * @author mathiasviquez
  */
-public class DefensaAerea extends Defensa implements IVolador{
-    private boolean isRunning = true;
+public class DefensaAerea extends Defensa implements IVolador, IAtaque{
+private boolean isRunning = true;
     private boolean isPause = false;
     public DefensaAerea() {
     }
@@ -39,7 +40,7 @@ public class DefensaAerea extends Defensa implements IVolador{
 
             double distancia = getRefLabel().getLocation().distance(zombie.getRefLabel().getLocation());
             if (distancia <= 10) {
-                atacarZombie(zombie);
+                atacar(zombie);
                 break;
             }
         }
@@ -97,7 +98,7 @@ public class DefensaAerea extends Defensa implements IVolador{
 
                     // Si está en rango, atacar
                     if (menorDistancia <= getAlcance() * 30) {
-                        atacarZombie(zombieCercano);
+                        atacar(zombieCercano);
                         Thread.sleep(1000 / Math.max(1, getGolpesPorSegundo()));
                         continue;
                     }
@@ -154,7 +155,7 @@ public class DefensaAerea extends Defensa implements IVolador{
         System.out.println(getNombre() + " detenida.");
     }
 
-    private void atacarZombie(Zombie zombie) {
+    private void atacar(Zombie zombie) {
         if (zombie == null || zombie.estaDestruido()) {
             return;
         }
@@ -183,4 +184,5 @@ public class DefensaAerea extends Defensa implements IVolador{
                 this.getApariencia()
         );
     }
+
 }

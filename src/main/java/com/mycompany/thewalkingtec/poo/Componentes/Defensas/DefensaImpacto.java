@@ -5,6 +5,8 @@
 package com.mycompany.thewalkingtec.poo.Componentes.Defensas;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
+import com.mycompany.thewalkingtec.poo.Componentes.IAtaque;
+import com.mycompany.thewalkingtec.poo.Componentes.IVolador;
 import com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author mathiasviquez
  */
-public class DefensaImpacto extends Defensa{
+public class DefensaImpacto extends Defensa implements IAtaque{
     private boolean haExplotado = false;
   
     public DefensaImpacto() {
@@ -68,7 +70,7 @@ public class DefensaImpacto extends Defensa{
         System.out.println(getNombre() + " ha explotado 💥");
 
         for (Zombie zombie : zombies) {
-            if (zombie == null || zombie.estaDestruido()) continue;
+            if (zombie == null || zombie.estaDestruido()|| zombie  instanceof IVolador) continue;
 
             double distancia = getRefLabel().getLocation()
                     .distance(zombie.getRefLabel().getLocation());

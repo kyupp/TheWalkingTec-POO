@@ -1,13 +1,14 @@
 package com.mycompany.thewalkingtec.poo.Componentes.Zombies;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
+import com.mycompany.thewalkingtec.poo.Componentes.IAtaque;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 
 /**
  *
  * @author kyup
  */
-public class ZombieMedianoAlcance extends Zombie {
+public class ZombieMedianoAlcance extends Zombie implements IAtaque{
 
     public ZombieMedianoAlcance() {
     }

@@ -2,6 +2,7 @@ package com.mycompany.thewalkingtec.poo.Componentes.Zombies;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
+import com.mycompany.thewalkingtec.poo.Componentes.IAtaque;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 import java.awt.Point;
 
@@ -9,7 +10,7 @@ import java.awt.Point;
  *
  * @author kyup
  */
-public class ZombieChoque extends Zombie {
+public class ZombieChoque extends Zombie implements IAtaque {
 
     private int radioExplosion;
     private boolean isRunning = true;

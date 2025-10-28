@@ -4,6 +4,8 @@
  */
 package com.mycompany.thewalkingtec.poo.Componentes.Defensas;
 
+import com.mycompany.thewalkingtec.poo.Componentes.IAtaque;
+import com.mycompany.thewalkingtec.poo.Componentes.IVolador;
 import com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 
@@ -11,7 +13,7 @@ import com.mycompany.thewalkingtec.poo.fPrincipal;
  *
  * @author mathiasviquez
  */
-public class DefensaAtaqueMultiple extends DefensaMedioAlcance{
+public class DefensaAtaqueMultiple extends DefensaMedioAlcance implements IAtaque{
     private int cantidadAtaques = 3;
 
     public DefensaAtaqueMultiple() {
@@ -33,7 +35,7 @@ public class DefensaAtaqueMultiple extends DefensaMedioAlcance{
 
                 int atacados = 0;
                 for (Zombie zombie : getRefPantalla().getAtacantes()) {
-                    if (zombie == null || zombie.estaDestruido()) continue;
+                    if (zombie == null || zombie.estaDestruido() || zombie  instanceof IVolador) continue;
 
                     double distancia = getRefLabel().getLocation().distance(zombie.getRefLabel().getLocation());
                     if (distancia <= getAlcance() * 30) {

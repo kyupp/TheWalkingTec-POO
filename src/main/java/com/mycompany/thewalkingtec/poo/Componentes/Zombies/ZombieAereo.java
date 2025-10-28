@@ -1,6 +1,7 @@
 package com.mycompany.thewalkingtec.poo.Componentes.Zombies;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
+import com.mycompany.thewalkingtec.poo.Componentes.IAtaque;
 import com.mycompany.thewalkingtec.poo.Componentes.IVolador;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 import java.awt.Point;
@@ -9,7 +10,7 @@ import java.awt.Point;
  *
  * @author kyup
  */
-public class ZombieAereo extends Zombie implements IVolador{
+public class ZombieAereo extends Zombie implements IVolador, IAtaque{
 
     public ZombieAereo() {
     }

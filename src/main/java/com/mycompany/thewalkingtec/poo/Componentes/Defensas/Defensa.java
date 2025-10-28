@@ -5,6 +5,7 @@
 package com.mycompany.thewalkingtec.poo.Componentes.Defensas;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
+import com.mycompany.thewalkingtec.poo.Componentes.IVolador;
 import com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 
@@ -64,10 +65,7 @@ public class Defensa extends Componente {
                 double menorDistancia = Double.MAX_VALUE;
 
                 for (Zombie zombieActual : super.getRefPantalla().getAtacantes()) {
-                    if (zombieActual == null) {
-                        continue;
-                    }
-                    if (zombieActual.estaDestruido()) {
+                    if (zombieActual == null || zombieActual.estaDestruido() ||zombieActual  instanceof IVolador ) {
                         continue;
                     }
 

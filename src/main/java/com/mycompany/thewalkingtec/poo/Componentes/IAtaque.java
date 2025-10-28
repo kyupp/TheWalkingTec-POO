@@ -9,6 +9,5 @@ package com.mycompany.thewalkingtec.poo.Componentes;
  * @author kyup
  */
 public interface IAtaque {
-    public void atacar();
-    public int calcularDaño();
+    public int atacar();
 }
