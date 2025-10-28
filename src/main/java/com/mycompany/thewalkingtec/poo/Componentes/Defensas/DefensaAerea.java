@@ -15,10 +15,14 @@ import java.awt.Point;
  *
  * @author mathiasviquez
  */
-public class DefensaAerea extends Defensa implements IVolador {
+public class DefensaAerea extends Defensa implements IVolador{
 
-    private boolean isRunning = true;
-    private boolean isPause = false;
+    public DefensaAerea() {
+    }
+
+    public DefensaAerea(String nombre, int vida, int ataquePorUnidad, int campos, int nivelDeAparicion, int alcance, String apariencia) {
+        super(nombre, vida, ataquePorUnidad, campos, nivelDeAparicion, alcance, apariencia);
+    }
 
     public DefensaAerea(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeAparicion, int alcance, String apariencia) {
         super(refPantalla, nombre, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeAparicion, alcance, apariencia);

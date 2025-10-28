@@ -223,6 +223,9 @@ public class fPrincipal extends javax.swing.JFrame {
         pnlUtilidadesLayout.setVerticalGroup(
             pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlUtilidadesLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(pnlComponentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addContainerGap()
                 .addGroup(pnlUtilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)

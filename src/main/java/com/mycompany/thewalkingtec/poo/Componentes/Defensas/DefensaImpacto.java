@@ -11,17 +11,20 @@ import java.util.ArrayList;
 
 /**
  *
- * @author kyup
+ * @author mathiasviquez
  */
-public class DefensaImpacto extends Defensa {
-
-    
+public class DefensaImpacto extends Defensa{
     private boolean haExplotado = false;
+  
+    public DefensaImpacto() {
+    }
 
-    public DefensaImpacto(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo,
-                          int nivel, int campos, int nivelDeAparicion, int alcance, String apariencia) {
-        super(refPantalla, nombre, ataquePorUnidad, vida, golpesPorSegundo, nivel,
-              campos, nivelDeAparicion, alcance, apariencia);
+    public DefensaImpacto(String nombre, int vida, int ataquePorUnidad, int campos, int nivelDeAparicion, int alcance, String apariencia) {
+        super(nombre, vida, ataquePorUnidad, campos, nivelDeAparicion, alcance, apariencia);
+    }
+    
+    public DefensaImpacto(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
+        super(refPantalla, nombre, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
     }
 
     @Override
@@ -95,4 +98,3 @@ public class DefensaImpacto extends Defensa {
                 getCampos(), getNivelDeAparicion(), getAlcance(), getApariencia());
     }
 }
-   
