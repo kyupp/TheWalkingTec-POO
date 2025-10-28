@@ -16,7 +16,8 @@ import java.awt.Point;
  * @author mathiasviquez
  */
 public class DefensaAerea extends Defensa implements IVolador{
-
+    private boolean isRunning = true;
+    private boolean isPause = false;
     public DefensaAerea() {
     }
 
