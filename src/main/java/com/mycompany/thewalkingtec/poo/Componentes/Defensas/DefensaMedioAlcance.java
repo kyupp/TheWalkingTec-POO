@@ -4,24 +4,63 @@
  */
 package com.mycompany.thewalkingtec.poo.Componentes.Defensas;
 
-
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
+import com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
+
 /**
  *
  * @author mathiasviquez
  */
-public class DefensaMedioAlcance extends Defensa{
 
+public class DefensaMedioAlcance extends Defensa {
     public DefensaMedioAlcance() {
     }
 
     public DefensaMedioAlcance(String nombre, int vida, int ataquePorUnidad, int campos, int nivelDeAparicion, int alcance, String apariencia) {
         super(nombre, vida, ataquePorUnidad, campos, nivelDeAparicion, alcance, apariencia);
     }
-    
-    public DefensaMedioAlcance(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
-        super(refPantalla, nombre, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos, nivelDeApaicion, alcance, apariencia);
+  
+    public DefensaMedioAlcance(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida,
+                               int golpesPorSegundo, int nivel, int campos, int nivelDeAparicion,
+                               int alcance, String apariencia) {
+        super(refPantalla, nombre, ataquePorUnidad, vida, golpesPorSegundo, nivel, campos,
+              nivelDeAparicion, alcance, apariencia);
     }
-    
+
+    @Override
+    public void run() {
+        while (!estaDestruido()) {
+            try {
+                if (isPause()) {
+                    Thread.sleep(200);
+                    continue;
+                }
+
+                Zombie objetivo = null;
+                double menorDistancia = Double.MAX_VALUE;
+
+                for (Zombie zombie : getRefPantalla().getAtacantes()) {
+                    if (zombie == null || zombie.estaDestruido()) {
+                        continue;
+                    }
+                    double distancia = getRefLabel().getLocation().distance(zombie.getRefLabel().getLocation());
+                    if (distancia < menorDistancia) {
+                        menorDistancia = distancia;
+                        objetivo = zombie;
+                    }
+                }
+
+                if (objetivo != null && menorDistancia <= getAlcance() * 30) {
+                    objetivo.recibirGolpe(getAtaquePorUnidad(), this);
+                    Thread.sleep(1000 / Math.max(1, getGolpesPorSegundo()));
+                } else {
+                    Thread.sleep(300);
+                }
+
+            } catch (InterruptedException e) {
+                break;
+            }
+        }
+    }
 }

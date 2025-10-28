@@ -5,6 +5,7 @@
 package com.mycompany.thewalkingtec.poo.Componentes.Zombies;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
+import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 import java.awt.Point;
 import static java.lang.Thread.sleep;
@@ -13,15 +14,14 @@ import static java.lang.Thread.sleep;
  *
  * @author mathiasviquez
  */
-public abstract class Zombie extends Componente{
-    
-    
+public abstract class Zombie extends Componente {
+
     private int ataquePorUnidad;
     private int velocidad;
     private boolean volador;
     private boolean isRunning = true;
     private boolean isPause = false;
-
+    
     public Zombie() {
     }
 
@@ -31,10 +31,10 @@ public abstract class Zombie extends Componente{
         this.velocidad = velocidad;
         this.volador = volador;
     }
-
-    public Zombie(fPrincipal refPantalla,String nombre,  int ataquePorUnidad, int vida, int golpesPorSegundo, 
-                  int nivel, int campos, int nivelDeAparicion, int alcance, 
-                  String apariencia, int velocidad, boolean volador) {
+  
+    public Zombie(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo,
+            int nivel, int campos, int nivelDeAparicion, int alcance,
+            String apariencia, int velocidad, boolean volador) {
 
         super(refPantalla, nombre, vida, golpesPorSegundo, nivel, campos, nivelDeAparicion, alcance, apariencia);
         this.ataquePorUnidad = ataquePorUnidad;
@@ -50,62 +50,118 @@ public abstract class Zombie extends Componente{
         return velocidad;
     }
 
-    public boolean isVolador() {
-        return volador;
+    public void setAtaquePorUnidad(int ataquePorUnidad) {
+        this.ataquePorUnidad = ataquePorUnidad;
     }
 
-    public void mover() {
-        // comportamiento genérico de movimiento
+    public boolean isVolador() {
+        return volador;
     }
 
     public int atacar() {
         return ataquePorUnidad;
     }
-    
+
+    @Override
     public void run() {
+        int paso = 10; // píxeles que avanza
 
-        while (isRunning) {
-            try {
-                //1. Esperar velocidad milisegundos
-                sleep(1000);
-                //2. Mover el label aleatoriamente: Determinar la posición: donde está el objetivo para determinar a donde debo ir
-                Point puntoObjetivo = super.getRefPantalla().getObjetivoLocation();
-                Point puntoActual = super.getRefLabel().getLocation();
-                int x = puntoActual.x;
-                int y = puntoActual.y;
-                //Desplaza a la derecha       
-                if (x < puntoObjetivo.x) {
-                    x += 20;
-                    //Desplaza a la izquierda  
-                } else if (x > puntoObjetivo.x) {
-                    x -= 20;
-                }
-
-                //Desplaza para abajo  
-                if (y < puntoObjetivo.y) {
-                    y += 20;
-                    //Desplaza para arriba 
-                } else if (y > puntoObjetivo.y) {
-                    y -= 20;
-                }
-
-                //4. Atacar TODO: Ataquen por proximidad, también que reciban ataque por proximidad
-                //atacar(refPantalla.getObjetivo());
-                super.getRefPantalla().moverZombie(super.getRefLabel(), x, y);
-                System.out.println("Eject");
-                while (isPause) {
-                    try {
-                        sleep(500);
-                    } catch (InterruptedException ex) {
-                        //System.getLogger(Soldado.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        while (isRunning && !this.estaDestruido()) {
+            {
+                try {
+                    if (isPause) {
+                        Thread.sleep(200);
+                        continue;
                     }
+
+                    // Si el zombie muere, detener el hilo
+                    if (super.estaDestruido()) {
+                        setStop();
+                        break;
+                    }
+
+                    //  Buscar defensa más cercana
+                    Defensa defensaCercana = null;
+                    double menorDistancia = Double.MAX_VALUE;
+
+                    for (Defensa defensaActual : super.getRefPantalla().getEjercito()) {
+                        if (defensaActual == null) {
+                            continue;
+                        }
+                        if (defensaActual.estaDestruido()) {
+                            continue;
+                        }
+
+                        double distancia = super.getRefLabel().getLocation()
+                                .distance(defensaActual.getRefLabel().getLocation());
+
+                        if (distancia < menorDistancia) {
+                            menorDistancia = distancia;
+                            defensaCercana = defensaActual;
+                        }
+                    }
+
+                    //  Si hay defensa cerca y está dentro del alcance, atacarla
+                    if (defensaCercana != null && menorDistancia <= super.getAlcance() * 30) {
+                        defensaCercana.recibirGolpe(this.getAtaquePorUnidad(), this);
+                        System.out.println(getNombre() + " atacó a " + defensaCercana.getNombre());
+                        Thread.sleep(super.getGolpesPorSegundo() * 1000);
+
+                        // Si la defensa murió, dejar de atacarla y continuar caminando
+                        if (defensaCercana.estaDestruido()) {
+                            defensaCercana = null;
+                        }
+
+                        continue; // no moverse mientras ataca
+                    }
+
+                    //  Si no hay defensa cerca, moverse hacia la reliquia
+                    Point objetivo = super.getRefPantalla().getObjetivoLocation();
+                    Point actual = super.getRefLabel().getLocation();
+
+                    int x = actual.x;
+                    int y = actual.y;
+
+                    if (x < objetivo.x) {
+                        x += paso;
+                    } else if (x > objetivo.x) {
+                        x -= paso;
+                    }
+
+                    if (y < objetivo.y) {
+                        y += paso;
+                    } else if (y > objetivo.y) {
+                        y -= paso;
+                    }
+
+                    // Mover zombie en el terreno
+                    super.getRefPantalla().mover(super.getRefLabel(), x, y);
+                    System.out.println(getNombre() + " se mueve hacia (" + x + ", " + y + ")");
+
+
+                    // Verificar si ya está cerca de la reliquia
+                    double distanciaReliquia = actual.distance(objetivo);
+                    if (distanciaReliquia <= super.getAlcance() * 30) {
+                        super.getRefPantalla().getObjetivo().recibirGolpe(this.getAtaquePorUnidad(), this);
+                        System.out.println(getNombre() + " atacó la reliquia");
+                        Thread.sleep(super.getGolpesPorSegundo() * 1000);
+                        continue;
+                    }
+
+                    // Delay del movimiento (según velocidad del zombie)
+                    int delay = 1500 / Math.max(1, velocidad + 1);
+                    Thread.sleep(delay);
+
+                } catch (InterruptedException e) {
+                    System.out.println("Zombie interrumpido");
                 }
-            } catch (InterruptedException ex) {
-                System.getLogger(Componente.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
         }
     }
-        
+
+    @Override
+    public abstract Componente clonar(fPrincipal refPantalla);
+
     public void setPause() {
         this.isPause = !this.isPause;
     }
@@ -114,10 +170,9 @@ public abstract class Zombie extends Componente{
         this.isRunning = false;
         this.isPause = false;
     }
-    
-    public boolean isPause(){
+
+    public boolean isPause() {
         return isPause;
     }
-    
-}
 
+}
