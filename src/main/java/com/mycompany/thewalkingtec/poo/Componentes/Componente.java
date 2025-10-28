@@ -7,6 +7,7 @@ package com.mycompany.thewalkingtec.poo.Componentes;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 import java.awt.Image;
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
@@ -20,7 +21,7 @@ import javax.swing.SwingUtilities;
  * @author kyup
  */
 
-public abstract class Componente extends Thread {
+public abstract class Componente extends Thread implements Serializable{
 
     //  Atributos principales
     private static int contadorDefensas = 1;

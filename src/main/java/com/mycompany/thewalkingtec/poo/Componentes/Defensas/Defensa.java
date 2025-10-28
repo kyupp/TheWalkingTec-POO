@@ -7,12 +7,13 @@ package com.mycompany.thewalkingtec.poo.Componentes.Defensas;
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
 import com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
+import java.io.Serializable;
 
 /**
  *
  * @author mathiasviquez
  */
-public class Defensa extends Componente {
+public class Defensa extends Componente implements Serializable{
 
     private int ataquePorUnidad;
     private boolean isRunning = true;

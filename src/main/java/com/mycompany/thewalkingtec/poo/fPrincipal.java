@@ -21,6 +21,20 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.BorderFactory;
@@ -997,6 +1011,167 @@ public class fPrincipal extends javax.swing.JFrame {
     public Casilla[][] getTerreno() {
         return terreno;
     }
+    
+    public void writeObject(String filePath, int tipo) {
+        try (ObjectOutputStream output = new ObjectOutputStream(
+                new BufferedOutputStream(new FileOutputStream(filePath)))) {
+
+            switch (tipo) {
+                case 1 -> output.writeObject(this.reliquia);
+                case 2 -> output.writeObject(this.defensasDisponibles);
+                case 3 -> output.writeObject(this.zombiesDisponibles);
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public ArrayList readComponente(String filePath, int tipo) {
+        
+        ArrayList lista = null;
+        
+        try (ObjectInputStream input = new ObjectInputStream(
+                new BufferedInputStream(new FileInputStream(filePath)))) {
+
+            switch (tipo) {
+                case 1 -> lista = (ArrayList<Zombie>) input.readObject();
+                case 2 -> lista = (ArrayList<Defensa>) input.readObject();
+                case 3 -> lista = (ArrayList<DefensaBloque>) input.readObject();
+            }
+
+        } catch (IOException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        
+        return lista;
+    }
+    
+        @SuppressWarnings("unchecked")
+    public void readObject(String filePath, int tipo) {
+        
+        try (ObjectInputStream input = new ObjectInputStream(
+                new BufferedInputStream(new FileInputStream(filePath)))) {
+
+            switch (tipo) {
+                case 1 -> this.reliquia = (ReliquiaDeLaVida) input.readObject();
+                case 2 -> this.defensasDisponibles = (ArrayList<Componente>) input.readObject();
+                case 3 -> this.zombiesDisponibles = (ArrayList<Zombie>) input.readObject();
+            }
+
+        } catch (IOException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void leerDatosTxt() {
+        
+    String path = "src/main/resources/partidasGuardadas/nivelCapacidad.txt";
+
+    try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+        
+        String line;
+        while ((line = br.readLine()) != null) {
+            if (line.startsWith("Nivel Actual:")) {
+                String valor = line.split(":")[1].trim();
+                this.nivelActual = Integer.parseInt(valor);
+            } else if (line.startsWith("Capacidad ejercito:")) {
+                String valor = line.split(":")[1].trim();
+                this.capacidadEjercito = Integer.parseInt(valor);
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+
+    private void abrirPartida(){
+        
+        readObject("src/main/resources/partidasGuardadas/reliquia", 1);
+        
+        readObject("src/main/resources/partidasGuardadas/defensasDisponibles", 2);
+        
+        readObject("src/main/resources/partidasGuardadas/zombiesDisponibles", 3);
+        
+        leerDatosTxt();
+    }
+
+    
+    public static void writeFile (String path, String value) throws IOException 
+    {
+
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, false))) {
+            bw.write(value);
+        }
+        
+    }
+    
+    public void guardarDatos(){
+        this.fileText();
+        
+        this.writeObject("src/main/resources/partidasGuardadas/reliquia", 1);
+        
+        this.writeObject("src/main/resources/partidasGuardadas/defensasDisponibles", 2);
+        
+        this.writeObject("src/main/resources/partidasGuardadas/zombiesDisponibles", 3);
+        
+    }
+    
+    public void fileText(){
+        
+        String txt = "Nivel Actual: " + this.nivelActual + "\nCapacidad ejercito: " + this.capacidadEjercito;
+        
+        try {
+            writeFile("src/main/resources/partidasGuardadas/nivelCapacidad.txt", txt);
+        } catch (IOException ex) {
+            //System.getLogger(fPrincipal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        
+    }
+    
+    public void cargarZombiesApp(ArrayList<Zombie> zombies){
+        
+        for (int i = 0; i < zombies.size(); i++){
+            zombies.get(i).setRefPantalla(this);
+            this.zombiesDisponibles.add(zombies.get(i));
+        }
+        
+    }
+    
+    public void cargarDefensaApp(ArrayList<Defensa> armas){
+        
+        for (int i = 0; i < armas.size(); i++){
+            armas.get(i).setRefPantalla(this);
+            this.defensasDisponibles.add(armas.get(i));
+        }
+        
+    }
+    
+    public void cargarBloquesApp(ArrayList<DefensaBloque> bloques){
+        
+        for (int i = 0; i < bloques.size(); i++){
+            bloques.get(i).setRefPantalla(this);
+            this.defensasDisponibles.add(bloques.get(i));
+        }
+        
+    }
+    
+    public void agregarComponentesApp(){
+        
+        ArrayList<Zombie> zombies = this.readComponente("src/main/resources/datos/datosZombies", 1);
+        ArrayList<Defensa> armas = this.readComponente("src/main/resources/datos/datosArmas", 2);
+        ArrayList<DefensaBloque> bloques = this.readComponente("src/main/resources/datos/datosBloques", 3);
+        
+        this.cargarZombiesApp(zombies);
+        this.cargarDefensaApp(armas);
+        this.cargarBloquesApp(bloques);
+        
+    }
+    
+    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

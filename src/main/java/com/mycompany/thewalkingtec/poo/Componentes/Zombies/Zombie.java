@@ -8,13 +8,14 @@ import com.mycompany.thewalkingtec.poo.Componentes.Componente;
 import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
 import java.awt.Point;
+import java.io.Serializable;
 import static java.lang.Thread.sleep;
 
 /**
  *
  * @author mathiasviquez
  */
-public abstract class Zombie extends Componente {
+public abstract class Zombie extends Componente implements Serializable{
 
     private int ataquePorUnidad;
     private int velocidad;

@@ -2,12 +2,13 @@ package com.mycompany.thewalkingtec.poo.Componentes;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
+import java.io.Serializable;
 
 /**
  *
  * @author mathiasviquez
  */
-public class ReliquiaDeLaVida extends Componente {
+public class ReliquiaDeLaVida extends Componente implements Serializable{
     private boolean isRunning = true;
     private boolean isPause = false;
     public ReliquiaDeLaVida(fPrincipal refPantalla, String nombre, int vida, String apariencia) {

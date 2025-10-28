@@ -629,57 +629,20 @@ public class CrearComponentes extends javax.swing.JFrame {
         return contador;
     }
     
-        public void writeObject (String filePath, int tipo)
-    {
-        try{
-            //use buffering
-            OutputStream file = new FileOutputStream(filePath);
-            OutputStream buffer = new BufferedOutputStream(file);
-            ObjectOutput output = new ObjectOutputStream(buffer);
-            
-            switch (tipo){
-                case 1 -> {
-                    try{
-                        for (int i =0; listaDeZombies.size() > i; i++){
-
-                            output.writeObject(listaDeZombies.get(i));
-
-                        }
-                    }
-                    finally{
-                        output.close();
-                    }
-                }
-                case 2 -> {
-                    try{
-                        for (int i =0; listaDeArmas.size() > i; i++){
-
-                            output.writeObject(listaDeArmas.get(i));
-
-                        }
-                    }
-                    finally{
-                        output.close();
-                    }
-                }
-                case 3 -> {
-                    try{
-                        for (int i =0; listaDeBloques.size() > i; i++){
-
-                            output.writeObject(listaDeBloques.get(i));
-
-                        }
-                    }
-                    finally{
-                        output.close();
-                    }
-                }
-            }
-          }  
-          catch(IOException ex){
-              
-          }
+    public void writeObject(String filePath, int tipo) {
         
+        try (ObjectOutputStream output = new ObjectOutputStream(
+                new BufferedOutputStream(new FileOutputStream(filePath)))) {
+
+            switch (tipo) {
+                case 1 -> output.writeObject(listaDeZombies);
+                case 2 -> output.writeObject(listaDeArmas);
+                case 3 -> output.writeObject(listaDeBloques);
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
         
     public int setRefLabel(JLabel refLabel, String appearance) {
