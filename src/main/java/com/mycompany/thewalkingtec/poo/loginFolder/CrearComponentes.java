@@ -100,27 +100,29 @@ public class CrearComponentes extends javax.swing.JFrame {
         return 0;   
     }
     
-    private void crearZombie(String name, int life, int type, int damage, int fields, int appearance, int range, String apariencia){
+    private void crearZombie(String name, int life, int type, int damage, int fields, int appearance, int range, int speed ,String apariencia){
         
         Zombie newZombie;
         
         switch (type){
             case 1 -> {
-                newZombie = new ZombieAereo(name, life, damage, fields, appearance, range, 1, apariencia);
+                newZombie = new ZombieAereo(name, life, damage, fields, appearance, range, speed, apariencia);
             }
             case 2 -> {
-                newZombie = new ZombieChoque(name, life, damage, fields, appearance, range, 1, apariencia);
+                newZombie = new ZombieChoque(name, life, damage, fields, appearance, range, speed, apariencia);
             }
             case 3 -> {
-                newZombie = new ZombieContacto(name, life, damage, fields, appearance, range, 1, apariencia);
+                newZombie = new ZombieContacto(name, life, damage, fields, appearance, range, speed, apariencia);
             }
             default ->{
-                newZombie = new ZombieMedianoAlcance(name, life, damage, fields, appearance, range, 1, apariencia);
+                newZombie = new ZombieMedianoAlcance(name, life, damage, fields, appearance, range, speed, apariencia);
             }
         }
         
         listaDeZombies.add(newZombie);
         System.out.println("Se agrego el zombieeeee: " + name + " :>>>>");
+        
+        this.txtFldAlertaCrearZombie.setText("Se agrego el zombie " + name + " extitosamente!");
         
     }
     
@@ -151,6 +153,8 @@ public class CrearComponentes extends javax.swing.JFrame {
         listaDeArmas.add(newArma);
         System.out.println("Se agrego el armaaaaa: " + name + " :>>>>");
         
+        this.txtFldAlertaCrearArma.setText("Se agrego el arma " + name + " extitosamente!");
+        
     }
     
     private void crearBloque(String name, int life, int fields ,int appearance, String apariencia){
@@ -160,6 +164,8 @@ public class CrearComponentes extends javax.swing.JFrame {
         listaDeBloques.add(newBloque);
         
         System.out.println("Se agrego el bloqueeee: " + name + " :>>>>");
+        
+        this.txtFldAlertaCrearBloques.setText("Se agrego el bloque " + name + " extitosamente!");
         
     }
     
@@ -215,6 +221,8 @@ public class CrearComponentes extends javax.swing.JFrame {
         
         String pathImage = "src/main/resources/zombieImages/" + name + "_image";
         
+        int speed = Integer.parseInt(this.txtFldSpeedZombie.getText());
+        
         System.out.println(image1 + "");
         System.out.println(image2 + "");
         System.out.println("QUE PASAAAA ");
@@ -224,12 +232,12 @@ public class CrearComponentes extends javax.swing.JFrame {
             
             if (rangeStr.equals("")){
             
-                crearArma(name, life, type, damage, fields, appearance, 0, pathImage + "1.png");
+                crearZombie(name, life, type, damage, fields, appearance, 0, speed ,pathImage + "1.png");
 
             } else{
 
                 int range = Integer.parseInt(rangeStr);
-                crearArma(name, life, type, damage, fields, appearance, range, pathImage + "1.png");
+                crearZombie(name, life, type, damage, fields, appearance, range, speed ,pathImage + "1.png");
 
             }    
         }
@@ -310,6 +318,24 @@ public class CrearComponentes extends javax.swing.JFrame {
     
     public boolean esUnNumero(String text){
         return text.matches("\\d+");
+    }
+    
+    public int verificarVelocidad(){
+        
+        String speed = this.txtFldSpeedZombie.getText();
+        
+        if (esUnNumero(speed)){
+            
+            if (Integer.parseInt(speed) <=0){
+                this.txtFldAlertaSpeedZombie.setText("Solo se permiten valores númericos mayores a 0");
+                return 1;
+            }
+            
+            return 0;
+            
+        }
+        this.txtFldAlertaSpeedZombie.setText("Solo se permiten valores númericos para la velocidad");
+        return 1;
     }
     
     public int verificarVida(int tipo){
@@ -557,6 +583,9 @@ public class CrearComponentes extends javax.swing.JFrame {
                         verificaciones++;
                     case 6:
                         contador += verificarName(this.listaDeZombies, tipo);
+                        verificaciones++;
+                    case 7:
+                        contador += verificarVelocidad();
                 }
             }
             case 2 -> {
@@ -754,6 +783,7 @@ public class CrearComponentes extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        txtFldAlertaCrearBloques2 = new javax.swing.JTextField();
         tbdPnCrearComponente = new javax.swing.JTabbedPane();
         pnlZombie = new javax.swing.JPanel();
         lblNameZombie = new javax.swing.JLabel();
@@ -785,6 +815,11 @@ public class CrearComponentes extends javax.swing.JFrame {
         txtFldRangeZombie = new javax.swing.JTextField();
         txtFldAlertaRangeZombie = new javax.swing.JTextField();
         btnCrearZombie = new javax.swing.JButton();
+        lblSpeedZombie = new javax.swing.JLabel();
+        txtFldSpeedZombie = new javax.swing.JTextField();
+        txtFldAlertaCrearZombie = new javax.swing.JTextField();
+        txtFldAlertaSpeedZombie1 = new javax.swing.JTextField();
+        txtFldAlertaSpeedZombie = new javax.swing.JTextField();
         pnlBloque = new javax.swing.JPanel();
         lblNameBloques = new javax.swing.JLabel();
         txtFldNameBloques = new javax.swing.JTextField();
@@ -807,6 +842,7 @@ public class CrearComponentes extends javax.swing.JFrame {
         txtFldAppearanceBloques = new javax.swing.JTextField();
         txtFldAlertaAppearanceBloques = new javax.swing.JTextField();
         btnCrearBloques = new javax.swing.JButton();
+        txtFldAlertaCrearBloques = new javax.swing.JTextField();
         pnlArmas = new javax.swing.JPanel();
         lblArmasImageOutput1 = new javax.swing.JLabel();
         lblImageArmas1 = new javax.swing.JLabel();
@@ -837,10 +873,16 @@ public class CrearComponentes extends javax.swing.JFrame {
         txtFldAlertaFieldsArma = new javax.swing.JTextField();
         txtFldAlertaAppearanceArma = new javax.swing.JTextField();
         txtFldAlertaRangeArma = new javax.swing.JTextField();
+        txtFldAlertaCrearArma = new javax.swing.JTextField();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
+
+        txtFldAlertaCrearBloques2.setEditable(false);
+        txtFldAlertaCrearBloques2.setBackground(new java.awt.Color(204, 204, 204));
+        txtFldAlertaCrearBloques2.setForeground(new java.awt.Color(0, 153, 0));
+        txtFldAlertaCrearBloques2.setBorder(null);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -985,6 +1027,11 @@ public class CrearComponentes extends javax.swing.JFrame {
         txtFldAlertaFieldsZombie.setBackground(new java.awt.Color(204, 204, 204));
         txtFldAlertaFieldsZombie.setForeground(new java.awt.Color(204, 0, 0));
         txtFldAlertaFieldsZombie.setBorder(null);
+        txtFldAlertaFieldsZombie.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFldAlertaFieldsZombieActionPerformed(evt);
+            }
+        });
 
         lblAppearanceZombie.setBackground(new java.awt.Color(102, 102, 102));
         lblAppearanceZombie.setFont(new java.awt.Font("Helvetica Neue", 3, 13)); // NOI18N
@@ -1029,6 +1076,33 @@ public class CrearComponentes extends javax.swing.JFrame {
             }
         });
 
+        lblSpeedZombie.setBackground(new java.awt.Color(102, 102, 102));
+        lblSpeedZombie.setFont(new java.awt.Font("Helvetica Neue", 3, 13)); // NOI18N
+        lblSpeedZombie.setForeground(new java.awt.Color(255, 255, 255));
+        lblSpeedZombie.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSpeedZombie.setText("Speed:");
+        lblSpeedZombie.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblSpeedZombie.setOpaque(true);
+
+        txtFldSpeedZombie.setBackground(new java.awt.Color(153, 153, 153));
+        txtFldSpeedZombie.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        txtFldAlertaCrearZombie.setEditable(false);
+        txtFldAlertaCrearZombie.setBackground(new java.awt.Color(204, 204, 204));
+        txtFldAlertaCrearZombie.setFont(new java.awt.Font("Helvetica Neue", 3, 13)); // NOI18N
+        txtFldAlertaCrearZombie.setForeground(new java.awt.Color(51, 153, 0));
+        txtFldAlertaCrearZombie.setBorder(null);
+
+        txtFldAlertaSpeedZombie1.setEditable(false);
+        txtFldAlertaSpeedZombie1.setBackground(new java.awt.Color(204, 204, 204));
+        txtFldAlertaSpeedZombie1.setForeground(new java.awt.Color(204, 0, 0));
+        txtFldAlertaSpeedZombie1.setBorder(null);
+
+        txtFldAlertaSpeedZombie.setEditable(false);
+        txtFldAlertaSpeedZombie.setBackground(new java.awt.Color(204, 204, 204));
+        txtFldAlertaSpeedZombie.setForeground(new java.awt.Color(204, 0, 0));
+        txtFldAlertaSpeedZombie.setBorder(null);
+
         javax.swing.GroupLayout pnlZombieLayout = new javax.swing.GroupLayout(pnlZombie);
         pnlZombie.setLayout(pnlZombieLayout);
         pnlZombieLayout.setHorizontalGroup(
@@ -1042,6 +1116,19 @@ public class CrearComponentes extends javax.swing.JFrame {
                     .addComponent(txtFldNameZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(47, 47, 47))
             .addGroup(pnlZombieLayout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(btnCrearZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlZombieLayout.createSequentialGroup()
+                        .addComponent(txtFldAlertaSpeedZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFldAlertaSpeedZombie1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlZombieLayout.createSequentialGroup()
+                        .addComponent(txtFldAlertaCrearZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(pnlZombieLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblZombieImageOutput1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1049,57 +1136,58 @@ public class CrearComponentes extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlZombieLayout.createSequentialGroup()
-                        .addComponent(lblImageZombie1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtFldImageZombie1)
-                        .addGap(75, 75, 75))
-                    .addGroup(pnlZombieLayout.createSequentialGroup()
-                        .addComponent(txtFldAlertaImageZombie1)
-                        .addContainerGap())
-                    .addGroup(pnlZombieLayout.createSequentialGroup()
-                        .addComponent(lblImageZombie2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtFldImageZombie2)
-                        .addGap(81, 81, 81))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlZombieLayout.createSequentialGroup()
-                        .addComponent(txtFldAlertaImageZombie2)
-                        .addContainerGap())
-                    .addGroup(pnlZombieLayout.createSequentialGroup()
-                        .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtFldAlertaRangeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(pnlZombieLayout.createSequentialGroup()
-                                .addComponent(lblFieldsZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtFldFieldsZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtFldAlertaDamageZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(pnlZombieLayout.createSequentialGroup()
-                                .addComponent(lblDamageZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtFldDamageZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(pnlZombieLayout.createSequentialGroup()
-                                .addComponent(lblTypeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(cmbBxTypeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
+                        .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtFldAlertaLifeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(pnlZombieLayout.createSequentialGroup()
                                 .addComponent(lblLifeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtFldLifeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtFldLifeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlZombieLayout.createSequentialGroup()
+                        .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlZombieLayout.createSequentialGroup()
-                                .addComponent(lblAppearanceZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtFldAppearanceZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(6, 6, 6)
+                                .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtFldAlertaDamageZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(pnlZombieLayout.createSequentialGroup()
+                                        .addComponent(lblDamageZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtFldDamageZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(pnlZombieLayout.createSequentialGroup()
+                                        .addComponent(lblTypeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(cmbBxTypeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(pnlZombieLayout.createSequentialGroup()
+                                        .addComponent(lblFieldsZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtFldFieldsZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtFldAlertaFieldsZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(pnlZombieLayout.createSequentialGroup()
+                                        .addComponent(lblAppearanceZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtFldAppearanceZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtFldAlertaAppearanceZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtFldAlertaRangeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(pnlZombieLayout.createSequentialGroup()
+                                        .addComponent(lblRangeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtFldRangeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(pnlZombieLayout.createSequentialGroup()
+                                        .addComponent(lblSpeedZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtFldSpeedZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(pnlZombieLayout.createSequentialGroup()
-                                .addComponent(lblRangeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblImageZombie2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtFldRangeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtFldAlertaFieldsZombie, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
-                            .addComponent(txtFldAlertaAppearanceZombie))
-                        .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(pnlZombieLayout.createSequentialGroup()
-                .addGap(188, 188, 188)
-                .addComponent(btnCrearZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(txtFldImageZombie2, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlZombieLayout.createSequentialGroup()
+                                .addComponent(lblImageZombie1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtFldImageZombie1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtFldAlertaImageZombie1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtFldAlertaImageZombie2, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         pnlZombieLayout.setVerticalGroup(
             pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1110,9 +1198,14 @@ public class CrearComponentes extends javax.swing.JFrame {
                     .addComponent(txtFldNameZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtFldAlertaNameZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
                 .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlZombieLayout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(lblZombieImageOutput1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(165, 165, 165)
+                        .addComponent(lblZombieImageOutput2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlZombieLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblImageZombie1)
                             .addComponent(txtFldImageZombie1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1127,23 +1220,20 @@ public class CrearComponentes extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblLifeZombie)
-                            .addComponent(txtFldLifeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(lblZombieImageOutput1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addComponent(txtFldAlertaLifeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbBxTypeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTypeZombie))
-                .addGap(17, 17, 17)
-                .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDamageZombie)
-                    .addComponent(txtFldDamageZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlZombieLayout.createSequentialGroup()
+                            .addComponent(txtFldLifeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addComponent(txtFldAlertaLifeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbBxTypeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblTypeZombie))
+                        .addGap(17, 17, 17)
+                        .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblDamageZombie)
+                            .addComponent(txtFldDamageZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtFldAlertaDamageZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(24, 24, 24)
                         .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblFieldsZombie)
                             .addComponent(txtFldFieldsZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1152,19 +1242,28 @@ public class CrearComponentes extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblAppearanceZombie)
-                            .addComponent(txtFldAppearanceZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(lblZombieImageOutput2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtFldAppearanceZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtFldAlertaAppearanceZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtFldAlertaAppearanceZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRangeZombie)
-                    .addComponent(txtFldRangeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtFldRangeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblRangeZombie))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtFldAlertaRangeZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
-                .addComponent(btnCrearZombie)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addGap(15, 15, 15)
+                .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSpeedZombie)
+                    .addComponent(txtFldSpeedZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtFldAlertaSpeedZombie1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFldAlertaSpeedZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addGroup(pnlZombieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCrearZombie)
+                    .addComponent(txtFldAlertaCrearZombie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         tbdPnCrearComponente.addTab("Zombie", pnlZombie);
@@ -1301,6 +1400,12 @@ public class CrearComponentes extends javax.swing.JFrame {
             }
         });
 
+        txtFldAlertaCrearBloques.setEditable(false);
+        txtFldAlertaCrearBloques.setBackground(new java.awt.Color(204, 204, 204));
+        txtFldAlertaCrearBloques.setFont(new java.awt.Font("Helvetica Neue", 3, 13)); // NOI18N
+        txtFldAlertaCrearBloques.setForeground(new java.awt.Color(0, 153, 0));
+        txtFldAlertaCrearBloques.setBorder(null);
+
         javax.swing.GroupLayout pnlBloqueLayout = new javax.swing.GroupLayout(pnlBloque);
         pnlBloque.setLayout(pnlBloqueLayout);
         pnlBloqueLayout.setHorizontalGroup(
@@ -1321,22 +1426,6 @@ public class CrearComponentes extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlBloqueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlBloqueLayout.createSequentialGroup()
-                        .addComponent(lblImageBloques1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtFldImageBloques1)
-                        .addGap(75, 75, 75))
-                    .addGroup(pnlBloqueLayout.createSequentialGroup()
-                        .addComponent(txtFldAlertaImageBloques1)
-                        .addContainerGap())
-                    .addGroup(pnlBloqueLayout.createSequentialGroup()
-                        .addComponent(lblImageBloques2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtFldImageBloques2)
-                        .addGap(81, 81, 81))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBloqueLayout.createSequentialGroup()
-                        .addComponent(txtFldAlertaImageBloques2)
-                        .addContainerGap())
-                    .addGroup(pnlBloqueLayout.createSequentialGroup()
                         .addGroup(pnlBloqueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtFldAlertaLifeBloques, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(pnlBloqueLayout.createSequentialGroup()
@@ -1353,10 +1442,31 @@ public class CrearComponentes extends javax.swing.JFrame {
                                 .addComponent(lblFieldsBloques, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtFldFieldsBloques, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlBloqueLayout.createSequentialGroup()
+                        .addGroup(pnlBloqueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtFldAlertaImageBloques1)
+                            .addComponent(txtFldAlertaImageBloques2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(pnlBloqueLayout.createSequentialGroup()
+                                .addGroup(pnlBloqueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlBloqueLayout.createSequentialGroup()
+                                        .addComponent(lblImageBloques1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtFldImageBloques1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(pnlBloqueLayout.createSequentialGroup()
+                                        .addComponent(lblImageBloques2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtFldImageBloques2, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
             .addGroup(pnlBloqueLayout.createSequentialGroup()
-                .addGap(180, 180, 180)
-                .addComponent(btnCrearBloques, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlBloqueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlBloqueLayout.createSequentialGroup()
+                        .addGap(180, 180, 180)
+                        .addComponent(btnCrearBloques, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlBloqueLayout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(txtFldAlertaCrearBloques, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlBloqueLayout.setVerticalGroup(
@@ -1406,7 +1516,9 @@ public class CrearComponentes extends javax.swing.JFrame {
                 .addComponent(txtFldAlertaAppearanceBloques, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addComponent(btnCrearBloques)
-                .addContainerGap(87, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtFldAlertaCrearBloques, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
         tbdPnCrearComponente.addTab("Bloques", pnlBloque);
@@ -1598,6 +1710,12 @@ public class CrearComponentes extends javax.swing.JFrame {
         txtFldAlertaRangeArma.setForeground(new java.awt.Color(204, 0, 0));
         txtFldAlertaRangeArma.setBorder(null);
 
+        txtFldAlertaCrearArma.setEditable(false);
+        txtFldAlertaCrearArma.setBackground(new java.awt.Color(204, 204, 204));
+        txtFldAlertaCrearArma.setFont(new java.awt.Font("Helvetica Neue", 3, 13)); // NOI18N
+        txtFldAlertaCrearArma.setForeground(new java.awt.Color(51, 153, 0));
+        txtFldAlertaCrearArma.setBorder(null);
+
         javax.swing.GroupLayout pnlArmasLayout = new javax.swing.GroupLayout(pnlArmas);
         pnlArmas.setLayout(pnlArmasLayout);
         pnlArmasLayout.setHorizontalGroup(
@@ -1617,22 +1735,6 @@ public class CrearComponentes extends javax.swing.JFrame {
                     .addComponent(lblArmasImageOutput2, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlArmasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlArmasLayout.createSequentialGroup()
-                        .addComponent(lblImageArmas1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtFldImageArmas1)
-                        .addGap(75, 75, 75))
-                    .addGroup(pnlArmasLayout.createSequentialGroup()
-                        .addComponent(txtFldAlertaImageArma1)
-                        .addContainerGap())
-                    .addGroup(pnlArmasLayout.createSequentialGroup()
-                        .addComponent(lblImageArmas2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtFldImageArmas2)
-                        .addGap(81, 81, 81))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlArmasLayout.createSequentialGroup()
-                        .addComponent(txtFldAlertaImageArma2)
-                        .addContainerGap())
                     .addGroup(pnlArmasLayout.createSequentialGroup()
                         .addGroup(pnlArmasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtFldAlertaRangeArma, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1664,10 +1766,31 @@ public class CrearComponentes extends javax.swing.JFrame {
                                 .addComponent(txtFldRangeArmas, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txtFldAlertaFieldsArma, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
                             .addComponent(txtFldAlertaAppearanceArma))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlArmasLayout.createSequentialGroup()
+                        .addGroup(pnlArmasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtFldAlertaImageArma1)
+                            .addComponent(txtFldAlertaImageArma2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(pnlArmasLayout.createSequentialGroup()
+                                .addGroup(pnlArmasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlArmasLayout.createSequentialGroup()
+                                        .addComponent(lblImageArmas1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtFldImageArmas1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(pnlArmasLayout.createSequentialGroup()
+                                        .addComponent(lblImageArmas2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtFldImageArmas2, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
             .addGroup(pnlArmasLayout.createSequentialGroup()
-                .addGap(188, 188, 188)
-                .addComponent(btnCrearArmas, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlArmasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlArmasLayout.createSequentialGroup()
+                        .addGap(175, 175, 175)
+                        .addComponent(btnCrearArmas, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlArmasLayout.createSequentialGroup()
+                        .addGap(79, 79, 79)
+                        .addComponent(txtFldAlertaCrearArma, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlArmasLayout.setVerticalGroup(
@@ -1731,9 +1854,11 @@ public class CrearComponentes extends javax.swing.JFrame {
                     .addComponent(txtFldRangeArmas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtFldAlertaRangeArma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCrearArmas)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtFldAlertaCrearArma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         tbdPnCrearComponente.addTab("Armas", pnlArmas);
@@ -1802,6 +1927,8 @@ public class CrearComponentes extends javax.swing.JFrame {
         this.txtFldAlertaImageArma2.setText("");
         this.txtFldAlertaNameArma.setText("");
         this.txtFldAlertaRangeArma.setText("");
+        this.txtFldAlertaCrearArma.setText("");
+        
         
         if (verificarDatos(2) == 0){
             obtenerDatosArma();
@@ -1820,7 +1947,9 @@ public class CrearComponentes extends javax.swing.JFrame {
         this.txtFldAlertaImageZombie1.setText("");
         this.txtFldAlertaImageZombie2.setText("");
         this.txtFldAlertaNameZombie.setText("");
-        this.txtFldAlertaRangeZombie.setText("");        
+        this.txtFldAlertaRangeZombie.setText("");
+        this.txtFldAlertaSpeedZombie.setText("");
+        this.txtFldAlertaCrearZombie.setText("");
         
         if (verificarDatos(1) == 0){
             obtenerDatosZombie();
@@ -1837,7 +1966,8 @@ public class CrearComponentes extends javax.swing.JFrame {
         this.txtFldAlertaLifeBloques.setText("");
         this.txtFldAlertaImageBloques1.setText("");
         this.txtFldAlertaImageBloques2.setText("");
-        this.txtFldAlertaNameBloques.setText("");      
+        this.txtFldAlertaNameBloques.setText("");
+        this.txtFldAlertaCrearBloques.setText("");
         
         if (verificarDatos(3) == 0){
             obtenerDatosBloque();
@@ -1854,6 +1984,10 @@ public class CrearComponentes extends javax.swing.JFrame {
     private void txtFldAlertaNameArmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldAlertaNameArmaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFldAlertaNameArmaActionPerformed
+
+    private void txtFldAlertaFieldsZombieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldAlertaFieldsZombieActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFldAlertaFieldsZombieActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1914,6 +2048,7 @@ public class CrearComponentes extends javax.swing.JFrame {
     private javax.swing.JLabel lblNameZombie;
     private javax.swing.JLabel lblRangeArmas;
     private javax.swing.JLabel lblRangeZombie;
+    private javax.swing.JLabel lblSpeedZombie;
     private javax.swing.JLabel lblTypeArmas;
     private javax.swing.JLabel lblTypeZombie;
     private javax.swing.JLabel lblZombieImageOutput1;
@@ -1925,6 +2060,10 @@ public class CrearComponentes extends javax.swing.JFrame {
     private javax.swing.JTextField txtFldAlertaAppearanceArma;
     private javax.swing.JTextField txtFldAlertaAppearanceBloques;
     private javax.swing.JTextField txtFldAlertaAppearanceZombie;
+    private javax.swing.JTextField txtFldAlertaCrearArma;
+    private javax.swing.JTextField txtFldAlertaCrearBloques;
+    private javax.swing.JTextField txtFldAlertaCrearBloques2;
+    private javax.swing.JTextField txtFldAlertaCrearZombie;
     private javax.swing.JTextField txtFldAlertaDamageArma;
     private javax.swing.JTextField txtFldAlertaDamageZombie;
     private javax.swing.JTextField txtFldAlertaFieldsArma;
@@ -1944,6 +2083,8 @@ public class CrearComponentes extends javax.swing.JFrame {
     private javax.swing.JTextField txtFldAlertaNameZombie;
     private javax.swing.JTextField txtFldAlertaRangeArma;
     private javax.swing.JTextField txtFldAlertaRangeZombie;
+    private javax.swing.JTextField txtFldAlertaSpeedZombie;
+    private javax.swing.JTextField txtFldAlertaSpeedZombie1;
     private javax.swing.JTextField txtFldAppearanceArmas;
     private javax.swing.JTextField txtFldAppearanceBloques;
     private javax.swing.JTextField txtFldAppearanceZombie;
@@ -1966,5 +2107,6 @@ public class CrearComponentes extends javax.swing.JFrame {
     private javax.swing.JTextField txtFldNameZombie;
     private javax.swing.JTextField txtFldRangeArmas;
     private javax.swing.JTextField txtFldRangeZombie;
+    private javax.swing.JTextField txtFldSpeedZombie;
     // End of variables declaration//GEN-END:variables
 }
