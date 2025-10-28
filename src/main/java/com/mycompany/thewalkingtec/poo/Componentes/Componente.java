@@ -32,12 +32,13 @@ public abstract class Componente extends Thread {
     public Componente() {
     }
 
-    public Componente(String nombre, int vida, int campos, int nivelDeAparicion, int alcance) {
+    public Componente(String nombre, int vida, int campos, int nivelDeAparicion, int alcance, String apariencia) {
         this.nombre = nombre;
         this.vida = vida;
         this.campos = campos;
         this.nivelDeAparicion = nivelDeAparicion;
         this.alcance = alcance;
+        this.apariencia = apariencia;
     }
     
     

@@ -100,22 +100,22 @@ public class CrearComponentes extends javax.swing.JFrame {
         return 0;   
     }
     
-    private void crearZombie(String name, int life, int type, int damage, int fields, int appearance, int range){
+    private void crearZombie(String name, int life, int type, int damage, int fields, int appearance, int range, String apariencia){
         
         Zombie newZombie;
         
         switch (type){
             case 1 -> {
-                newZombie = new ZombieAereo(name, life, damage, fields, appearance, range, 1);
+                newZombie = new ZombieAereo(name, life, damage, fields, appearance, range, 1, apariencia);
             }
             case 2 -> {
-                newZombie = new ZombieChoque(name, life, damage, fields, appearance, range, 1);
+                newZombie = new ZombieChoque(name, life, damage, fields, appearance, range, 1, apariencia);
             }
             case 3 -> {
-                newZombie = new ZombieContacto(name, life, damage, fields, appearance, range, 1);
+                newZombie = new ZombieContacto(name, life, damage, fields, appearance, range, 1, apariencia);
             }
             default ->{
-                newZombie = new ZombieMedianoAlcance(name, life, damage, fields, appearance, range, 1);
+                newZombie = new ZombieMedianoAlcance(name, life, damage, fields, appearance, range, 1, apariencia);
             }
         }
         
@@ -124,26 +124,26 @@ public class CrearComponentes extends javax.swing.JFrame {
         
     }
     
-    private void crearArma(String name, int life, int type, int damage, int fields, int appearance, int range){
+    private void crearArma(String name, int life, int type, int damage, int fields, int appearance, int range, String apariencia){
         
         Defensa newArma;
         
         switch (type){
             case 1 -> {
-                newArma = new DefensaAerea(name, life, damage, fields, appearance, range);
+                newArma = new DefensaAerea(name, life, damage, fields, appearance, range, apariencia);
             }
             case 2 -> {
-                newArma = new DefensaImpacto(name, life, damage, fields, appearance, range);
+                newArma = new DefensaImpacto(name, life, damage, fields, appearance, range, apariencia);
             }
             case 3 -> {
-                newArma = new DefensaContacto(name, life, damage, fields, appearance, range);
+                newArma = new DefensaContacto(name, life, damage, fields, appearance, range, apariencia);
             }
             case 4 -> {
-                newArma = new DefensaMedioAlcance(name, life, damage, fields, appearance, range);
+                newArma = new DefensaMedioAlcance(name, life, damage, fields, appearance, range, apariencia);
             }
             default -> {
                 
-                newArma = new DefensaAtaqueMultiple(name, life, damage, fields, appearance, range);
+                newArma = new DefensaAtaqueMultiple(name, life, damage, fields, appearance, range, apariencia);
                 
             }
         }
@@ -153,9 +153,9 @@ public class CrearComponentes extends javax.swing.JFrame {
         
     }
     
-    private void crearBloque(String name, int life, int fields ,int appearance){
+    private void crearBloque(String name, int life, int fields ,int appearance, String apariencia){
         
-        DefensaBloque newBloque = new DefensaBloque(name, life, fields, appearance);
+        DefensaBloque newBloque = new DefensaBloque(name, life, fields, appearance, apariencia);
         
         listaDeBloques.add(newBloque);
         
@@ -224,12 +224,12 @@ public class CrearComponentes extends javax.swing.JFrame {
             
             if (rangeStr.equals("")){
             
-                crearArma(name, life, type, damage, fields, appearance, 0);
+                crearArma(name, life, type, damage, fields, appearance, 0, pathImage + "1.png");
 
             } else{
 
                 int range = Integer.parseInt(rangeStr);
-                crearArma(name, life, type, damage, fields, appearance, range);
+                crearArma(name, life, type, damage, fields, appearance, range, pathImage + "1.png");
 
             }    
         }
@@ -266,12 +266,12 @@ public class CrearComponentes extends javax.swing.JFrame {
             
             if (rangeStr.equals("")){
             
-                crearArma(name, life, type, damage, fields, appearance, 0);
+                crearArma(name, life, type, damage, fields, appearance, 0, pathImage + "1.png");
 
             } else{
 
                 int range = Integer.parseInt(rangeStr);
-                crearArma(name, life, type, damage, fields, appearance, range);
+                crearArma(name, life, type, damage, fields, appearance, range, pathImage + "1.png");
 
             }    
         }
@@ -299,7 +299,7 @@ public class CrearComponentes extends javax.swing.JFrame {
         
         if (saveImageFromURL(image1, pathImage, 3, 1) && saveImageFromURL(image2, pathImage, 3, 2)){
             
-            crearBloque(name, life, fields, appearance);
+            crearBloque(name, life, fields, appearance, pathImage + "1.png");
 
         }    
     }
@@ -317,17 +317,41 @@ public class CrearComponentes extends javax.swing.JFrame {
         switch (tipo){
             case 1 -> {
                 life = this.txtFldLifeZombie.getText();
-                if (esUnNumero(life)) return 0;
+                if (esUnNumero(life)){
+                    
+                    if (Integer.parseInt(life) <= 0){
+                        this.txtFldAlertaLifeZombie.setText("Solo se permiten valores númericos mayores a 0");
+                        break;
+                    }
+                    
+                    return 0;
+                }
                 this.txtFldAlertaLifeZombie.setText("Solo se permiten valores númericos para la vida");
             }
             case 2 -> {
                 life = this.txtFldLifeArmas.getText();
-                if (esUnNumero(life)) return 0;
+                if (esUnNumero(life)){
+                    
+                    if (Integer.parseInt(life) <= 0){
+                        this.txtFldAlertaLifeArma.setText("Solo se permiten valores númericos mayores a 0");
+                        break;
+                    }
+                    
+                    return 0;
+                }
                 this.txtFldAlertaLifeArma.setText("Solo se permiten valores númericos para la vida");
             }
             case 3 -> {
                 life = this.txtFldLifeBloques.getText();
-                if (esUnNumero(life)) return 0;
+                if (esUnNumero(life)){
+                    
+                    if (Integer.parseInt(life) <= 0){
+                        this.txtFldAlertaLifeBloques.setText("Solo se permiten valores númericos mayores a 0");
+                        break;
+                    }
+                    
+                    return 0;
+                }
                 this.txtFldAlertaLifeBloques.setText("Solo se permiten valores númericos para la vida");
             }
         }
@@ -339,12 +363,29 @@ public class CrearComponentes extends javax.swing.JFrame {
         switch (tipo){
             case 1 -> {
                 damage = this.txtFldDamageZombie.getText();
-                if (esUnNumero(damage)) return 0;
+                if (esUnNumero(damage)){
+                    
+                    if (Integer.parseInt(damage) <= 0){
+                        this.txtFldAlertaDamageZombie.setText("Solo se permiten valores númericos mayores a 0");
+                        break;
+                    }
+                    
+                    return 0;
+                }
                 this.txtFldAlertaDamageZombie.setText("Solo se permiten valores númericos para el daño");
             }
             case 2 -> {
                 damage = this.txtFldDamageArmas.getText();
-                if (esUnNumero(damage)) return 0;
+                if (esUnNumero(damage)){
+                    
+                    if (Integer.parseInt(damage) <= 0){
+                        this.txtFldAlertaDamageArma.setText("Solo se permiten valores númericos mayores a 0");
+                        break;
+                    }
+                    
+                    return 0;
+                }
+                
                 this.txtFldAlertaDamageArma.setText("Solo se permiten valores númericos para el daño");
             }
         }
@@ -358,8 +399,15 @@ public class CrearComponentes extends javax.swing.JFrame {
                 range = this.txtFldRangeZombie.getText();
                 if (esUnNumero(range) || range.equals("")) {
                     String opcion = (String) this.cmbBxTypeZombie.getSelectedItem();
-                    if (opcion.equals("Choque") || range.equals("")) return 0;
-                    this.txtFldAlertaRangeZombie.setText("Esta opción solo se permite para tipo impacto");
+                    if (opcion.equals("Choque") || range.equals("")){
+                        
+                        if (!range.equals("") && (Integer.parseInt(range) > 25 || Integer.parseInt(range) <= 0)){
+                            this.txtFldAlertaRangeZombie.setText("El rango debe de ser entre 1 y 25");
+                            break;
+                        }
+                        return 0;
+                    }
+                    this.txtFldAlertaRangeZombie.setText("Esta opción solo se permite para tipo Choque");
                     break;
                 }
                 this.txtFldAlertaRangeZombie.setText("Solo se permiten valores númericos para el rango");
@@ -368,8 +416,15 @@ public class CrearComponentes extends javax.swing.JFrame {
                 range = this.txtFldRangeArmas.getText();
                 if (esUnNumero(range) || range.equals("")) {
                     String opcion = (String) this.cmbBxTypeArmas.getSelectedItem();
-                    if (opcion.equals("Impacto") || range.equals("") || opcion.equals("Ataque Multiple")) return 0;
-                    this.txtFldAlertaRangeArma.setText("Esta opción solo se permite para tipo impacto");
+                    if (opcion.equals("Impacto") || range.equals("") || opcion.equals("Ataque Multiple")){
+                        
+                        if (!range.equals("") && (Integer.parseInt(range) > 25 || Integer.parseInt(range) <= 0)){
+                            this.txtFldAlertaRangeArma.setText("El rango debe de ser entre 1 y 25");
+                            break;
+                        }
+                        return 0;
+                    }
+                    this.txtFldAlertaRangeArma.setText("Esta opción solo se permite para tipo impacto y Ataque Multiple");
                     break;
                 }
                 this.txtFldAlertaRangeArma.setText("Solo se permiten valores númericos para el rango");
@@ -379,21 +434,47 @@ public class CrearComponentes extends javax.swing.JFrame {
     }
     
     public int verificarAparicion(int tipo){
-        String life;
+        String appearance;
         switch (tipo){
             case 1 -> {
-                life = this.txtFldAppearanceZombie.getText();
-                if (esUnNumero(life)) return 0;
+                appearance = this.txtFldAppearanceZombie.getText();
+                if (esUnNumero(appearance)){
+                    
+                    System.out.println("SI PASEEE");
+                    
+                    if (Integer.parseInt(appearance) <= 0){
+                        this.txtFldAlertaAppearanceZombie.setText("Solo se permiten valores númericos mayores a 0");
+                        break;
+                    }
+                    
+                    return 0;
+                }
                 this.txtFldAlertaAppearanceZombie.setText("Solo se permiten valores númericos para la aparición");
             }
             case 2 -> {
-                life = this.txtFldAppearanceArmas.getText();
-                if (esUnNumero(life)) return 0;
+                appearance = this.txtFldAppearanceArmas.getText();
+                if (esUnNumero(appearance)){
+                    
+                    if (Integer.parseInt(appearance) <= 0){
+                        this.txtFldAlertaAppearanceArma.setText("Solo se permiten valores númericos mayores a 0");
+                        break;
+                    }
+                    
+                    return 0;
+                }
                 this.txtFldAlertaAppearanceArma.setText("Solo se permiten valores númericos para la aparición");
             }
             case 3 -> {
-                life = this.txtFldAppearanceBloques.getText();
-                if (esUnNumero(life)) return 0;
+                appearance = this.txtFldAppearanceBloques.getText();
+                if (esUnNumero(appearance)){
+                    
+                    if (Integer.parseInt(appearance) <= 0){
+                        this.txtFldAlertaAppearanceBloques.setText("Solo se permiten valores númericos mayores a 0");
+                        break;
+                    }
+                    
+                    return 0;
+                }
                 this.txtFldAlertaAppearanceBloques.setText("Solo se permiten valores númericos para la aparición");
             }
         }
@@ -401,21 +482,50 @@ public class CrearComponentes extends javax.swing.JFrame {
     }  
     
     public int verificarCampos(int tipo){
-        String life;
+        String fields;
         switch (tipo){
             case 1 -> {
-                life = this.txtFldFieldsZombie.getText();
-                if (esUnNumero(life)) return 0;
+                fields = this.txtFldFieldsZombie.getText();
+                
+                System.out.println(fields);
+                
+                if (esUnNumero(fields)){
+                    
+                    System.out.println("SI PASEEE");
+                    
+                    if (Integer.parseInt(fields) <= 0){
+                        this.txtFldAlertaFieldsZombie.setText("Solo se permiten valores númericos mayores a 0");
+                        break;
+                    }
+                    
+                    return 0;
+                }
                 this.txtFldAlertaFieldsZombie.setText("Solo se permiten valores númericos para los campos");
             }
             case 2 -> {
-                life = this.txtFldAppearanceArmas.getText();
-                if (esUnNumero(life)) return 0;
+                fields = this.txtFldAppearanceArmas.getText();
+                if (esUnNumero(fields)){
+                    
+                    if (Integer.parseInt(fields) <= 0){
+                        this.txtFldAlertaFieldsArma.setText("Solo se permiten valores númericos mayores a 0");
+                        break;
+                    }
+                    
+                    return 0;
+                }
                 this.txtFldAlertaFieldsArma.setText("Solo se permiten valores númericos para los campos");
             }
             case 3 -> {
-                life = this.txtFldFieldsBloques.getText();
-                if (esUnNumero(life)) return 0;
+                fields = this.txtFldFieldsBloques.getText();
+                if (esUnNumero(fields)){
+                    
+                    if (Integer.parseInt(fields) <= 0){
+                        this.txtFldAlertaFieldsBloques.setText("Solo se permiten valores númericos mayores a 0");
+                        break;
+                    }
+                    
+                    return 0;
+                }
                 this.txtFldAlertaFieldsBloques.setText("Solo se permiten valores númericos para los campos");
             }
         }
@@ -1731,7 +1841,7 @@ public class CrearComponentes extends javax.swing.JFrame {
         
         if (verificarDatos(3) == 0){
             obtenerDatosBloque();
-            writeObject(System.getProperty("src/main/resources/datos/datosBloques"), 3);
+            writeObject("src/main/resources/datos/datosBloques", 3);
         } else{
             System.out.println("NO SE PUDOOOO INGRESAR EL BLOQUEEEE :<");
         }

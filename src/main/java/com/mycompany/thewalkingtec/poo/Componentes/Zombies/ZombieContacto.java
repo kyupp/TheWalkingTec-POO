@@ -18,8 +18,8 @@ public class ZombieContacto extends Zombie {
     public ZombieContacto() {
     }
 
-    public ZombieContacto(String nombre, int vida, int ataquePorUnidad, int campos, int nivelDeAparicion, int alcance, int velocidad) {
-        super(nombre, vida, ataquePorUnidad, campos, nivelDeAparicion, alcance, velocidad, false);
+    public ZombieContacto(String nombre, int vida, int ataquePorUnidad, int campos, int nivelDeAparicion, int alcance, int velocidad, String apariencia) {
+        super(nombre, vida, ataquePorUnidad, campos, nivelDeAparicion, alcance, velocidad, false, apariencia);
     }
     
 

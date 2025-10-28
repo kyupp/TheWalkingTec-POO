@@ -15,8 +15,8 @@ public class DefensaImpacto extends Defensa{
     public DefensaImpacto() {
     }
 
-    public DefensaImpacto(String nombre, int vida, int ataquePorUnidad, int campos, int nivelDeAparicion, int alcance) {
-        super(nombre, vida, ataquePorUnidad, campos, nivelDeAparicion, alcance);
+    public DefensaImpacto(String nombre, int vida, int ataquePorUnidad, int campos, int nivelDeAparicion, int alcance, String apariencia) {
+        super(nombre, vida, ataquePorUnidad, campos, nivelDeAparicion, alcance, apariencia);
     }
     
     public DefensaImpacto(fPrincipal refPantalla, String nombre, int ataquePorUnidad, int vida, int golpesPorSegundo, int nivel, int campos, int nivelDeApaicion, int alcance, String apariencia) {
