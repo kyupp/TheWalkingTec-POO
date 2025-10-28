@@ -138,26 +138,22 @@ public abstract class Componente extends Thread {
     }
 
     private void marcarDestruido() {
-        this.estaDestruido = true;
-        // Todas las actualizaciones de UI deben ejecutarse en el EDT
-        SwingUtilities.invokeLater(() -> {
-            try {
-                if (getRefLabel() != null) {
-                    getRefLabel().setVisible(false);
-                }
-            } catch (Exception ex) {
-                // ignorar
-            }
-            try {
-                // Notificar al frame que compruebe fin de juego y actualice contadores (EDT)
-                if (getRefPantalla() != null) {
-                    getRefPantalla().actualizarContadores();
-                    getRefPantalla().comprobarPerder();
-                }
-            } catch (Exception ex) {
-                // ignorar
-            }
-        });
+        if (refLabel != null) {
+            refLabel.setIcon(null);
+            refLabel.setOpaque(true);
+
+            if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie)
+                refLabel.setBackground(new java.awt.Color(180, 0, 0));
+            else if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa)
+                refLabel.setBackground(new java.awt.Color(80, 80, 80));
+            else if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.ReliquiaDeLaVida)
+                refLabel.setBackground(new java.awt.Color(0, 0, 0));
+        }
+
+        if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.Zombies.Zombie)
+            refPantalla.comprobarGanar();
+        else if (this instanceof com.mycompany.thewalkingtec.poo.Componentes.ReliquiaDeLaVida)
+            refPantalla.comprobarPerder();
     }
 
     //  Mostrar información básica
@@ -252,9 +248,7 @@ public abstract class Componente extends Thread {
     public boolean estaDestruido() {
         return vida <= 0; 
     }
-    public String getApariencia() { 
-        return apariencia;
-    }
+    
     public JLabel getRefLabel() {
         return refLabel;
     }
@@ -274,10 +268,6 @@ public abstract class Componente extends Thread {
 
     public int getNivelDeAparicion() {
         return nivelDeAparicion;
-    }
-
-    public void setRefPantalla(fPrincipal refPantalla) {
-        this.refPantalla = refPantalla;
     }
 
     public void setVida(int vida) {
