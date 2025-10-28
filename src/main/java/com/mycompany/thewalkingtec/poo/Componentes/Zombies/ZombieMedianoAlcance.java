@@ -1,14 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.thewalkingtec.poo.Componentes.Zombies;
 
 import com.mycompany.thewalkingtec.poo.Componentes.Componente;
-import com.mycompany.thewalkingtec.poo.Componentes.Defensas.Defensa;
-import com.mycompany.thewalkingtec.poo.Componentes.IAtaque;
 import com.mycompany.thewalkingtec.poo.fPrincipal;
-import javax.swing.JLabel;
 
 /**
  *
@@ -32,12 +25,19 @@ public class ZombieMedianoAlcance extends Zombie {
     }
 
     @Override
-    public void mover() {
-        // se detiene cuando hay defensa en rango de alcance
-    }
-
-    @Override
     public Componente clonar(fPrincipal refPantalla) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return new ZombieMedianoAlcance(
+                refPantalla,
+                this.getNombre(),
+                this.getAtaquePorUnidad(),
+                this.getVida(),
+                this.getGolpesPorSegundo(),
+                this.getNivel(),
+                this.getCampos(),
+                this.getNivelDeAparicion(),
+                this.getAlcance(),
+                this.getApariencia(),
+                this.getVelocidad()
+        );
     }
 }
